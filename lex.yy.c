@@ -1,5 +1,6 @@
+#line 2 "lex.yy.c"
 
-#line 3 "lex.yy.c"
+#line 4 "lex.yy.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -351,8 +352,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 13
-#define YY_END_OF_BUFFER 14
+#define YY_NUM_RULES 14
+#define YY_END_OF_BUFFER 15
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -362,7 +363,7 @@ struct yy_trans_info
 	};
 static const flex_int16_t yy_accept[34] =
     {   0,
-        0,    0,   14,   13,    1,    6,    7,   13,   11,    5,
+        0,    0,   15,   13,    1,    6,    7,   13,   11,    5,
         5,    5,    5,    1,    0,    6,    0,    8,   10,    9,
        12,    5,    5,    2,    5,    6,    0,    6,    5,    5,
         4,    3,    0
@@ -370,20 +371,20 @@ static const flex_int16_t yy_accept[34] =
 
 static const YY_CHAR yy_ec[256] =
     {   0,
-        1,    1,    1,    1,    1,    1,    1,    1,    2,    2,
+        1,    1,    1,    1,    1,    1,    1,    1,    2,    3,
         1,    1,    2,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    2,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    3,    1,    3,    4,    1,    5,    5,    5,
-        5,    5,    5,    5,    5,    5,    5,    1,    1,    6,
-        7,    8,    1,    1,    9,    9,    9,    9,   10,    9,
-        9,    9,    9,    9,    9,    9,    9,    9,    9,    9,
-        9,    9,    9,    9,    9,    9,    9,    9,    9,    9,
-        1,    1,    1,    1,    1,    1,    9,    9,    9,    9,
+        1,    1,    4,    1,    4,    5,    1,    6,    6,    6,
+        6,    6,    6,    6,    6,    6,    6,    1,    1,    7,
+        8,    9,    1,    1,   10,   10,   10,   10,   11,   10,
+       10,   10,   10,   10,   10,   10,   10,   10,   10,   10,
+       10,   10,   10,   10,   10,   10,   10,   10,   10,   10,
+        1,    1,    1,    1,    1,    1,   10,   10,   10,   10,
 
-       11,   12,    9,   13,   14,    9,    9,   15,    9,   16,
-        9,    9,    9,    9,   17,   18,    9,    9,    9,    9,
-        9,    9,    1,    1,    1,    1,    1,    1,    1,    1,
+       12,   13,   10,   14,   15,   10,   10,   16,   10,   17,
+       10,   10,   10,   10,   18,   19,   10,   10,   10,   10,
+       10,   10,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -400,18 +401,18 @@ static const YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1
     } ;
 
-static const YY_CHAR yy_meta[19] =
+static const YY_CHAR yy_meta[20] =
     {   0,
-        1,    1,    1,    1,    2,    1,    1,    1,    3,    2,
-        2,    3,    3,    3,    3,    3,    3,    3
+        1,    1,    1,    1,    1,    2,    1,    1,    1,    3,
+        2,    2,    3,    3,    3,    3,    3,    3,    3
     } ;
 
 static const flex_int16_t yy_base[36] =
     {   0,
-        0,    0,   45,   46,   42,   15,   14,   36,   35,    0,
-       26,   28,   26,   36,   32,    0,   24,   46,   46,   46,
-       46,    0,   19,    0,   24,   29,   28,   27,   17,    8,
-        0,    0,   46,   28,   21
+        0,    0,   48,   49,   18,   17,   16,   39,   38,    0,
+       29,   31,   29,   24,   36,    0,   26,   49,   49,   49,
+       49,    0,   23,    0,   28,   33,   32,   31,   24,   18,
+        0,    0,   49,   31,   29
     } ;
 
 static const flex_int16_t yy_def[36] =
@@ -422,26 +423,26 @@ static const flex_int16_t yy_def[36] =
        34,   34,    0,   33,   33
     } ;
 
-static const flex_int16_t yy_nxt[65] =
+static const flex_int16_t yy_nxt[69] =
     {   0,
-        4,    5,    4,    4,    6,    7,    8,    9,   10,   10,
-       11,   10,   10,   12,   10,   10,   10,   13,   15,   16,
-       18,   19,   17,   32,   17,   17,   27,   31,   28,   22,
-       22,   28,   28,   26,   30,   29,   26,   14,   25,   24,
-       23,   21,   20,   14,   33,    3,   33,   33,   33,   33,
+        4,    5,    5,    4,    4,    6,    7,    8,    9,   10,
+       10,   11,   10,   10,   12,   10,   10,   10,   13,   14,
+       14,   15,   16,   18,   19,   14,   14,   17,   17,   27,
+       17,   28,   22,   22,   32,   31,   28,   28,   26,   30,
+       29,   26,   25,   24,   23,   21,   20,   33,    3,   33,
        33,   33,   33,   33,   33,   33,   33,   33,   33,   33,
-       33,   33,   33,   33
+       33,   33,   33,   33,   33,   33,   33,   33
     } ;
 
-static const flex_int16_t yy_chk[65] =
+static const flex_int16_t yy_chk[69] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    6,    6,
-        7,    7,   35,   30,    6,    6,   17,   29,   17,   34,
-       34,   28,   27,   26,   25,   23,   15,   14,   13,   12,
-       11,    9,    8,    5,    3,   33,   33,   33,   33,   33,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    5,
+        5,    6,    6,    7,    7,   14,   14,    6,    6,   17,
+       35,   17,   34,   34,   30,   29,   28,   27,   26,   25,
+       23,   15,   13,   12,   11,    9,    8,    3,   33,   33,
        33,   33,   33,   33,   33,   33,   33,   33,   33,   33,
-       33,   33,   33,   33
+       33,   33,   33,   33,   33,   33,   33,   33
     } ;
 
 static yy_state_type yy_last_accepting_state;
@@ -460,9 +461,11 @@ int yy_flex_debug = 0;
 char *yytext;
 #line 1 "lex.l"
 #line 2 "lex.l"
+#include "symbol_table.h" 
 #define LT 60
-#line 465 "lex.yy.c"
-#line 466 "lex.yy.c"
+
+#line 468 "lex.yy.c"
+#line 469 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -679,9 +682,9 @@ YY_DECL
 		}
 
 	{
-#line 13 "lex.l"
+#line 15 "lex.l"
 
-#line 685 "lex.yy.c"
+#line 688 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -714,7 +717,7 @@ yy_match:
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 46 );
+		while ( yy_base[yy_current_state] != 49 );
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
@@ -741,70 +744,76 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 14 "lex.l"
+#line 16 "lex.l"
 {/* não faz nada */}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 15 "lex.l"
+#line 17 "lex.l"
 {return IF;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 16 "lex.l"
+#line 18 "lex.l"
 {return THEN;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 17 "lex.l"
+#line 19 "lex.l"
 {return ELSE;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 18 "lex.l"
+#line 20 "lex.l"
 {yylval = installID(); return ID;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 19 "lex.l"
+#line 21 "lex.l"
 {yylval = installNUM(); return NUMBER;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 20 "lex.l"
+#line 22 "lex.l"
 {yylval = LT; return RELOP;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 21 "lex.l"
+#line 23 "lex.l"
 {yylval = LE; return RELOP;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 22 "lex.l"
+#line 24 "lex.l"
 {yylval = EQ; return RELOP;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 23 "lex.l"
+#line 25 "lex.l"
 {yylval = NE; return RELOP;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 24 "lex.l"
+#line 26 "lex.l"
 {yylval = GT; return RELOP;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 25 "lex.l"
+#line 27 "lex.l"
 {yylval = GE; return RELOP;}
 	YY_BREAK
 case 13:
+/* rule 13 can match eol */
 YY_RULE_SETUP
-#line 26 "lex.l"
+#line 28 "lex.l"
+{ printf("Erro.") }
+	YY_BREAK
+case 14:
+YY_RULE_SETUP
+#line 30 "lex.l"
 ECHO;
 	YY_BREAK
-#line 808 "lex.yy.c"
+#line 817 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1809,7 +1818,16 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 26 "lex.l"
+#line 30 "lex.l"
 
-int installID() {/* install lexeme in the symbol table */}
-int installNUM() {/* install num const in aux table */}
+int installID(const char* lexeme) {
+    // Suponha que 'currentScope' é uma variável global que rastreia o escopo atual
+    // 'attributes' pode ser uma string ou estrutura contendo outros atributos relevantes
+    insertSymbol(lexeme, "identifier", "simple", 0, currentScope, NULL, "none");
+    return 0; // ou outro valor apropriado
+}
+int installNUM(const char* num) {
+    // Aqui, o tipo poderia ser determinado dinamicamente baseado no formato do número
+    insertSymbol(num, "number", "simple", sizeof(num), currentScope, NULL, "constant");
+    return 0; // ou outro valor apropriado
+}
