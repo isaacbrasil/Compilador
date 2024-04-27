@@ -1,0 +1,16 @@
+inicioprog
+    inteiro num = 10;
+    real taxa = 3.14;
+    string nome = "Testes";
+
+    se (num < 20) entao
+        escreva "O número é menor que 20";
+    fimse
+
+    enquanto (num > 0) faca
+        escreva "Contagem regressiva: ", num;
+        num = num - 1;
+    fimenquanto
+
+    inteiro número = 5;
+fimprog
