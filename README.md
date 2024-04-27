@@ -1,19 +1,16 @@
 Compilador que reconhece a linguagem irrisória.
 
-Para compilar execute: 
+Para compilar o arquivo Flex junto com o código da tabela de símbolos e qualquer outro código-fonte necessário para o compilador SEQUENCIALMENTE:
 
 ```
-flex lex.l && gcc lex.yy.c -ll -o lex && ./lex < teste01.in
+flex -o lex.yy.c lex.l && gcc -o mycompiler lex.yy.c symbol_table.c -lfl && ./mycompiler
 
 ```
 
 
-Para compilar o arquivo Flex junto com o código da tabela de símbolos e qualquer outro código-fonte necessário para o compilador:
-
-bash
+Para compilar o arquivo Flex junto com o código da tabela de símbolos e qualquer outro código-fonte necessário para o compilador PASSANDO UM ARQUIVO DE TEXTO COMO TESTE:
 
 ```
-flex -o lex.yy.c lex.l
-gcc -o mycompiler lex.yy.c symbol_table.c main.c -lfl
+flex -o lex.yy.c lex.l && gcc -o mycompiler lex.yy.c symbol_table.c -lfl && ./mycompiler < input.txt
 
 ```
