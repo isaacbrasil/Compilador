@@ -9,7 +9,6 @@ typedef struct Symbol {
     char *type;
     char *form;
     int size;
-    int scope;
     void *memoryLocation;
     char *attributes;  // Uma string para armazenar outros atributos
     struct Symbol *next;
@@ -17,36 +16,50 @@ typedef struct Symbol {
 
 Symbol *symbolTable[TABLE_SIZE];
 
-unsigned int hash(char *str) {
+unsigned int hash(const char *str) {
     unsigned int hash = 0;
     for (; *str; str++) hash = hash * 31 + *str;
     return hash % TABLE_SIZE;
 }
 
-void insertSymbol(char *name, char *type, char *form, int size, int scope, void *memoryLocation, char *attributes) {
+void insertSymbol(const char *name, const char *type, int size, void *memoryLocation) {
     Symbol *existingSymbol = findSymbol(name);
     if (existingSymbol == NULL) { // Somente insira se o símbolo ainda não existe
         Symbol *symbol = (Symbol *)malloc(sizeof(Symbol));
+        if (!symbol) {
+            fprintf(stderr, "Falha na alocação de memória\n");
+            return;
+        }
         symbol->name = strdup(name);
         symbol->type = strdup(type);
-        symbol->form = strdup(form);
         symbol->size = size;
-        symbol->scope = scope;
         symbol->memoryLocation = memoryLocation;
-        symbol->attributes = strdup(attributes);
 
         int index = hash(name);
         symbol->next = symbolTable[index];
         symbolTable[index] = symbol;
     }
-    // Caso contrário, o símbolo já existe, então não faça nada ou atualize as informações existentes se necessário
 }
 
 void addReservedWords() {
-    insertSymbol("if", "keyword", "reserved", 0, 0, NULL, "none");
-    insertSymbol("then", "keyword", "reserved", 0, 0, NULL, "none");
-    insertSymbol("else", "keyword", "reserved", 0, 0, NULL, "none");
-    // ... adicione outras palavras reservadas aqui ...
+    insertSymbol("se", "keyword", 0, 0);
+    insertSymbol("entao", "keyword", 0, 0);
+    insertSymbol("else", "keyword", 0, 0);
+    insertSymbol("inicioprog", "keyword", 0, 0);
+    insertSymbol("fimprog", "keyword", 0, 0);
+    insertSymbol("inicioargs", "keyword", 0, 0);
+    insertSymbol("fimargs", "keyword", 0, 0);
+    insertSymbol("iniciovars", "keyword", 0, 0);
+    insertSymbol("fimvars", "keyword", 0, 0);
+    insertSymbol("escreva", "keyword", 0, 0);
+    insertSymbol("inteiro", "keyword", 0, 0);
+    insertSymbol("real", "keyword", 0, 0);
+    insertSymbol("literal", "keyword", 0, 0);
+    insertSymbol("fimse", "keyword", 0, 0);
+    insertSymbol("enquanto", "keyword", 0, 0);
+    insertSymbol("faca", "keyword", 0, 0);
+    insertSymbol("fimenquanto", "keyword", 0, 0);
+
 }
 
 
@@ -71,7 +84,6 @@ void freeSymbolTable() {
             Symbol *next = symbol->next;
             free(symbol->name);
             free(symbol->type);
-            free(symbol->form);
             free(symbol->attributes);
             free(symbol);
             symbol = next;
