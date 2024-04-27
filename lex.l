@@ -31,6 +31,11 @@
 #define GE 65
 #define SPECIALCHAR 66
 #define ATTR 67
+#define DELIM 68
+
+#define BARRAENE 69
+#define BARRAERRE 70
+#define BARRATE 71
 
 int installReserved(const char *yytext, const char *tokenType);
 int installID(const char *lexeme);
@@ -44,7 +49,7 @@ int installEspecialChar(const char *yytext);
 
 D [0-9]
 L [A-Za-z]
-S [~`!@#$%^&*()_+\/[]|‘?><.,-]
+S [-~`!@#$%^&*()_+/[]|‘?><.,\]
 numero {D}+(\.{D}+)?([Ee][+-]?{D}+)?
 literal \"([^"\\]|\\.)*\"
 identificador {L}({L}|{D})*
