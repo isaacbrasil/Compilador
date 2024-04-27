@@ -79,7 +79,7 @@ else { installReserved(yytext, "keyword"); printf("Palavra reservada: %s\n", yyt
 "<>" {NE; printf("operador relacional: %s\n", yytext); return RELOP;}
 ">" {GT; printf("operador relacional: %s\n", yytext); return RELOP;}
 ">=" {GE; printf("operador relacional: %s\n", yytext); return RELOP;}
-erro { printf("Erro: caractere desconhecido '%s'\n", yytext); }
+{erro} { printf("Erro: caractere desconhecido: '%s'\n", yytext); }
 
 %%
 int installID(const char* lexeme) {
