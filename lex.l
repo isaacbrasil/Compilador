@@ -37,7 +37,7 @@
 #define FP 70
 #define VIRG 71
 #define PVIRG 72
-
+#define COMM 73
 
 int installReserved(const char *yytext, const char *tokenType);
 int installID(const char *lexeme);
@@ -47,21 +47,24 @@ int installEspecialChar(const char *yytext);
 
 %}
 
-%option noyywrap
 
 D [0-9]
 L [A-Za-z]
-S [\\~`!@#$%^&*()_+/[]|‘?><.,\-]
+S [-\\~`!@#$%^&*()_+/[]|‘?><.,]
 numero {D}+(\.{D}+)?([Ee][+-]?{D}+)?
 literal \"([^"\\]|\\.)*\"
 identificador {L}({L}|_|{D})*
 delim [ \t\r\n]
 vazio {delim}+
-erro [.]
+erro [.\n]
 abre_par [(]
 fecha_par [)]
 virgula [,]
 ponto_e_virg [;]
+comentario \{({L}|{D}|{S}|{vazio})*\}
+fim_de_arq <<EOF>>
+
+
 %%
 
 {vazio} { } 
@@ -70,6 +73,7 @@ ponto_e_virg [;]
 {fecha_par} { installEspecialChar(yytext); printf("\nFecha parenteses: %s\n", yytext); return FP;}
 {virgula} { installEspecialChar(yytext); printf("\nVírgula: %s\n", yytext); return VIRG;}
 {ponto_e_virg} { installEspecialChar(yytext); printf("\nPonto & Vírgula: %s\n", yytext); return PVIRG;}
+{comentario} { printf("\nComentario: %s\n", yytext); return COMM; }
 
 inicioprog { installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", yytext); return INICIOPROG;  }
 fimprog { installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", yytext); return FIMPROG; }
@@ -94,6 +98,7 @@ else { installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", y
 
 {S} { installEspecialChar(yytext); printf("\nCaractere especial: %s\n", yytext); return SPECIALCHAR; }
 
+
 "<" { printf("\noperador relacional: %s\n", yytext); return RELOP;}
 "<=" { printf("\noperador relacional: %s\n", yytext); return RELOP;}
 "==" { printf("\noperador relacional: %s\n", yytext); return RELOP;}
@@ -101,7 +106,9 @@ else { installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", y
 ">" { printf("\noperador relacional: %s\n", yytext); return RELOP;}
 ">="  {printf("\noperador relacional: %s\n", yytext); return RELOP;}
 "=" { printf("\natribuição: %s\n", yytext); return ATTR;}
-{erro} { printf("\n\nErro: caractere desconhecido: '%s'\n", yytext); }
+
+{erro} { printf("\nErro: caractere desconhecido: '%s'\n", yytext); }
+<<EOF>> { printf("\nFIM DE ARQUIVO.\n"); return 999; }
 
 %%
 int installID(const char* lexeme) {
@@ -128,7 +135,9 @@ int installEspecialChar(const char* lexeme) {
 int main(){
     initializeSymbolTable();
     addReservedWords();
-    while(1){
+
+   int result;
+    while((result = yylex()) != 999) {
         yylex();
     }
     return 0;
