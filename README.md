@@ -14,6 +14,6 @@ bash
 
 ```
 flex -o lex.yy.c lex.l
-gcc -o mycompiler lex.yy.c symbol_table.c main.c -lfl
+gcc -o mycompiler lex.yy.c symbol_table.c -lfl && ./mycompiler
 
 ```
