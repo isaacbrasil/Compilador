@@ -2,11 +2,15 @@ i > 5 = 8 == 7
 \n ou
 a11fa
 fimprogs
+fimprog
 se
 entao
-"dsfasff"
-\/\/\/\/
-/*dsfsfasd*/
+"literal"
+\/
+/*comentario*/
 9-1290
 i_909
 
+        dfvsafd
+;((())),
+,

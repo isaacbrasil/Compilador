@@ -33,9 +33,11 @@
 #define ATTR 67
 #define DELIM 68
 
-#define BARRAENE 69
-#define BARRAERRE 70
-#define BARRATE 71
+#define AP 69
+#define FP 70
+#define VIRG 71
+#define PVIRG 72
+
 
 int installReserved(const char *yytext, const char *tokenType);
 int installID(const char *lexeme);
@@ -49,16 +51,26 @@ int installEspecialChar(const char *yytext);
 
 D [0-9]
 L [A-Za-z]
-S [\\~`!@#$%^&*()_+/[]|‘?><.,-]
+S [\\~`!@#$%^&*()_+/[]|‘?><.,\-]
 numero {D}+(\.{D}+)?([Ee][+-]?{D}+)?
 literal \"([^"\\]|\\.)*\"
 identificador {L}({L}|_|{D})*
 delim [ \t\r\n]
 vazio {delim}+
 erro [.]
+abre_par [(]
+fecha_par [)]
+virgula [,]
+ponto_e_virg [;]
 %%
 
-vazio { printf("\nvazio\n"); } 
+{vazio} { } 
+
+{abre_par} { installEspecialChar(yytext); printf("\nAbre parenteses: %s\n", yytext); return AP;}
+{fecha_par} { installEspecialChar(yytext); printf("\nFecha parenteses: %s\n", yytext); return FP;}
+{virgula} { installEspecialChar(yytext); printf("\nVírgula: %s\n", yytext); return VIRG;}
+{ponto_e_virg} { installEspecialChar(yytext); printf("\nPonto & Vírgula: %s\n", yytext); return PVIRG;}
+
 inicioprog { installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", yytext); return INICIOPROG;  }
 fimprog { installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", yytext); return FIMPROG; }
 inicioargs { installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", yytext); return INICIOARGS; }
@@ -76,22 +88,19 @@ faca { installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", y
 fimenquanto { installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", yytext); return FIMENQUANTO; }
 else { installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", yytext); return ELSE; }
 
-
-
 {identificador} {installID(yytext); printf("\nidentificador: %s\n", yytext); return ID;}
 {numero} {installNUM(yytext); printf("\nnumero: %s\n", yytext); return NUMBER;}
 {literal} { installLiteral(yytext); printf("\nliteral: %s\n", yytext); return LITERAL; } 
 
 {S} { installEspecialChar(yytext); printf("\nCaractere especial: %s\n", yytext); return SPECIALCHAR; }
 
-"<" {LT; printf("\noperador relacional: %s\n", yytext); return RELOP;}
-"<=" {LE; printf("\noperador relacional: %s\n", yytext); return RELOP;}
-"==" {EQ; printf("\noperador relacional: %s\n", yytext); return RELOP;}
-"<>" {NE; printf("\noperador relacional: %s\n", yytext); return RELOP;}
-">" {GT; printf("\noperador relacional: %s\n", yytext); return RELOP;}
-">=" {GE; printf("\noperador relacional: %s\n", yytext); return RELOP;}
-
-"=" {GE; printf("\natribuição: %s\n", yytext); return ATTR;}
+"<" { printf("\noperador relacional: %s\n", yytext); return RELOP;}
+"<=" { printf("\noperador relacional: %s\n", yytext); return RELOP;}
+"==" { printf("\noperador relacional: %s\n", yytext); return RELOP;}
+"<>" { printf("\noperador relacional: %s\n", yytext); return RELOP;}
+">" { printf("\noperador relacional: %s\n", yytext); return RELOP;}
+">="  {printf("\noperador relacional: %s\n", yytext); return RELOP;}
+"=" { printf("\natribuição: %s\n", yytext); return ATTR;}
 {erro} { printf("\n\nErro: caractere desconhecido: '%s'\n", yytext); }
 
 %%
