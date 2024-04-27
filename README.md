@@ -14,3 +14,4 @@ Para compilar o arquivo Flex junto com o código da tabela de símbolos e qualqu
 flex -o lex.yy.c lex.l && gcc -o mycompiler lex.yy.c symbol_table.c -lfl && ./mycompiler < input.txt
 
 ```
+
