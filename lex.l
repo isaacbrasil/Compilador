@@ -49,10 +49,10 @@ int installEspecialChar(const char *yytext);
 
 D [0-9]
 L [A-Za-z]
-S [-~`!@#$%^&*()_+/[]|‘?><.,\]
+S [\\~`!@#$%^&*()_+/[]|‘?><.,-]
 numero {D}+(\.{D}+)?([Ee][+-]?{D}+)?
 literal \"([^"\\]|\\.)*\"
-identificador {L}({L}|{D})*
+identificador {L}({L}|_|{D})*
 delim [ \t\r\n]
 vazio {delim}+
 erro [.]
