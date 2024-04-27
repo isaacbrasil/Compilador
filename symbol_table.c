@@ -25,7 +25,7 @@ Symbol *findSymbol(const char *name) {
 
 void insertSymbol(const char *name, const char *type, int size, void *memoryLocation) {
     Symbol *existingSymbol = findSymbol(name);
-    if (existingSymbol == NULL) { // Somente insira se o símbolo ainda não existe
+    if (existingSymbol == NULL) { 
         Symbol *symbol = (Symbol *)malloc(sizeof(Symbol));
         if (!symbol) {
             fprintf(stderr, "Falha na alocação de memória\n");
