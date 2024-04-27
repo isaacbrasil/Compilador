@@ -30,11 +30,13 @@
 #define GT 64
 #define GE 65
 #define SPECIALCHAR 66
+#define ATTR 67
 
 int installReserved(const char *yytext, const char *tokenType);
 int installID(const char *lexeme);
 int installNUM(const char *num);
 int installLiteral(const char *yytext);
+int installEspecialChar(const char *yytext);
 
 %}
 
@@ -44,12 +46,10 @@ D [0-9]
 L [A-Za-z]
 S [~`!@#$%^&*()_+\/[]|‘?><.,-]
 numero {D}+(\.{D}+)?([Ee][+-]?{D}+)?
-literal "\"([^\"\\\\]|\\\\.)*\"".
+literal \"([^"\\]|\\.)*\"
 identificador {L}({L}|{D})*
 delim [ \t\r\n]
 vazio {delim}+
-abre_par [(]
-fecha_par [)]
 erro [.]
 %%
 
@@ -77,7 +77,7 @@ else { installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", y
 {numero} {installNUM(yytext); printf("\nnumero: %s\n", yytext); return NUMBER;}
 {literal} { installLiteral(yytext); printf("\nliteral: %s\n", yytext); return LITERAL; } 
 
-{S} { installEspecialChar(yytext); printf("\nCaractere especial: %s\n", yytext);; return SPECIALCHAR; }
+{S} { installEspecialChar(yytext); printf("\nCaractere especial: %s\n", yytext); return SPECIALCHAR; }
 
 "<" {LT; printf("\noperador relacional: %s\n", yytext); return RELOP;}
 "<=" {LE; printf("\noperador relacional: %s\n", yytext); return RELOP;}
@@ -85,6 +85,8 @@ else { installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", y
 "<>" {NE; printf("\noperador relacional: %s\n", yytext); return RELOP;}
 ">" {GT; printf("\noperador relacional: %s\n", yytext); return RELOP;}
 ">=" {GE; printf("\noperador relacional: %s\n", yytext); return RELOP;}
+
+"=" {GE; printf("\natribuição: %s\n", yytext); return ATTR;}
 {erro} { printf("\n\nErro: caractere desconhecido: '%s'\n", yytext); }
 
 %%
