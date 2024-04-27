@@ -30,6 +30,11 @@
 #define GT 64
 #define GE 65
 
+int installReserved(const char *yytext, const char *tokenType);
+int installID(const char *lexeme);
+int installNUM(const char *num);
+int installLiteral(const char *yytext);
+
 %}
 
 %option noyywrap
@@ -44,7 +49,7 @@ delim [ \t\r\n]
 vazio {delim}+
 abre_par [(]
 fecha_par [)]
-erro [.]
+erro [.\n]
 %%
 
 vazio { printf("vazio"); } 
@@ -65,15 +70,15 @@ faca { installReserved(yytext, "keyword"); printf("Palavra reservada: %s\n", yyt
 fimenquanto { installReserved(yytext, "keyword"); printf("Palavra reservada: %s\n", yytext); return FIMENQUANTO; }
 else { installReserved(yytext, "keyword"); printf("Palavra reservada: %s\n", yytext); return ELSE; }
 
-{identificador} {yylval = installID(); printf("identificador: %s\n", yytext); return ID;}
-{numero} {yylval = installNUM(); printf("numero: %s\n", yytext); return NUMBER;}
-{literal} { yylval = installLiteral(yytext); printf("literal: %s\n", yytext); return LITERAL; } 
-"<" {yylval = LT; printf("operador relacional: %s\n", yytext); return RELOP;}
-"<=" {yylval = LE; printf("operador relacional: %s\n", yytext); return RELOP;}
-"==" {yylval = EQ; printf("operador relacional: %s\n", yytext); return RELOP;}
-"<>" {yylval = NE; printf("operador relacional: %s\n", yytext); return RELOP;}
-">" {yylval = GT; printf("operador relacional: %s\n", yytext); return RELOP;}
-">=" {yylval = GE; printf("operador relacional: %s\n", yytext); return RELOP;}
+{identificador} {installID(yytext); printf("identificador: %s\n", yytext); return ID;}
+{numero} {installNUM(yytext); printf("numero: %s\n", yytext); return NUMBER;}
+{literal} { installLiteral(yytext); printf("literal: %s\n", yytext); return LITERAL; } 
+"<" {LT; printf("operador relacional: %s\n", yytext); return RELOP;}
+"<=" {LE; printf("operador relacional: %s\n", yytext); return RELOP;}
+"==" {EQ; printf("operador relacional: %s\n", yytext); return RELOP;}
+"<>" {NE; printf("operador relacional: %s\n", yytext); return RELOP;}
+">" {GT; printf("operador relacional: %s\n", yytext); return RELOP;}
+">=" {GE; printf("operador relacional: %s\n", yytext); return RELOP;}
 erro { printf("Erro: caractere desconhecido '%s'\n", yytext); }
 
 %%
@@ -89,15 +94,16 @@ int installReserved(const char* lexeme, const char* tokenType) {
     insertSymbol(lexeme, tokenType, 0, NULL);
     return 0; 
 }
-Symbol *findSymbol(const char *name);
-int installReserved(const char *yytext, const char *tokenType);
-int installID(const char *lexeme);
-int installNUM(const char *num);
-int installLiteral(const char *yytext);
+int installLiteral(const char* lexeme) {
+    insertSymbol(lexeme, "literal", 0, NULL);
+    return 0; 
+}
 
 int main(){
     initializeSymbolTable();
     addReservedWords();
-    yylex();
+    while(1){
+        yylex();
+    }
     return 0;
 }
