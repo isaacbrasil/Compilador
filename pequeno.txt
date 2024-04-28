@@ -1,0 +1,2 @@
+{Teste}
+inteiro numero = 3;
