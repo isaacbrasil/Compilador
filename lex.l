@@ -136,6 +136,6 @@ int main(){
     addReservedWords();
 
     int result;
-    while((result = yylex()) != 999) {}
+    while((result = yylex()) != 999);
     return 0;
 }
