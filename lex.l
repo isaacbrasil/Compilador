@@ -1,6 +1,7 @@
 %{
 #include <stdio.h>
 #include "symbol_table.h"
+
 #define INICIOPROG 1
 #define FIMPROG 2
 #define INICIOARGS 3
@@ -17,11 +18,10 @@
 #define ENQUANTO 13
 #define FACA 14
 #define FIMENQUANTO 15
-#define ELSE 16
 
-#define ID 17
-#define NUMBER 18
-#define RELOP 19
+#define ID 16
+#define NUMBER 17
+#define RELOP 18
 
 #define LT 60
 #define LE 61
@@ -38,6 +38,9 @@
 #define VIRG 71
 #define PVIRG 72
 #define COMM 73
+
+#define ERROR 404
+
 
 int installReserved(const char *yytext, const char *tokenType);
 int installID(const char *lexeme);
@@ -89,7 +92,6 @@ fimse { installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", 
 enquanto { installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", yytext); return ENQUANTO; }
 faca { installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", yytext); return FACA; }
 fimenquanto { installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", yytext); return FIMENQUANTO; }
-else { installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", yytext); return ELSE; }
 
 {identificador} {installID(yytext); printf("\nidentificador: %s\n", yytext); return ID;}
 {numero} {installNUM(yytext); printf("\nnumero: %s\n", yytext); return NUMBER;}
@@ -106,7 +108,7 @@ else { installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", y
 ">="  {printf("\noperador relacional: %s\n", yytext); return RELOP;}
 "=" { printf("\natribuição: %s\n", yytext); return ATTR;}
 
-{erro} { printf("\nErro: caractere desconhecido: '%s'\n", yytext); }
+.|\n { printf("\nErro: caractere desconhecido: '%s'\n", yytext); return ERROR; }
 <<EOF>> { printf("\nFIM DE ARQUIVO.\n"); return 999; }
 
 %%
