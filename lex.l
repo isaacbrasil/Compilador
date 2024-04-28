@@ -59,13 +59,13 @@ literal \"([^"\\]|\\.)*\"
 identificador {L}({L}|_|{D})*
 delim [ \t\r\n]
 vazio {delim}+
+erro .|\n
 abre_par [(]
 fecha_par [)]
 virgula [,]
 ponto_e_virg [;]
 comentario \{({L}|{D}|{S}|{vazio})*\}
 fim_de_arq <<EOF>>
-
 
 %%
 
@@ -137,9 +137,7 @@ int main(){
     initializeSymbolTable();
     addReservedWords();
 
-   int result;
-    while((result = yylex()) != 999) {
-        yylex();
-    }
+    int result;
+    while((result = yylex()) != 999);
     return 0;
 }
