@@ -19,6 +19,6 @@ Para compilar o arquivo Flex junto com o bison:
 
 
 ```
-flex lex.l && bison -d sintatico.y && gcc sintático.tab.c lex.yy.c -o mycompiler && ./mycompiler
+flex lex.l && bison -d sintatico.y && gcc sintático.tab.c lex.yy.c -o mycompiler && ./mycompiler < input.txt
 
 ```
