@@ -1,12 +1,15 @@
 %{
 
- #include <stdio.h>
+#include <ctype.h>
+#include <stdio.h>
 #include <stdlib.h>
+#define YYSTYPE double
+extern int yylineno; 
 int yylex(void);
 extern int yylval;
 void yyerror (char *);
     
-}%
+%}
 
 %token AP FP VIRG PVIRG COMM INICIOPROG FIMPROG INICIOARGS FIMARGS INICIOVARS FIMVARS ESCREVA INTEIRO  
 %token REAL SE ENTAO FIMSE ENQUANTO FACA FIMENQUANTO ID NUMBER LITERAL SPECIALCHAR RELOP ATTR ERROR
@@ -19,6 +22,20 @@ void yyerror (char *);
 %right '^'
 
 %%
+
+lines : lines expr '\n' { printf("= %g\n", $2); }
+| lines '\n'
+| /* empty */
+;
+expr : expr '+' expr { $$ = $1 + $3; }
+| expr '-' expr { $$ = $1 - $3; }
+| expr '*' expr { $$ = $1 * $3; }
+| expr '/' expr { $$ = $1 / $3; }
+| '(' expr ')' { $$ = $2; }
+| '-' expr %prec UMINUS { $$ = -$2; }
+| NUMBER
+;
+
 ST : ST {printf("\nACEITO\n"); exit(0) ;}
 ST: FOR EP Expr1 PV Expr2 PV Expr3 DP ECHAVES DCHAVES
 | WHILE EP Expr2 DP ECHAVES DCHAVES
@@ -58,3 +75,5 @@ Expr2 : VARIAVEL RELOP VARIAVEL {printf("teste1 Expr2");}
 
 Expr3 : VARIAVEL INC {printf("teste1 Expr3");}
 | VARIAVEL DEC {printf("teste2 Expr3");}
+
+%%
