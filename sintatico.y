@@ -50,11 +50,11 @@ RELOP : MENORQ
 | DIFERENTE
 
 
-Expr1 : VARIAVEL IGUAL VARIAVEL
-| VARIAVEL IGUAL NUM
+Expr1 : VARIAVEL IGUAL VARIAVEL {printf("teste1 Expr1");}
+| VARIAVEL IGUAL NUM {printf("teste2 Expr1");}
 
-Expr2 : VARIAVEL RELOP VARIAVEL
-| VARIAVEL RELOP NUM
+Expr2 : VARIAVEL RELOP VARIAVEL {printf("teste1 Expr2");}
+| VARIAVEL RELOP NUM {printf("teste2 Expr2");}
 
-Expr3 : VARIAVEL INC
-| VARIAVEL DEC
+Expr3 : VARIAVEL INC {printf("teste1 Expr3");}
+| VARIAVEL DEC {printf("teste2 Expr3");}
