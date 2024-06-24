@@ -36,44 +36,17 @@ expr : expr '+' expr { $$ = $1 + $3; }
 | NUMBER
 ;
 
-ST : ST {printf("\nACEITO\n"); exit(0) ;}
-ST: FOR EP Expr1 PV Expr2 PV Expr3 DP ECHAVES DCHAVES
-| WHILE EP Expr2 DP ECHAVES DCHAVES
-| SWITCH EP VARIAVEL DP ECHAVES E DCHAVES
-| BINARIO
-| HEXADECIMAL
-| OCTAL
+programa : INICIOPROG args { printf("Programa reconhecido\n"); }
+;
 
-E : A
-| A C
-| A E
+args : INICIOARGS listvars FIMARGS { printf("Argumentos reconhecidos\n"); }
+| codigo { printf("Código como argumento reconhecido\n"); }
+;
 
-A : A B
-| CASE NUM D B
+codigo : INICIOVARS listvars FIMVARS restante { printf("Bloco de código reconhecido\n"); }
+;
 
-B: BREAK PV
-
-C: DEFAULT D B
-
-D: DD VARIAVEL PV
-| DD PV
-| DD
-
-RELOP : MENORQ
-| MAIORQ
-| IGUAL
-| MENORG
-| MAIORG
-| DIFERENTE
-
-
-Expr1 : VARIAVEL IGUAL VARIAVEL {printf("teste1 Expr1");}
-| VARIAVEL IGUAL NUM {printf("teste2 Expr1");}
-
-Expr2 : VARIAVEL RELOP VARIAVEL {printf("teste1 Expr2");}
-| VARIAVEL RELOP NUM {printf("teste2 Expr2");}
-
-Expr3 : VARIAVEL INC {printf("teste1 Expr3");}
-| VARIAVEL DEC {printf("teste2 Expr3");}
+listvars : /* sua definição de variáveis aqui */
+;
 
 %%
