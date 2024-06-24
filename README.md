@@ -15,3 +15,10 @@ flex -o lex.yy.c lex.l && gcc -o mycompiler lex.yy.c symbol_table.c -lfl && ./my
 
 ```
 
+Para compilar o arquivo Flex junto com o bison:
+
+
+```
+flex lex.l && bison -d sintatico.y && gcc sintático.tab.c lex.yy.c -o mycompiler && ./mycompiler
+
+```
