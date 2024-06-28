@@ -23,18 +23,37 @@ void yyerror (char *);
 
 %%
 
-lines : lines expr '\n' { printf("= %g\n", $2); }
-| lines '\n'
-| /* empty */
-;
-expr : expr '+' expr { $$ = $1 + $3; }
-| expr '-' expr { $$ = $1 - $3; }
-| expr '*' expr { $$ = $1 * $3; }
-| expr '/' expr { $$ = $1 / $3; }
-| '(' expr ')' { $$ = $2; }
-| '-' expr %prec UMINUS { $$ = -$2; }
-| NUMBER
-;
+declara_args: INICIOARGS arg_var FIMARGS
+declara_vars: INICIOVARS arg_var FIMVARS
+
+arg_var: LITERAL ID PVIRG
+| INTEIRO NUMBER PVIRG
+| REAL NUMBER PVIRG
+
+
+
+
+
+numeric_value: signal value
+signal: '+'
+| '-'
+| VAZIO
+value: NUMBER
+| ID
+
+algebraic_expr: NUMBER RELOP NUMBER
+| NUMBER RELOP ID
+| ID RELOP ID
+| ID RELOP NUMBER
+
+//logic_expr: 
+| ID RELOP ID
+| ID RELOP NUMBER
+
+//logic_expr: 
+
+
+expr_condicional: SE AP (NUMBER RELOP)
 
 programa : INICIOPROG args { printf("Programa reconhecido\n"); }
 ;
