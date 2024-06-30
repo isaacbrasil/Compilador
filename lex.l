@@ -1,8 +1,9 @@
 %{
 #include <stdio.h>
 #include "symbol_table.h"
+#include "sintatico.tab.h"
 
-#define INICIOPROG 1
+/*#define INICIOPROG 1
 #define FIMPROG 2
 #define INICIOARGS 3
 #define FIMARGS 4
@@ -39,8 +40,10 @@
 #define PVIRG 72
 #define COMM 73
 
-#define ERROR 404
+#define RELALG 124
 
+#define ERROR 404
+*/
 
 int installReserved(const char *yytext, const char *tokenType);
 int installID(const char *lexeme);
@@ -98,6 +101,12 @@ fimenquanto { installReserved(yytext, "keyword"); printf("\nPalavra reservada: %
 {literal} { installLiteral(yytext); printf("\nliteral: %s\n", yytext); return LITERAL; } 
 
 {S} { installEspecialChar(yytext); printf("\nCaractere especial: %s\n", yytext); return SPECIALCHAR; }
+
+
+"+" { printf("\noperador relacional: %s\n", yytext); return RELALG;}
+"-" { printf("\noperador relacional: %s\n", yytext); return RELALG;}
+"*" { printf("\noperador relacional: %s\n", yytext); return RELALG;}
+"/" { printf("\noperador relacional: %s\n", yytext); return RELALG;}
 
 
 "<" { printf("\noperador relacional: %s\n", yytext); return RELOP;}
