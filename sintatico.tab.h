@@ -82,11 +82,10 @@ extern int yydebug;
     ATTR = 283,                    /* ATTR  */
     ERROR = 284,                   /* ERROR  */
     RELALG = 285,                  /* RELALG  */
-    MAIORG = 286,                  /* MAIORG  */
-    DIFERENTE = 287,               /* DIFERENTE  */
-    MENORQ = 288,                  /* MENORQ  */
-    MENORG = 289,                  /* MENORG  */
-    EP = 290                       /* EP  */
+    MULT = 286,                    /* MULT  */
+    SOMA = 287,                    /* SOMA  */
+    SUB = 288,                     /* SUB  */
+    DIV = 289                      /* DIV  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif

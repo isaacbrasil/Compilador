@@ -53,6 +53,7 @@ int installEspecialChar(const char *yytext);
 
 %}
 
+%option noyywrap
 
 D [0-9]
 L [A-Za-z]
@@ -103,12 +104,6 @@ fimenquanto { installReserved(yytext, "keyword"); printf("\nPalavra reservada: %
 {S} { installEspecialChar(yytext); printf("\nCaractere especial: %s\n", yytext); return SPECIALCHAR; }
 
 
-"+" { printf("\noperador relacional: %s\n", yytext); return RELALG;}
-"-" { printf("\noperador relacional: %s\n", yytext); return RELALG;}
-"*" { printf("\noperador relacional: %s\n", yytext); return RELALG;}
-"/" { printf("\noperador relacional: %s\n", yytext); return RELALG;}
-
-
 "<" { printf("\noperador relacional: %s\n", yytext); return RELOP;}
 "<=" { printf("\noperador relacional: %s\n", yytext); return RELOP;}
 "==" { printf("\noperador relacional: %s\n", yytext); return RELOP;}
@@ -142,11 +137,12 @@ int installEspecialChar(const char* lexeme) {
     return 0; 
 }
 
-int main(){
+/*int main(){
     initializeSymbolTable();
     addReservedWords();
 
     int result;
     while((result = yylex()) != 999);
+    
     return 0;
-}
+}*/
