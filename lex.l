@@ -3,48 +3,6 @@
 #include "symbol_table.h"
 #include "sintatico.tab.h"
 
-/*#define INICIOPROG 1
-#define FIMPROG 2
-#define INICIOARGS 3
-#define FIMARGS 4
-#define INICIOVARS 5
-#define FIMVARS 6
-#define ESCREVA 7
-#define INTEIRO 8
-#define REAL 9
-#define SE 21
-#define LITERAL 10
-#define ENTAO 11
-#define FIMSE 12
-#define ENQUANTO 13
-#define FACA 14
-#define FIMENQUANTO 15
-
-#define ID 16
-#define NUMBER 17
-#define RELOP 18
-
-#define LT 60
-#define LE 61
-#define EQ 62
-#define NE 63
-#define GT 64
-#define GE 65
-#define SPECIALCHAR 66
-#define ATTR 67
-#define DELIM 68
-
-#define AP 69
-#define FP 70
-#define VIRG 71
-#define PVIRG 72
-#define COMM 73
-
-#define RELALG 124
-
-#define ERROR 404
-*/
-
 int installReserved(const char *yytext, const char *tokenType);
 int installID(const char *lexeme);
 int installNUM(const char *num);
