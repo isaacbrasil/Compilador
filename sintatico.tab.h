@@ -81,11 +81,7 @@ extern int yydebug;
     RELOP = 282,                   /* RELOP  */
     ATTR = 283,                    /* ATTR  */
     ERROR = 284,                   /* ERROR  */
-    RELALG = 285,                  /* RELALG  */
-    MULT = 286,                    /* MULT  */
-    SOMA = 287,                    /* SOMA  */
-    SUB = 288,                     /* SUB  */
-    DIV = 289                      /* DIV  */
+    LITERALSTRING = 285            /* LITERALSTRING  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif

@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include "symbol_table.h"
 #include "sintatico.tab.h"
-//#define YYSTYPE double
 extern int yylineno; 
 int yylex(void);
 extern int yylval;
@@ -13,94 +12,110 @@ int yyerror (char *);
 %}
 
 %token AP FP VIRG PVIRG COMM INICIOPROG FIMPROG INICIOARGS FIMARGS INICIOVARS FIMVARS ESCREVA INTEIRO  
-%token REAL SE ENTAO FIMSE ENQUANTO FACA FIMENQUANTO ID NUMBER LITERAL SPECIALCHAR RELOP ATTR ERROR RELALG
-%token MULT SOMA SUB DIV
+%token REAL SE ENTAO FIMSE ENQUANTO FACA FIMENQUANTO ID NUMBER LITERAL SPECIALCHAR RELOP ATTR ERROR
+%token LITERALSTRING
 
 
 // Precedencia
 %right '='
-//%left MAIORG DIFERENTE MENORQ MENORG EP
-%left RELOP RELALG
-%left '+' '-' 
-%left '*' '/' 
-%left MULT DIV
-%left SOMA SUB
+%left RELOP
+%left '+' '-'
+%left '*' '/'
+
 
 %%
       
 //Produção do programa completo
-programa : INICIOPROG prog FIMPROG;
+programa : INICIOPROG prog FIMPROG { printf("\nPrograma reconhecido\n");};
 
 //Produção do codigo do programa:
-prog : declara_args declara_vars statement;
+prog : declara_args declara_vars statement { printf("\nProdução do codigo do programa\n");};
 
 //Produção de argumentos e variaveis
-declara_args : INICIOARGS arg_var FIMARGS;
-declara_vars : INICIOVARS arg_var FIMVARS;
+declara_args : INICIOARGS args_list FIMARGS     {printf("\nProdução de argumentos\n");}; 
+declara_vars : INICIOVARS vars_list FIMVARS     {printf("\nProdução de variaveis\n");};
 
 //Produção de qualquer statement
-statement : algebraic_expr statement
-        | logic_expr statement
-        | attrib statement
-        | expr_condicional statement
-        | expr_controle statement
-        | expr_escreva statement
-        | //Vazio
-        ;
+statement : algebraic_expr statement            {printf("\nstatement -> algebraic_expr statement\n");}
+        | logic_expr statement                  {printf("\nstatement -> logic_expr statement\n");}
+        | attrib statement                      {printf("\nstatement -> attrib statement\n");}
+        | expr_condicional statement            {printf("\nstatement -> expr_condicional statement\n");}
+        | expr_controle statement               {printf("\nstatement -> expr_controle statement\n");}
+        | expr_escreva statement                {printf("\nstatement -> expr_escreva statement\n");}
+        | ;
 
 //Produção de expressão algébrica
-algebraic_expr : NUMBER rel_alg NUMBER
-                | NUMBER rel_alg ID
-                | ID rel_alg ID
-                | ID rel_alg NUMBER
+algebraic_expr : NUMBER rel_alg NUMBER  { printf("\nalgebraic_expr -> NUMBER rel_alg NUMBER\n");}
+                | NUMBER rel_alg ID     { printf("\nalgebraic_expr -> NUMBER rel_alg ID\n");}
+                | ID rel_alg ID         { printf("\nalgebraic_expr -> ID rel_alg ID\n");}
+                | ID rel_alg NUMBER     { printf("\nalgebraic_expr -> ID rel_alg NUMBER\n");}
                 ;
 
 //Produção de operador algébrico
-rel_alg : '-'
-        | '+'
-        | '/'
-        | '*'
+rel_alg : '-' { printf("\nrel_alg -> SUBTRAÇÃO\n");}
+        | '+' { printf("\nrel_alg -> ADIÇÃO\n");}  
+        | '/' { printf("\nrel_alg -> DIVISÃO\n");}
+        | '*' { printf("\nrel_alg -> MULTIPLICAÇÃO\n");}
         ;
 
 //Produção de expressão logica
-logic_expr : ID RELOP ID
-            | ID RELOP NUMBER
-            | NUMBER RELOP ID
-            | NUMBER RELOP NUMBER
+logic_expr : ID RELOP ID            { printf("\nlogic_expr -> ID RELOP ID \n");}
+            | ID RELOP NUMBER       { printf("\nlogic_expr -> ID RELOP NUMBER\n");}
+            | NUMBER RELOP ID       { printf("\nlogic_expr -> NUMBER RELOP ID\n");}
+            | NUMBER RELOP NUMBER   { printf("\nlogic_expr -> NUMBER RELOP NUMBER\n");}
             ;
 
 //Produção de atribuição
-attrib : ID ATTR ID PVIRG
-        | ID ATTR NUMBER PVIRG
-        | ID ATTR algebraic_expr PVIRG
-        | ID ATTR logic_expr PVIRG
+attrib : ID ATTR ID PVIRG               { printf("\nattrib -> ID ATTR ID PVIRG\n");}
+        | ID ATTR NUMBER PVIRG          { printf("\nattrib -> ID ATTR NUMBER PVIRG\n");}
+        | ID ATTR algebraic_expr PVIRG  { printf("\nattrib -> ID ATTR algebraic_expr PVIRG\n");}
+        | ID ATTR logic_expr PVIRG      { printf("\nattrib -> ID ATTR logic_expr PVIRG\n");}
+        | ID ATTR LITERALSTRING PVIRG   { printf("\nattrib -> ID ATTR LITERALSTRING PVIRG\n");}
         ;
 
 //Produção de expressão condicional
-expr_condicional : SE AP logic_expr FP ENTAO instruction FIMSE;
+expr_condicional : SE AP logic_expr FP ENTAO instruction FIMSE { printf("\nProdução de expressão condicional\n");};
 
 //Produção de expressão de controle
-expr_controle : ENQUANTO AP logic_expr FP FACA instruction FIMENQUANTO;
+expr_controle : ENQUANTO AP logic_expr FP FACA instruction FIMENQUANTO { printf("\nProdução de expressão de controle\n");};
 
 //Produção de escreva
-expr_escreva : ESCREVA LITERAL PVIRG
-            | ESCREVA REAL PVIRG
-            | ESCREVA INTEIRO PVIRG
+expr_escreva : ESCREVA LITERAL PVIRG    { printf("\nexpr_escreva -> ESCREVA LITERAL PVIRG\n");}
+            | ESCREVA REAL PVIRG        { printf("\nexpr_escreva -> ESCREVA REAL PVIRG\n");}
+            | ESCREVA INTEIRO PVIRG     { printf("\nexpr_escreva -> ESCREVA INTEIRO PVIRG\n");}
             ;
+
+//Produção de argumentos
+args_list : var_decl args_list { printf("\nargs_list -> var_decl args_list\n");}
+          | ;
 
 //Produção de variaveis
-arg_var : tipo_var ID itera_vars PVIRG;
+vars_list :  var_decl vars_list { printf("\nvars_list -> var_decl vars_list\n");}
+          | ;
 
-//Produção de variaveis separadas por virgula
-itera_vars : VIRG ID itera_vars
-            | //VAZIO
-            ;
+//Produção de variaveis
+var_decl : tipo_var ID_list PVIRG { printf("\nvar_decl -> tipo_var ID_list PVIRG\n");};
+ 
+//Produção de lista de identificadores 
+ID_list : ID_list VIRG ID   { printf("\nID_list -> ID_list VIRG ID\n");}
+        | ID                { printf("\nID_list -> ID\n");};
 
 //Produção de tipos de variaveis
-tipo_var : INTEIRO
-        | REAL
-        | LITERAL
+tipo_var : INTEIRO          { printf("\ntipo_var -> INTEIRO\n");}
+        | REAL              { printf("\ntipo_var -> REAL\n");}
+        | LITERAL           { printf("\ntipo_var -> LITERAL\n");}
         ;
+//Produção de uma instrução
+instruction : expr_escreva  { printf("\ninstruction -> expr_escreva\n");}
+            |  attrib       { printf("\ninstruction -> attrib\n");}
+            ;
+
+//Produção de contagem de linhas          
+lines : lines programa '\n' { printf("= %g\n", $2); }
+    | lines '\n'
+    | /* empty */
+    | error '\n' { yyerrok; }
+    ;
 
 //Produção de valores numéricos
 //numeric_value : signal value;
@@ -108,18 +123,13 @@ tipo_var : INTEIRO
 //Produção de sinais dos valores numéricos
 //signal : '+'
 //       | '-'
-//        | //VAZIO
-//      ;
+//       |;
 
 //Produção de valor que uma variavel pode assumir
 //value : NUMBER
 //    | ID
 //    ;
 
-//Produção de uma instrução
-instruction : expr_escreva
-            |  attrib
-            ;
 
 %%
 int main() {
