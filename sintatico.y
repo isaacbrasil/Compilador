@@ -116,21 +116,6 @@ tipo_var : INTEIRO          { printf("\ntipo_var -> INTEIRO\n");}
 instruction : expr_escreva instruction { printf("\ninstruction -> expr_escreva\n");}
             |  attrib instruction   { printf("\ninstruction -> attrib\n");}
             |  ;
-
-//Produção de valores numéricos
-//numeric_value : signal value;
-
-//Produção de sinais dos valores numéricos
-//signal : '+'
-//       | '-'
-//       |;
-
-//Produção de valor que uma variavel pode assumir
-//value : NUMBER
-//    | ID
-//    ;
-
-
 %%
 int main() {
     initializeSymbolTable(); // Inicializa a tabela de símbolos
