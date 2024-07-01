@@ -69,6 +69,8 @@ fim_de_arq <<EOF>>
 
 %%
 
+\n { yylineno++; }
+
 {vazio} { } 
 
 {abre_par} { installEspecialChar(yytext); printf("\nAbre parenteses: %s\n", yytext); return AP;}
@@ -109,7 +111,7 @@ fimenquanto { installReserved(yytext, "keyword"); printf("\nPalavra reservada: %
 ">="  {printf("\noperador relacional: %s\n", yytext); return RELOP;}
 "=" { printf("\natribuição: %s\n", yytext); return ATTR;}
 
-.|\n { printf("\nErro: caractere desconhecido: '%s'\n", yytext); return ERROR; }
+. { printf("\nErro: caractere desconhecido: '%s'\n", yytext); return ERROR; }
 <<EOF>> { printf("\nFIM DE ARQUIVO.\n"); return 999; }
 
 %%

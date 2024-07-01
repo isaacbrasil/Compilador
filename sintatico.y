@@ -26,15 +26,17 @@ int yyerror (char *);
 %%
       
 //Produção do programa completo
-programa : INICIOPROG prog FIMPROG { printf("\nPrograma reconhecido\n");};
+programa : INICIOPROG prog FIMPROG  { printf("\nPrograma reconhecido\n");};
 
 //Produção do codigo do programa:
 prog : declara_args declara_vars statement { printf("\nProdução do codigo do programa\n");};
 
 //Produção de argumentos e variaveis
-declara_args : INICIOARGS args_list FIMARGS     {printf("\nProdução de argumentos\n");}; 
-declara_vars : INICIOVARS vars_list FIMVARS     {printf("\nProdução de variaveis\n");};
+declara_args : INICIOARGS args_list FIMARGS     {printf("\nProdução de argumentos\n");}
+             | INICIOARGS error FIMARGS         { yyerrok; fprintf(stderr, "Erro de sintaxe nos argumentos na linha %d\n", yylineno); };
 
+declara_vars : INICIOVARS vars_list FIMVARS     {printf("\nProdução de variaveis\n");}
+             | INICIOVARS error FIMVARS         { yyerrok; fprintf(stderr, "Erro de sintaxe nos argumentos na linha %d\n", yylineno); };
 //Produção de qualquer statement
 statement : algebraic_expr statement            {printf("\nstatement -> algebraic_expr statement\n");}
         | logic_expr statement                  {printf("\nstatement -> logic_expr statement\n");}
@@ -110,13 +112,6 @@ tipo_var : INTEIRO          { printf("\ntipo_var -> INTEIRO\n");}
 instruction : expr_escreva instruction { printf("\ninstruction -> expr_escreva\n");}
             |  attrib instruction   { printf("\ninstruction -> attrib\n");}
             |  ;
-
-//Produção de contagem de linhas          
-lines : lines programa '\n' { printf("= %g\n", $2); }
-    | lines '\n'
-    | /* empty */
-    | error '\n' { yyerrok; }
-    ;
 
 //Produção de valores numéricos
 //numeric_value : signal value;

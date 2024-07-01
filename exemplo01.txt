@@ -1,5 +1,6 @@
 inicioprog
 inicioargs
+ inteiro;
  literal letra;
  inteiro cont;
 fimargs
