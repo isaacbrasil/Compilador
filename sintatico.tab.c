@@ -1654,6 +1654,7 @@ int main() {
     return 0;
 }
 
-// int yyerror(char *s) {
-//     fprintf(stderr, "Error: %s -- Line: %d\n", s, yylineno);
-// }
+int yyerror(char *s) {
+    fprintf(stderr, "Error: %s -- Line: %d\n", s, yylineno+1);
+    return 0;
+}
