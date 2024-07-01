@@ -26,17 +26,15 @@ int yyerror (char *);
 %%
       
 //Produção do programa completo
-programa : INICIOPROG prog FIMPROG  { printf("\nPrograma reconhecido\n");};
+programa : INICIOPROG prog FIMPROG  { printf("\nFim do Programa\n");};
 
 //Produção do codigo do programa:
 prog : declara_args declara_vars statement { printf("\nProdução do codigo do programa\n");};
 
 //Produção de argumentos e variaveis
-declara_args : INICIOARGS args_list FIMARGS     {printf("\nProdução de argumentos\n");}
-             | error                            { yyerrok; fprintf(stderr, "Erro de sintaxe nos argumentos na linha %d\n", yylineno); };
+declara_args : INICIOARGS args_list FIMARGS     {printf("\nProdução de argumentos\n");};
 
-declara_vars : INICIOVARS vars_list FIMVARS     {printf("\nProdução de variaveis\n");}
-             | error                            { yyerrok; fprintf(stderr, "Erro de sintaxe nos argumentos na linha %d\n", yylineno); };
+declara_vars : INICIOVARS vars_list FIMVARS     {printf("\nProdução de variaveis\n");};
 //Produção de qualquer statement
 statement : algebraic_expr statement            {printf("\nstatement -> algebraic_expr statement\n");}
         | logic_expr statement                  {printf("\nstatement -> logic_expr statement\n");}
@@ -44,7 +42,6 @@ statement : algebraic_expr statement            {printf("\nstatement -> algebrai
         | expr_condicional statement            {printf("\nstatement -> expr_condicional statement\n");}
         | expr_controle statement               {printf("\nstatement -> expr_controle statement\n");}
         | expr_escreva statement                {printf("\nstatement -> expr_escreva statement\n");}
-        | error                                 { yyerrok; fprintf(stderr, "Erro de sintaxe na instrução na linha %d\n", yylineno); }
         | ;
 
 //Produção de expressão algébrica
@@ -90,12 +87,10 @@ expr_escreva : ESCREVA LITERALSTRING PVIRG    { printf("\nexpr_escreva -> ESCREV
 
 //Produção de argumentos
 args_list : var_decl args_list { printf("\nargs_list -> var_decl args_list\n");}
-          | error { yyerrok; fprintf(stderr, "Erro de sintaxe na lista de argumentos na linha %d\n", yylineno); }
           | ;
 
 //Produção de variaveis
 vars_list :  var_decl vars_list { printf("\nvars_list -> var_decl vars_list\n");}
-          | error { yyerrok; fprintf(stderr, "Erro de sintaxe na lista de variáveis na linha %d\n", yylineno); }
           | ;
 
 //Produção de variaveis
@@ -104,7 +99,6 @@ var_decl : tipo_var ID_list PVIRG { printf("\nvar_decl -> tipo_var ID_list PVIRG
 //Produção de lista de identificadores 
 ID_list : ID_list VIRG ID   { printf("\nID_list -> ID_list VIRG ID\n");}
         | ID                { printf("\nID_list -> ID\n");}
-        | error { yyerrok; fprintf(stderr, "Erro de sintaxe na lista de identificadores na linha %d\n", yylineno); }
         ;
 
 //Produção de tipos de variaveis
@@ -128,6 +122,6 @@ int main() {
 }
 
 int yyerror(char *s) {
-    fprintf(stderr, "Error: %s -- Line: %d\n", s, yylineno+1);
+    fprintf(stderr, "Error: %s -- Line: %d\n", s, yylineno);
     return 0;
 }
