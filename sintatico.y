@@ -80,9 +80,10 @@ expr_condicional : SE AP logic_expr FP ENTAO instruction FIMSE { printf("\nProdu
 expr_controle : ENQUANTO AP logic_expr FP FACA instruction FIMENQUANTO { printf("\nProdução de expressão de controle\n");};
 
 //Produção de escreva
-expr_escreva : ESCREVA LITERAL PVIRG    { printf("\nexpr_escreva -> ESCREVA LITERAL PVIRG\n");}
+expr_escreva : ESCREVA LITERALSTRING PVIRG    { printf("\nexpr_escreva -> ESCREVA LITERALSTRING PVIRG\n");}
             | ESCREVA REAL PVIRG        { printf("\nexpr_escreva -> ESCREVA REAL PVIRG\n");}
             | ESCREVA INTEIRO PVIRG     { printf("\nexpr_escreva -> ESCREVA INTEIRO PVIRG\n");}
+            | ESCREVA ID PVIRG
             ;
 
 //Produção de argumentos
@@ -106,9 +107,9 @@ tipo_var : INTEIRO          { printf("\ntipo_var -> INTEIRO\n");}
         | LITERAL           { printf("\ntipo_var -> LITERAL\n");}
         ;
 //Produção de uma instrução
-instruction : expr_escreva  { printf("\ninstruction -> expr_escreva\n");}
-            |  attrib       { printf("\ninstruction -> attrib\n");}
-            ;
+instruction : expr_escreva instruction { printf("\ninstruction -> expr_escreva\n");}
+            |  attrib instruction   { printf("\ninstruction -> attrib\n");}
+            |  ;
 
 //Produção de contagem de linhas          
 lines : lines programa '\n' { printf("= %g\n", $2); }
