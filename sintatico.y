@@ -38,7 +38,7 @@ declara_args : INICIOARGS args_list FIMARGS     {printf("\nProdução de argumen
 
 //Produção de comentarios
 comment: AC prog FC           {printf("\nProdução de comentarios\n");}
-        | AC FC
+        | AC FC               {printf("\nProdução de comentario vazio\n");}
         ;
 
 declara_vars : INICIOVARS vars_list FIMVARS     {printf("\nProdução de variaveis\n");}
