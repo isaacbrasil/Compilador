@@ -14,7 +14,7 @@ int yyerror (char *);
 %token AP FP VIRG PVIRG COMM INICIOPROG FIMPROG INICIOARGS FIMARGS INICIOVARS FIMVARS ESCREVA INTEIRO  
 %token REAL SE ENTAO FIMSE ENQUANTO FACA FIMENQUANTO ID NUMBER LITERAL SPECIALCHAR RELOP ATTR ERROR
 %token LITERALSTRING
-
+%token AC FC
 
 // Precedencia
 %right '='
@@ -33,6 +33,11 @@ prog : declara_args declara_vars statement { printf("\nProdução do codigo do p
 
 //Produção de argumentos e variaveis
 declara_args : INICIOARGS args_list FIMARGS     {printf("\nProdução de argumentos\n");};
+
+//Produção de comentarios
+comment: AC prog FC           {printf("\nProdução de comentarios\n");};
+        | AC FC
+        ;
 
 declara_vars : INICIOVARS vars_list FIMVARS     {printf("\nProdução de variaveis\n");};
 //Produção de qualquer statement
