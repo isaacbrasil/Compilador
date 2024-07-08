@@ -32,14 +32,19 @@ programa : INICIOPROG prog FIMPROG  { printf("\nFim do Programa\n");};
 prog : declara_args declara_vars statement { printf("\nProdução do codigo do programa\n");};
 
 //Produção de argumentos e variaveis
-declara_args : INICIOARGS args_list FIMARGS     {printf("\nProdução de argumentos\n");};
+declara_args : INICIOARGS args_list FIMARGS     {printf("\nProdução de argumentos\n");}
+             | INICIOARGS FIMARGS               {printf("\nArgumentos vazios\n");}
+             ;
 
 //Produção de comentarios
-comment: AC prog FC           {printf("\nProdução de comentarios\n");};
+comment: AC prog FC           {printf("\nProdução de comentarios\n");}
         | AC FC
         ;
 
-declara_vars : INICIOVARS vars_list FIMVARS     {printf("\nProdução de variaveis\n");};
+declara_vars : INICIOVARS vars_list FIMVARS     {printf("\nProdução de variaveis\n");}
+             | INICIOVARS FIMVARS               {printf("\nVariáveis vazias\n");}
+             ;
+
 //Produção de qualquer statement
 statement : algebraic_expr statement            {printf("\nstatement -> algebraic_expr statement\n");}
         | logic_expr statement                  {printf("\nstatement -> logic_expr statement\n");}
