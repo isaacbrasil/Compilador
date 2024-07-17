@@ -2,19 +2,27 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "symbol_table.h"
 #include "sintatico.tab.h"
 extern int yylineno; 
 int yylex(void);
 extern int yylval;
-int yyerror (char *);  
+int yyerror(char *);
 
+int enable_prints = 1; // Flag para controlar os prints
+
+void print_if_enabled(const char *msg) {
+    if (enable_prints) {
+        printf("%s", msg);
+    }
+}
 %}
 
 %token AP FP VIRG PVIRG COMM INICIOPROG FIMPROG INICIOARGS FIMARGS INICIOVARS FIMVARS ESCREVA INTEIRO  
 %token REAL SE ENTAO FIMSE ENQUANTO FACA FIMENQUANTO ID NUMBER LITERAL SPECIALCHAR RELOP ATTR ERROR
 %token LITERALSTRING
-
+%token AC FC
 
 // Precedencia
 %right '='
@@ -26,92 +34,114 @@ int yyerror (char *);
 %%
       
 //Produção do programa completo
-programa : INICIOPROG prog FIMPROG  { printf("\nFim do Programa\n");};
+programa : INICIOPROG prog FIMPROG  { print_if_enabled("\nFim do Programa\n");};
 
 //Produção do codigo do programa:
-prog : declara_args declara_vars statement { printf("\nProdução do codigo do programa\n");};
+prog : declara_args declara_vars statement { print_if_enabled("\nProdução do codigo do programa\n");};
 
 //Produção de argumentos e variaveis
-declara_args : INICIOARGS args_list FIMARGS     {printf("\nProdução de argumentos\n");};
+declara_args : INICIOARGS args_list FIMARGS     {print_if_enabled("\nProdução de argumentos\n");}
+             | INICIOARGS FIMARGS               {print_if_enabled("\nArgumentos vazios\n");}
+             ;
 
-declara_vars : INICIOVARS vars_list FIMVARS     {printf("\nProdução de variaveis\n");};
+//Produção de comentarios
+comment: COMM                                   {print_if_enabled("\nProdução de comentarios\n");};
+
+declara_vars : INICIOVARS vars_list FIMVARS     {print_if_enabled("\nProdução de variaveis\n");}
+             | INICIOVARS FIMVARS               {print_if_enabled("\nVariáveis vazias\n");}
+             ;
+
 //Produção de qualquer statement
-statement : algebraic_expr statement            {printf("\nstatement -> algebraic_expr statement\n");}
-        | logic_expr statement                  {printf("\nstatement -> logic_expr statement\n");}
-        | attrib statement                      {printf("\nstatement -> attrib statement\n");}
-        | expr_condicional statement            {printf("\nstatement -> expr_condicional statement\n");}
-        | expr_controle statement               {printf("\nstatement -> expr_controle statement\n");}
-        | expr_escreva statement                {printf("\nstatement -> expr_escreva statement\n");}
-        | ;
+statement : comment statement                   {print_if_enabled("\nstatement -> comment statement\n"); }
+        | algebraic_expr statement              {print_if_enabled("\nstatement -> algebraic_expr statement\n");}
+        | logic_expr statement                  {print_if_enabled("\nstatement -> logic_expr statement\n");}
+        | attrib statement                      {print_if_enabled("\nstatement -> attrib statement\n");}
+        | expr_condicional statement            {print_if_enabled("\nstatement -> expr_condicional statement\n");}
+        | expr_controle statement               {print_if_enabled("\nstatement -> expr_controle statement\n");}
+        | expr_escreva statement                {print_if_enabled("\nstatement -> expr_escreva statement\n");}
+        | comment                               { print_if_enabled("\nstatement -> comment\n"); }
+        | 
+        ;
 
 //Produção de expressão algébrica
-algebraic_expr : NUMBER rel_alg NUMBER  { printf("\nalgebraic_expr -> NUMBER rel_alg NUMBER\n");}
-                | NUMBER rel_alg ID     { printf("\nalgebraic_expr -> NUMBER rel_alg ID\n");}
-                | ID rel_alg ID         { printf("\nalgebraic_expr -> ID rel_alg ID\n");}
-                | ID rel_alg NUMBER     { printf("\nalgebraic_expr -> ID rel_alg NUMBER\n");}
+algebraic_expr : NUMBER rel_alg NUMBER  { print_if_enabled("\nalgebraic_expr -> NUMBER rel_alg NUMBER\n");}
+                | NUMBER rel_alg ID     { print_if_enabled("\nalgebraic_expr -> NUMBER rel_alg ID\n");}
+                | ID rel_alg ID         { print_if_enabled("\nalgebraic_expr -> ID rel_alg ID\n");}
+                | ID rel_alg NUMBER     { print_if_enabled("\nalgebraic_expr -> ID rel_alg NUMBER\n");}
                 ;
 
 //Produção de operador algébrico
-rel_alg : '-' { printf("\nrel_alg -> SUBTRAÇÃO\n");}
-        | '+' { printf("\nrel_alg -> ADIÇÃO\n");}  
-        | '/' { printf("\nrel_alg -> DIVISÃO\n");}
-        | '*' { printf("\nrel_alg -> MULTIPLICAÇÃO\n");}
+rel_alg : '-' { print_if_enabled("\nrel_alg -> SUBTRAÇÃO\n");}
+        | '+' { print_if_enabled("\nrel_alg -> ADIÇÃO\n");}  
+        | '/' { print_if_enabled("\nrel_alg -> DIVISÃO\n");}
+        | '*' { print_if_enabled("\nrel_alg -> MULTIPLICAÇÃO\n");}
         ;
 
 //Produção de expressão logica
-logic_expr : ID RELOP ID            { printf("\nlogic_expr -> ID RELOP ID \n");}
-            | ID RELOP NUMBER       { printf("\nlogic_expr -> ID RELOP NUMBER\n");}
-            | NUMBER RELOP ID       { printf("\nlogic_expr -> NUMBER RELOP ID\n");}
-            | NUMBER RELOP NUMBER   { printf("\nlogic_expr -> NUMBER RELOP NUMBER\n");}
+logic_expr : ID RELOP ID            { print_if_enabled("\nlogic_expr -> ID RELOP ID \n");}
+            | ID RELOP NUMBER       { print_if_enabled("\nlogic_expr -> ID RELOP NUMBER\n");}
+            | NUMBER RELOP ID       { print_if_enabled("\nlogic_expr -> NUMBER RELOP ID\n");}
+            | NUMBER RELOP NUMBER   { print_if_enabled("\nlogic_expr -> NUMBER RELOP NUMBER\n");}
             ;
 
 //Produção de atribuição
-attrib : ID ATTR ID PVIRG               { printf("\nattrib -> ID ATTR ID PVIRG\n");}
-        | ID ATTR NUMBER PVIRG          { printf("\nattrib -> ID ATTR NUMBER PVIRG\n");}
-        | ID ATTR algebraic_expr PVIRG  { printf("\nattrib -> ID ATTR algebraic_expr PVIRG\n");}
-        | ID ATTR logic_expr PVIRG      { printf("\nattrib -> ID ATTR logic_expr PVIRG\n");}
-        | ID ATTR LITERALSTRING PVIRG   { printf("\nattrib -> ID ATTR LITERALSTRING PVIRG\n");}
+attrib : ID ATTR ID PVIRG               { print_if_enabled("\nattrib -> ID ATTR ID PVIRG\n");}
+        | ID ATTR NUMBER PVIRG          { print_if_enabled("\nattrib -> ID ATTR NUMBER PVIRG\n");}
+        | ID ATTR algebraic_expr PVIRG  { print_if_enabled("\nattrib -> ID ATTR algebraic_expr PVIRG\n");}
+        | ID ATTR logic_expr PVIRG      { print_if_enabled("\nattrib -> ID ATTR logic_expr PVIRG\n");}
+        | ID ATTR LITERALSTRING PVIRG   { print_if_enabled("\nattrib -> ID ATTR LITERALSTRING PVIRG\n");}
         ;
 
 //Produção de expressão condicional
-expr_condicional : SE AP logic_expr FP ENTAO instruction FIMSE { printf("\nProdução de expressão condicional\n");};
+expr_condicional : SE AP logic_expr FP ENTAO instruction FIMSE { print_if_enabled("\nProdução de expressão condicional\n");};
 //Produção de expressão de controle
-expr_controle : ENQUANTO AP logic_expr FP FACA instruction FIMENQUANTO { printf("\nProdução de expressão de controle\n");};
+expr_controle : ENQUANTO AP logic_expr FP FACA instruction FIMENQUANTO { print_if_enabled("\nProdução de expressão de controle\n");};
 
 //Produção de escreva
-expr_escreva : ESCREVA LITERALSTRING PVIRG    { printf("\nexpr_escreva -> ESCREVA LITERALSTRING PVIRG\n");}
-            | ESCREVA REAL PVIRG        { printf("\nexpr_escreva -> ESCREVA REAL PVIRG\n");}
-            | ESCREVA INTEIRO PVIRG     { printf("\nexpr_escreva -> ESCREVA INTEIRO PVIRG\n");}
+expr_escreva : ESCREVA LITERALSTRING PVIRG    { print_if_enabled("\nexpr_escreva -> ESCREVA LITERALSTRING PVIRG\n");}
+            | ESCREVA REAL PVIRG        { print_if_enabled("\nexpr_escreva -> ESCREVA REAL PVIRG\n");}
+            | ESCREVA INTEIRO PVIRG     { print_if_enabled("\nexpr_escreva -> ESCREVA INTEIRO PVIRG\n");}
             | ESCREVA ID PVIRG
             ;
 
 //Produção de argumentos
-args_list : var_decl args_list { printf("\nargs_list -> var_decl args_list\n");}
+args_list : var_decl args_list { print_if_enabled("\nargs_list -> var_decl args_list\n");}
           | ;
 
 //Produção de variaveis
-vars_list :  var_decl vars_list { printf("\nvars_list -> var_decl vars_list\n");}
+vars_list :  var_decl vars_list { print_if_enabled("\nvars_list -> var_decl vars_list\n");}
           | ;
 
 //Produção de variaveis
-var_decl : tipo_var ID_list PVIRG { printf("\nvar_decl -> tipo_var ID_list PVIRG\n");};
+var_decl : tipo_var ID_list PVIRG { print_if_enabled("\nvar_decl -> tipo_var ID_list PVIRG\n");};
  
 //Produção de lista de identificadores 
-ID_list : ID_list VIRG ID   { printf("\nID_list -> ID_list VIRG ID\n");}
-        | ID                { printf("\nID_list -> ID\n");}
+ID_list : ID_list VIRG ID   { print_if_enabled("\nID_list -> ID_list VIRG ID\n");}
+        | ID                { print_if_enabled("\nID_list -> ID\n");}
         ;
 
 //Produção de tipos de variaveis
-tipo_var : INTEIRO          { printf("\ntipo_var -> INTEIRO\n");}
-        | REAL              { printf("\ntipo_var -> REAL\n");}
-        | LITERAL           { printf("\ntipo_var -> LITERAL\n");}
+tipo_var : INTEIRO          { print_if_enabled("\ntipo_var -> INTEIRO\n");}
+        | REAL              { print_if_enabled("\ntipo_var -> REAL\n");}
+        | LITERAL           { print_if_enabled("\ntipo_var -> LITERAL\n");}
         ;
 //Produção de uma instrução
-instruction : expr_escreva instruction { printf("\ninstruction -> expr_escreva\n");}
-            |  attrib instruction   { printf("\ninstruction -> attrib\n");}
-            |  ;
+instruction : expr_escreva instruction { print_if_enabled("\ninstruction -> expr_escreva\n");}
+            |  attrib instruction   { print_if_enabled("\ninstruction -> attrib\n");}
+            | comment instruction      { print_if_enabled("\ninstruction -> comment\n");}
+            |
+            ;
 %%
-int main() {
+int main(int argc, char **argv) {
+
+ // Verifica se a flag para desabilitar os prints foi passada
+    for (int i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "--no-print") == 0) {
+            enable_prints = 0;
+        }
+    }
+
+
     initializeSymbolTable(); // Inicializa a tabela de símbolos
     addReservedWords();      // Adiciona palavras reservadas
 

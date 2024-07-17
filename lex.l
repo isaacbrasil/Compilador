@@ -33,6 +33,8 @@
 #define DELIM 68
 #define AP 69
 #define FP 70
+#define AP 74
+#define FP 75
 #define VIRG 71
 #define PVIRG 72
 #define COMM 73
@@ -62,6 +64,8 @@ vazio {delim}+
 erro .|\n
 abre_par [(]
 fecha_par [)]
+abre_chave [{]
+fecha_chave [}]
 virgula [,]
 ponto_e_virg [;]
 comentario \{({L}|{D}|{S}|{vazio})*\}
@@ -75,6 +79,8 @@ fim_de_arq <<EOF>>
 
 {abre_par} { installEspecialChar(yytext); printf("\nAbre parenteses: %s\n", yytext); return AP;}
 {fecha_par} { installEspecialChar(yytext); printf("\nFecha parenteses: %s\n", yytext); return FP;}
+{abre_chave} { installEspecialChar(yytext); printf("\nAbre chaves: %s\n", yytext); return AC;}
+{fecha_chave} { installEspecialChar(yytext); printf("\nFecha chaves: %s\n", yytext); return FC;}
 {virgula} { installEspecialChar(yytext); printf("\nVírgula: %s\n", yytext); return VIRG;}
 {ponto_e_virg} { installEspecialChar(yytext); printf("\nPonto & Vírgula: %s\n", yytext); return PVIRG;}
 {comentario} { printf("\nComentario: %s\n", yytext); return COMM; }

@@ -11,6 +11,7 @@ chute="k";
 zero=0;
 se(letra==chute) entao
  escreva "Acertei!\n";
+ {comentario aqui}
 fimse
 se(cont < zero) entao
  escreva "cont < 0\n";
