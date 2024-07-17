@@ -3,7 +3,7 @@
 #include "symbol_table.h"
 #include "sintatico.tab.h"
 
-#define INICIOPROG 1
+/*#define INICIOPROG 1
 #define FIMPROG 2
 #define INICIOARGS 3
 #define FIMARGS 4
@@ -41,7 +41,7 @@
 #define RELALG 124
 #define ERROR 404
 #define LITERALSTRING 478
-
+*/
 
 int installReserved(const char *yytext, const char *tokenType);
 int installID(const char *lexeme);
