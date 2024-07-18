@@ -109,12 +109,19 @@ fimenquanto { installReserved(yytext, "keyword"); printf("\nPalavra reservada: %
 {S} { installEspecialChar(yytext); printf("\nCaractere especial: %s\n", yytext); return SPECIALCHAR; }
 
 
-"<" { printf("\noperador relacional: %s\n", yytext); return RELOP;}
-"<=" { printf("\noperador relacional: %s\n", yytext); return RELOP;}
-"==" { printf("\noperador relacional: %s\n", yytext); return RELOP;}
-"<>" { printf("\noperador relacional: %s\n", yytext); return RELOP;}
-">" { printf("\noperador relacional: %s\n", yytext); return RELOP;}
-">="  {printf("\noperador relacional: %s\n", yytext); return RELOP;}
+"<" { printf("\noperador relacional: %s\n", yytext); return LT;}
+"<=" { printf("\noperador relacional: %s\n", yytext); return LE;}
+"==" { printf("\noperador relacional: %s\n", yytext); return EQ;}
+"<>" { printf("\noperador relacional: %s\n", yytext); return NE;}
+">" { printf("\noperador relacional: %s\n", yytext); return GT;}
+">="  {printf("\noperador relacional: %s\n", yytext); return GE;}
+
+"+" { printf("\noperador aritmético: %s\n", yytext); return PLUS;}
+"-" { printf("\noperador aritmético: %s\n", yytext); return MINUS;}
+"*" { printf("\noperador aritmético: %s\n", yytext); return MULT;}
+"/" { printf("\noperador aritmético: %s\n", yytext); return DIV;}
+
+
 "=" { printf("\natribuição: %s\n", yytext); return ATTR;}
 
 . { printf("\nErro: caractere desconhecido: '%s'\n", yytext); return ERROR; }
