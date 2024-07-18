@@ -103,8 +103,8 @@ int insert_symbol_table(const char* lexeme, DataType type) {
 %token AC FC LT LE EQ NE GT GE PLUS MINUS MULT DIV
 
 // Precedencia
-%right '='
-%left RELOP
+%right '=' EQ
+%left RELOP LT LE NE GT GE
 %left '+' '-'
 %left '*' '/'
 
