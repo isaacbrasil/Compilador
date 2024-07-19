@@ -30,7 +30,6 @@ Para desligar o modo verbose basta passar a flag "--no-print":
 
 
 ```
-bison -d sintatico.y && flex lex.l && gcc sintatico.tab.c lex.yy.c  symbol_table.c -o mycompiler
-./mycompiler --no-print < input.txt
+bison -d sintatico.y && flex lex.l && gcc sintatico.tab.c lex.yy.c symbol_table.c -o mycompiler && ./mycompiler --no-print < input.txt
 
 ```
