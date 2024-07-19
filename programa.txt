@@ -1,0 +1,13 @@
+inicioProg
+inicioArgs
+inteiro a, b;
+real c;
+fimArgs
+inicioVars
+a = 10;
+b = 20;
+c = 3.5;
+fimVars
+a + b;
+c + 4;
+fimProg

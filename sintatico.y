@@ -9,12 +9,53 @@ int yylex(void);
 extern int yylval;
 int yyerror (char *);  
 
+typedef enum { T_INT, T_FLOAT, T_STRING, T_ERROR } Type;
+
+Type checkType(Type left, Type right);
+
+Type checkType(Type left, Type right) {
+    if (left == right) return left;
+    if ((left == T_INT && right == T_FLOAT) || (left == T_FLOAT && right == T_INT)) return T_FLOAT;
+    fprintf(stderr, "Error: diferença de tipos -- Line: %d\n", yylineno);
+    return T_ERROR;
+}
+
+Type determineType(int num) {
+    // Função de exemplo que retorna T_INT para simplificação. 
+    // Se você usa um token específico para inteiros e outro para reais, ajuste conforme necessário.
+    return T_INT;
+}
+
+Type determineType(float num) {
+    return T_FLOAT;
+}
+
+int isInteger(int num) {
+    // Verifica se um número é inteiro.
+    // Na prática, isso pode ser desnecessário se `INTEIRO` e `REAL` já estão separados.
+    return 1;  // Retorna 1 (verdadeiro) para indicar que é um inteiro.
+}
+
 %}
 
-%token AP FP VIRG PVIRG COMM INICIOPROG FIMPROG INICIOARGS FIMARGS INICIOVARS FIMVARS ESCREVA INTEIRO  
-%token REAL SE ENTAO FIMSE ENQUANTO FACA FIMENQUANTO ID NUMBER LITERAL SPECIALCHAR RELOP ATTR ERROR
-%token LITERALSTRING
 
+%union {
+    int ival;
+    float fval;
+    char *sval;
+    Type type;
+}
+
+
+%token AP FP VIRG PVIRG COMM INICIOPROG FIMPROG INICIOARGS FIMARGS INICIOVARS FIMVARS ESCREVA  
+%token SE ENTAO FIMSE ENQUANTO FACA FIMENQUANTO NUMBER LITERAL SPECIALCHAR RELOP ATTR ERROR
+
+%token <ival> INTEIRO
+%token <fval> REAL
+%token <sval> LITERALSTRING
+%type  <type> algebraic_expr logic_expr attrib
+%type  <type> tipo_var
+%type  <type> ID
 
 // Precedencia
 %right '='
@@ -45,11 +86,28 @@ statement : algebraic_expr statement            {printf("\nstatement -> algebrai
         | ;
 
 //Produção de expressão algébrica
-algebraic_expr : NUMBER rel_alg NUMBER  { printf("\nalgebraic_expr -> NUMBER rel_alg NUMBER\n");}
-                | NUMBER rel_alg ID     { printf("\nalgebraic_expr -> NUMBER rel_alg ID\n");}
-                | ID rel_alg ID         { printf("\nalgebraic_expr -> ID rel_alg ID\n");}
-                | ID rel_alg NUMBER     { printf("\nalgebraic_expr -> ID rel_alg NUMBER\n");}
-                ;
+algebraic_expr : NUMBER rel_alg NUMBER {
+                    if (isInteger($1) && isInteger($3)) {
+                        $$ = T_INT;
+                    } else {
+                        $$ = T_FLOAT;
+                    }
+                    printf("\nalgebraic_expr -> NUMBER rel_alg NUMBER\n");
+                }
+               | NUMBER rel_alg ID {
+                    $$ = checkType(determineType($1), $3);
+                    printf("\nalgebraic_expr -> NUMBER rel_alg ID\n");
+                }
+               | ID rel_alg ID {
+                    $$ = checkType($1, $3);
+                    printf("\nalgebraic_expr -> ID rel_alg ID\n");
+                }
+               | ID rel_alg NUMBER {
+                    $$ = checkType($1, determineType($3));
+                    printf("\nalgebraic_expr -> ID rel_alg NUMBER\n");
+                }
+               ;
+
 
 //Produção de operador algébrico
 rel_alg : '-' { printf("\nrel_alg -> SUBTRAÇÃO\n");}
