@@ -3,44 +3,6 @@
 #include "symbol_table.h"
 #include "sintatico.tab.h"
 
-/*#define INICIOPROG 1
-#define FIMPROG 2
-#define INICIOARGS 3
-#define FIMARGS 4
-#define INICIOVARS 5
-#define FIMVARS 6
-#define ESCREVA 7
-#define INTEIRO 8
-#define REAL 9
-#define SE 21
-#define LITERAL 10
-#define ENTAO 11
-#define FIMSE 12
-#define ENQUANTO 13
-#define FACA 14
-#define FIMENQUANTO 15
-#define ID 16
-#define NUMBER 17
-#define RELOP 18
-#define LT 60
-#define LE 61
-#define EQ 62
-#define NE 63
-#define GT 64
-#define GE 65
-#define SPECIALCHAR 66
-#define ATTR 67
-#define DELIM 68
-#define AP 69
-#define FP 70
-#define VIRG 71
-#define PVIRG 72
-#define COMM 73
-#define RELALG 124
-#define ERROR 404
-#define LITERALSTRING 478
-*/
-
 int installReserved(const char *yytext, const char *tokenType);
 int installID(const char *lexeme);
 int installNUM(const char *num);
@@ -97,10 +59,18 @@ faca { installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", y
 fimenquanto { installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", yytext); return FIMENQUANTO; }
 
 {identificador} {installID(yytext); printf("\nidentificador: %s\n", yytext); return ID;}
-{numero} {installNUM(yytext); printf("\nnumero: %s\n", yytext); return NUMBER;}
+{numero} { 
+    if (strchr(yytext, '.') != NULL) {
+        yylval.fval = atof(yytext);
+        printf("\nreal: %s\n", yytext);
+        return REAL;
+    } else {
+        yylval.ival = atoi(yytext);
+        printf("\ninteiro: %s\n", yytext);
+        return INTEIRO;
+    }
+}
 {literal} { installLiteral(yytext); printf("\nliteral: %s\n", yytext); return LITERALSTRING; } 
-
-{S} { installEspecialChar(yytext); printf("\nCaractere especial: %s\n", yytext); return SPECIALCHAR; }
 
 
 "<" { printf("\noperador relacional: %s\n", yytext); return RELOP;}
@@ -135,13 +105,3 @@ int installEspecialChar(const char* lexeme) {
     insertSymbol(lexeme, "specialChar", 0, NULL);
     return 0; 
 }
-
-/*int main(){
-    initializeSymbolTable();
-    addReservedWords();
-
-    int result;
-    while((result = yylex()) != 999);
-    
-    return 0;
-}*/

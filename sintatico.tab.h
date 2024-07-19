@@ -54,41 +54,51 @@ extern int yydebug;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
-    AP = 258,                      /* AP  */
-    FP = 259,                      /* FP  */
-    VIRG = 260,                    /* VIRG  */
-    PVIRG = 261,                   /* PVIRG  */
-    COMM = 262,                    /* COMM  */
-    INICIOPROG = 263,              /* INICIOPROG  */
-    FIMPROG = 264,                 /* FIMPROG  */
-    INICIOARGS = 265,              /* INICIOARGS  */
-    FIMARGS = 266,                 /* FIMARGS  */
-    INICIOVARS = 267,              /* INICIOVARS  */
-    FIMVARS = 268,                 /* FIMVARS  */
-    ESCREVA = 269,                 /* ESCREVA  */
-    INTEIRO = 270,                 /* INTEIRO  */
-    REAL = 271,                    /* REAL  */
-    SE = 272,                      /* SE  */
-    ENTAO = 273,                   /* ENTAO  */
-    FIMSE = 274,                   /* FIMSE  */
-    ENQUANTO = 275,                /* ENQUANTO  */
-    FACA = 276,                    /* FACA  */
-    FIMENQUANTO = 277,             /* FIMENQUANTO  */
-    ID = 278,                      /* ID  */
-    NUMBER = 279,                  /* NUMBER  */
-    LITERAL = 280,                 /* LITERAL  */
-    SPECIALCHAR = 281,             /* SPECIALCHAR  */
-    RELOP = 282,                   /* RELOP  */
-    ATTR = 283,                    /* ATTR  */
-    ERROR = 284,                   /* ERROR  */
-    LITERALSTRING = 285            /* LITERALSTRING  */
+    INTEIRO = 258,                 /* INTEIRO  */
+    REAL = 259,                    /* REAL  */
+    LITERALSTRING = 260,           /* LITERALSTRING  */
+    AP = 261,                      /* AP  */
+    FP = 262,                      /* FP  */
+    VIRG = 263,                    /* VIRG  */
+    PVIRG = 264,                   /* PVIRG  */
+    COMM = 265,                    /* COMM  */
+    INICIOPROG = 266,              /* INICIOPROG  */
+    FIMPROG = 267,                 /* FIMPROG  */
+    INICIOARGS = 268,              /* INICIOARGS  */
+    FIMARGS = 269,                 /* FIMARGS  */
+    INICIOVARS = 270,              /* INICIOVARS  */
+    FIMVARS = 271,                 /* FIMVARS  */
+    ESCREVA = 272,                 /* ESCREVA  */
+    SE = 273,                      /* SE  */
+    ENTAO = 274,                   /* ENTAO  */
+    FIMSE = 275,                   /* FIMSE  */
+    ENQUANTO = 276,                /* ENQUANTO  */
+    FACA = 277,                    /* FACA  */
+    FIMENQUANTO = 278,             /* FIMENQUANTO  */
+    ID = 279,                      /* ID  */
+    NUMBER = 280,                  /* NUMBER  */
+    RELOP = 281,                   /* RELOP  */
+    ATTR = 282,                    /* ATTR  */
+    ERROR = 283,                   /* ERROR  */
+    LITERAL = 284                  /* LITERAL  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+union YYSTYPE
+{
+#line 20 "sintatico.y"
+
+    int ival;
+    float fval;
+    char *sval;
+
+#line 99 "sintatico.tab.h"
+
+};
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif
