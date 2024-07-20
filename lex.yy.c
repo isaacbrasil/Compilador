@@ -538,7 +538,7 @@ char *yytext;
 
 int installReserved(const char *yytext, const char *tokenType);
 int installID(const char *lexeme);
-int installNUM(const char *num);
+int installNUM(const char *num, const char* type);
 int installLiteral(const char *yytext);
 int installEspecialChar(const char *yytext);
 
@@ -947,13 +947,13 @@ case 25:
 YY_RULE_SETUP
 #line 62 "lex.l"
 { 
-    if (strchr(yytext, '.') != NULL) {
+    const char* type = (strchr(yytext, '.') != NULL) ? "real" : "inteiro";
+    installNUM(yytext, type);
+    if (strcmp(type, "real") == 0) {
         yylval.fval = atof(yytext);
-        printf("\nreal: %s\n", yytext);
         return REAL;
     } else {
         yylval.ival = atoi(yytext);
-        printf("\ninteiro: %s\n", yytext);
         return INTEIRO;
     }
 }
@@ -961,56 +961,56 @@ YY_RULE_SETUP
 case 26:
 /* rule 26 can match eol */
 YY_RULE_SETUP
-#line 73 "lex.l"
+#line 74 "lex.l"
 { installLiteral(yytext); printf("\nliteral: %s\n", yytext); return LITERALSTRING; } 
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 76 "lex.l"
+#line 77 "lex.l"
 { printf("\noperador relacional: %s\n", yytext); return RELOP;}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 77 "lex.l"
+#line 78 "lex.l"
 { printf("\noperador relacional: %s\n", yytext); return RELOP;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 78 "lex.l"
+#line 79 "lex.l"
 { printf("\noperador relacional: %s\n", yytext); return RELOP;}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 79 "lex.l"
+#line 80 "lex.l"
 { printf("\noperador relacional: %s\n", yytext); return RELOP;}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 80 "lex.l"
+#line 81 "lex.l"
 { printf("\noperador relacional: %s\n", yytext); return RELOP;}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 81 "lex.l"
+#line 82 "lex.l"
 {printf("\noperador relacional: %s\n", yytext); return RELOP;}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 82 "lex.l"
+#line 83 "lex.l"
 { printf("\natribuição: %s\n", yytext); return ATTR;}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 84 "lex.l"
+#line 85 "lex.l"
 { printf("\nErro: caractere desconhecido: '%s'\n", yytext); return ERROR; }
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 85 "lex.l"
+#line 86 "lex.l"
 { printf("\nFIM DE ARQUIVO.\n"); return 999; }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 87 "lex.l"
+#line 88 "lex.l"
 ECHO;
 	YY_BREAK
 #line 1017 "lex.yy.c"
@@ -2016,16 +2016,18 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 87 "lex.l"
+#line 88 "lex.l"
 
 int installID(const char* lexeme) {
     insertSymbol(lexeme, "identifier", 0, NULL);
     return 0; 
 }
-int installNUM(const char* num) {
-    insertSymbol(num, "number", strlen(num), NULL);
+
+int installNUM(const char* num, const char* type) {
+    insertSymbol(num, type, strlen(num), NULL);
     return 0; 
 }
+
 int installReserved(const char* lexeme, const char* tokenType) {
     insertSymbol(lexeme, tokenType, 0, NULL);
     return 0; 

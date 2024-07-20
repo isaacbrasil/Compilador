@@ -5,7 +5,7 @@
 
 int installReserved(const char *yytext, const char *tokenType);
 int installID(const char *lexeme);
-int installNUM(const char *num);
+int installNUM(const char *num, const char* type);
 int installLiteral(const char *yytext);
 int installEspecialChar(const char *yytext);
 
@@ -60,16 +60,17 @@ fimenquanto { installReserved(yytext, "keyword"); printf("\nPalavra reservada: %
 
 {identificador} {installID(yytext); printf("\nidentificador: %s\n", yytext); return ID;}
 {numero} { 
-    if (strchr(yytext, '.') != NULL) {
+    const char* type = (strchr(yytext, '.') != NULL) ? "real" : "inteiro";
+    installNUM(yytext, type);
+    if (strcmp(type, "real") == 0) {
         yylval.fval = atof(yytext);
-        printf("\nreal: %s\n", yytext);
         return REAL;
     } else {
         yylval.ival = atoi(yytext);
-        printf("\ninteiro: %s\n", yytext);
         return INTEIRO;
     }
 }
+
 {literal} { installLiteral(yytext); printf("\nliteral: %s\n", yytext); return LITERALSTRING; } 
 
 
@@ -89,10 +90,12 @@ int installID(const char* lexeme) {
     insertSymbol(lexeme, "identifier", 0, NULL);
     return 0; 
 }
-int installNUM(const char* num) {
-    insertSymbol(num, "number", strlen(num), NULL);
+
+int installNUM(const char* num, const char* type) {
+    insertSymbol(num, type, strlen(num), NULL);
     return 0; 
 }
+
 int installReserved(const char* lexeme, const char* tokenType) {
     insertSymbol(lexeme, tokenType, 0, NULL);
     return 0; 

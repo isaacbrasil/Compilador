@@ -94,8 +94,9 @@ union YYSTYPE
     int ival;
     float fval;
     char *sval;
+    Type type;
 
-#line 99 "sintatico.tab.h"
+#line 100 "sintatico.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

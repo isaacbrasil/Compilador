@@ -161,7 +161,7 @@ int yyerror(char *s) {
 Type checkType(Type left, Type right) {
     if (left == right) return left;
     if ((left == T_INT && right == T_FLOAT) || (left == T_FLOAT && right == T_INT)) return T_FLOAT;
-    fprintf(stderr, "Error: Type mismatch -- Line: %d\n", yylineno);
+    fprintf(stderr, "Error: Incompatibilidade de tipos -- Line: %d\n", yylineno);
     return T_ERROR;
 }
 
