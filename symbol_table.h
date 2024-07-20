@@ -2,6 +2,7 @@
 #define SYMBOL_TABLE_H
 
 #include <stdio.h>
+#include "types.h"
 
 #define TABLE_SIZE 100
 

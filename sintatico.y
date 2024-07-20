@@ -2,7 +2,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "types.h"  // Inclua o arquivo de cabeçalho aqui
+#include "types.h"
 #include "symbol_table.h"
 #include "sintatico.tab.h"
 extern int yylineno;
