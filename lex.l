@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "symbol_table.h"
 #include "sintatico.tab.h"
+#include "types.h"  // Inclua o arquivo de cabeçalho aqui
 
 int installReserved(const char *yytext, const char *tokenType);
 int installID(const char *lexeme);

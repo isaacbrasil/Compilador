@@ -89,7 +89,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 20 "sintatico.y"
+#line 19 "sintatico.y"
 
     int ival;
     float fval;
