@@ -2,7 +2,6 @@
 #define SYMBOL_TABLE_H
 
 #include <stdio.h>
-#include "types.h"
 
 #define TABLE_SIZE 100
 
@@ -25,5 +24,6 @@ void insertSymbol(const char *name, const char *type, int size, void *memoryLoca
 void addReservedWords();
 void initializeSymbolTable();
 void freeSymbolTable();
+void showSymbolTable();
 
 #endif // SYMBOL_TABLE_H

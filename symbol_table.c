@@ -60,7 +60,6 @@ void addReservedWords() {
     insertSymbol("enquanto", "keyword", 0, 0);
     insertSymbol("faca", "keyword", 0, 0);
     insertSymbol("fimenquanto", "keyword", 0, 0);
-
 }
 
 void initializeSymbolTable() {
@@ -79,6 +78,16 @@ void freeSymbolTable() {
             free(symbol->attributes);
             free(symbol);
             symbol = next;
+        }
+    }
+}
+
+void showSymbolTable() {
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        Symbol *symbol = symbolTable[i];
+        while (symbol) {
+            printf("Nome: %s, Tipo: %s, Tamanho: %d, Endereço: %p\n", symbol->name, symbol->type, symbol->size, symbol->memoryLocation);
+            symbol = symbol->next;
         }
     }
 }

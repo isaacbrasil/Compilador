@@ -2,6 +2,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "types.h"
 #include "symbol_table.h"
 #include "sintatico.tab.h"
@@ -9,13 +10,16 @@ extern int yylineno;
 int yylex(void);
 int yyerror (char *);
 
-// Funções auxiliares para verificação de tipo
+int enable_prints = 0;
+int enable_lex_prints = 0;
+void print_if_enabled(const char *msg);
+void print_lex_with_args(const char *msg, const char *arg);
+
 Type checkType(Type left, Type right);
 Type determineType(double num);
 
 %}
 
-// Definição da união deve vir após a definição do tipo `Type`
 %union {
     int ival;
     float fval;
@@ -26,191 +30,198 @@ Type determineType(double num);
 %token <ival> INTEIRO
 %token <fval> REAL
 %token <sval> LITERALSTRING
-%type <type> algebraic_expr logic_expr attrib
-%type <type> tipo_var
-%type <type> ID
+%token <type> ID
 
 %token AP FP VIRG PVIRG COMM INICIOPROG FIMPROG INICIOARGS FIMARGS INICIOVARS FIMVARS ESCREVA
-%token SE ENTAO FIMSE ENQUANTO FACA FIMENQUANTO ID NUMBER RELOP ATTR ERROR LITERAL
+%token SE ENTAO FIMSE ENQUANTO FACA FIMENQUANTO NUMBER RELOP ATTR ERROR LITERAL RELALG
 
-// Precedencia
+%type <type> algebraic_expr
+%type <type> rel_alg
+%type <type> logic_expr
+%type <type> attrib
+
 %right '='
 %left RELOP
-%left '+' '-'
-%left '*' '/'
+%left RELALGSUM RELALGSUB
+%left RELALGDIV RELALGTIMES
 
 %%
 
-programa : INICIOPROG prog FIMPROG { printf("\nFim do Programa\n"); };
+programa : INICIOPROG prog FIMPROG { print_if_enabled("\nFim do Programa\n"); };
 
-prog : declara_args declara_vars statement { printf("\nProdução do codigo do programa\n"); };
+prog : declara_args declara_vars statement { print_if_enabled("\nProdução do codigo do programa\n"); };
 
-declara_args : INICIOARGS args_list FIMARGS { printf("\nProdução de argumentos\n"); };
+declara_args : INICIOARGS args_list FIMARGS { print_if_enabled("\nProdução de argumentos\n"); };
 
-declara_vars : INICIOVARS vars_list FIMVARS { printf("\nProdução de variaveis\n"); };
+declara_vars : INICIOVARS vars_list FIMVARS { print_if_enabled("\nProdução de variaveis\n"); };
 
-statement : algebraic_expr statement { printf("\nstatement -> algebraic_expr statement\n"); }
-          | logic_expr statement { printf("\nstatement -> logic_expr statement\n"); }
-          | attrib statement { printf("\nstatement -> attrib statement\n"); }
-          | expr_condicional statement { printf("\nstatement -> expr_condicional statement\n"); }
-          | expr_controle statement { printf("\nstatement -> expr_controle statement\n"); }
-          | expr_escreva statement { printf("\nstatement -> expr_escreva statement\n"); }
+statement : algebraic_expr statement { print_if_enabled("\nstatement -> algebraic_expr statement\n"); }
+          | logic_expr statement { print_if_enabled("\nstatement -> logic_expr statement\n"); }
+          | attrib statement { print_if_enabled("\nstatement -> attrib statement\n"); }
+          | expr_condicional statement { print_if_enabled("\nstatement -> expr_condicional statement\n"); }
+          | expr_controle statement { print_if_enabled("\nstatement -> expr_controle statement\n"); }
+          | expr_escreva statement { print_if_enabled("\nstatement -> expr_escreva statement\n"); }
           | ;
 
 algebraic_expr : INTEIRO rel_alg INTEIRO {
                     $$ = T_INT;
-                    printf("\nalgebraic_expr -> INTEIRO rel_alg INTEIRO\n");
+                    printf("$$ type: %d\n", $$);
+                    print_if_enabled("\nalgebraic_expr -> INTEIRO rel_alg INTEIRO\n");
                 }
                 | INTEIRO rel_alg ID {
                     $$ = checkType(T_INT, $3);
+                    printf("$$ type: %d\n", $$);
                     if ($$ == T_ERROR) yyerror("Incompatibilidade de tipos na expressão aritmética");
-                    printf("\nalgebraic_expr -> INTEIRO rel_alg ID\n");
+                    print_if_enabled("\nalgebraic_expr -> INTEIRO rel_alg ID\n");
                 }
                 | ID rel_alg ID {
                     $$ = checkType($1, $3);
+                    printf("$$ type: %d\n", $$);
                     if ($$ == T_ERROR) yyerror("Incompatibilidade de tipos na expressão aritmética");
-                    printf("\nalgebraic_expr -> ID rel_alg ID\n");
+                    print_if_enabled("\nalgebraic_expr -> ID rel_alg ID\n");
                 }
                 | ID rel_alg INTEIRO {
                     $$ = checkType($1, T_INT);
+                    printf("$$ type: %d\n", $$);
                     if ($$ == T_ERROR) yyerror("Incompatibilidade de tipos na expressão aritmética");
-                    printf("\nalgebraic_expr -> ID rel_alg INTEIRO\n");
+                    print_if_enabled("\nalgebraic_expr -> ID rel_alg INTEIRO\n");
                 }
                 | REAL rel_alg REAL {
                     $$ = T_FLOAT;
-                    printf("\nalgebraic_expr -> REAL rel_alg REAL\n");
+                    printf("$$ type: %d\n", $$);
+                    print_if_enabled("\nalgebraic_expr -> REAL rel_alg REAL\n");
                 }
                 | REAL rel_alg ID {
                     $$ = checkType(T_FLOAT, $3);
+                    printf("$$ type: %d\n", $$);
                     if ($$ == T_ERROR) yyerror("Incompatibilidade de tipos na expressão aritmética");
-                    printf("\nalgebraic_expr -> REAL rel_alg ID\n");
+                    print_if_enabled("\nalgebraic_expr -> REAL rel_alg ID\n");
                 }
                 | ID rel_alg REAL {
                     $$ = checkType($1, T_FLOAT);
+                    printf("$$ type: %d\n", $$);
                     if ($$ == T_ERROR) yyerror("Incompatibilidade de tipos na expressão aritmética");
-                    printf("\nalgebraic_expr -> ID rel_alg REAL\n");
+                    print_if_enabled("\nalgebraic_expr -> ID rel_alg REAL\n");
                 }
                 ;
 
-rel_alg : '-' { printf("\nrel_alg -> SUBTRAÇÃO\n"); }
-        | '+' { printf("\nrel_alg -> ADIÇÃO\n"); }
-        | '/' { printf("\nrel_alg -> DIVISÃO\n"); }
-        | '*' { printf("\nrel_alg -> MULTIPLICAÇÃO\n"); }
+rel_alg : RELALGSUB { print_if_enabled("\nrel_alg -> SUBTRAÇÃO\n"); }
+        | RELALGSUM { print_if_enabled("\nrel_alg -> ADIÇÃO\n"); }
+        | RELALGDIV { print_if_enabled("\nrel_alg -> DIVISÃO\n"); }
+        | RELALGTIMES { print_if_enabled("\nrel_alg -> MULTIPLICAÇÃO\n"); }
         ;
 
 logic_expr : ID RELOP ID {
-                printf("\nlogic_expr -> ID RELOP ID\n");
-                $$ = checkType($1, $3);
-                if ($$ == T_ERROR) yyerror("Incompatibilidade de tipos na expressão lógica");
+                print_if_enabled("\nlogic_expr -> ID RELOP ID\n");
             }
             | ID RELOP INTEIRO {
-                printf("\nlogic_expr -> ID RELOP INTEIRO\n");
-                $$ = checkType($1, T_INT);
-                if ($$ == T_ERROR) yyerror("Incompatibilidade de tipos na expressão lógica");
+                print_if_enabled("\nlogic_expr -> ID RELOP INTEIRO\n");
             }
             | INTEIRO RELOP ID {
-                printf("\nlogic_expr -> INTEIRO RELOP ID\n");
-                $$ = checkType(T_INT, $3);
-                if ($$ == T_ERROR) yyerror("Incompatibilidade de tipos na expressão lógica");
+                print_if_enabled("\nlogic_expr -> INTEIRO RELOP ID\n");
             }
             | INTEIRO RELOP INTEIRO {
-                printf("\nlogic_expr -> INTEIRO RELOP INTEIRO\n");
-                $$ = T_INT;
+                print_if_enabled("\nlogic_expr -> INTEIRO RELOP INTEIRO\n");
             }
             | ID RELOP REAL {
-                printf("\nlogic_expr -> ID RELOP REAL\n");
-                $$ = checkType($1, T_FLOAT);
-                if ($$ == T_ERROR) yyerror("Incompatibilidade de tipos na expressão lógica");
+                print_if_enabled("\nlogic_expr -> ID RELOP REAL\n");
             }
             | REAL RELOP ID {
-                printf("\nlogic_expr -> REAL RELOP ID\n");
-                $$ = checkType(T_FLOAT, $3);
-                if ($$ == T_ERROR) yyerror("Incompatibilidade de tipos na expressão lógica");
+                print_if_enabled("\nlogic_expr -> REAL RELOP ID\n");
             }
             | REAL RELOP REAL {
-                printf("\nlogic_expr -> REAL RELOP REAL\n");
-                $$ = T_FLOAT;
+                print_if_enabled("\nlogic_expr -> REAL RELOP REAL\n");
             }
             ;
 
 attrib : ID ATTR ID PVIRG {
-            printf("\nattrib -> ID ATTR ID PVIRG\n");
-            $$ = checkType($1, $3);
-            if ($$ == T_ERROR) yyerror("Incompatibilidade de tipos na atribuição");
+            print_if_enabled("\nattrib -> ID ATTR ID PVIRG\n");
         }
         | ID ATTR INTEIRO PVIRG {
-            printf("\nattrib -> ID ATTR INTEIRO PVIRG\n");
-            $$ = checkType($1, T_INT);
-            if ($$ == T_ERROR) yyerror("Incompatibilidade de tipos na atribuição");
+            print_if_enabled("\nattrib -> ID ATTR INTEIRO PVIRG\n");
+        }
+        | ID ATTR REAL PVIRG {
+            print_if_enabled("\nattrib -> ID ATTR REAL PVIRG\n");
         }
         | ID ATTR algebraic_expr PVIRG {
-            printf("\nattrib -> ID ATTR algebraic_expr PVIRG\n");
-            $$ = checkType($1, $3);
-            if ($$ == T_ERROR) yyerror("Incompatibilidade de tipos na atribuição");
+            print_if_enabled("\nattrib -> ID ATTR algebraic_expr PVIRG\n");
         }
         | ID ATTR logic_expr PVIRG {
-            printf("\nattrib -> ID ATTR logic_expr PVIRG\n");
-            $$ = checkType($1, $3);
-            if ($$ == T_ERROR) yyerror("Incompatibilidade de tipos na atribuição");
+            print_if_enabled("\nattrib -> ID ATTR logic_expr PVIRG\n");
         }
         | ID ATTR LITERALSTRING PVIRG {
-            printf("\nattrib -> ID ATTR LITERALSTRING PVIRG\n");
-            $$ = checkType($1, T_STRING);
-            if ($$ == T_ERROR) yyerror("Incompatibilidade de tipos na atribuição");
+            print_if_enabled("\nattrib -> ID ATTR LITERALSTRING PVIRG\n");
         }
         ;
 
-expr_condicional : SE AP logic_expr FP ENTAO instruction FIMSE { printf("\nProdução de expressão condicional\n"); };
+expr_condicional : SE AP logic_expr FP ENTAO statement FIMSE { print_if_enabled("\nProdução de expressão condicional\n"); };
 
-expr_controle : ENQUANTO AP logic_expr FP FACA instruction FIMENQUANTO { printf("\nProdução de expressão de controle\n"); };
+expr_controle : ENQUANTO AP logic_expr FP FACA statement FIMENQUANTO { print_if_enabled("\nProdução de expressão de controle\n"); };
 
-expr_escreva : ESCREVA LITERALSTRING PVIRG { printf("\nexpr_escreva -> ESCREVA LITERALSTRING PVIRG\n"); }
-              | ESCREVA REAL PVIRG { printf("\nexpr_escreva -> ESCREVA REAL PVIRG\n"); }
-              | ESCREVA INTEIRO PVIRG { printf("\nexpr_escreva -> ESCREVA INTEIRO PVIRG\n"); }
-              | ESCREVA ID PVIRG { printf("\nexpr_escreva -> ESCREVA ID PVIRG\n"); }
+expr_escreva : ESCREVA LITERALSTRING PVIRG { print_if_enabled("\nexpr_escreva -> ESCREVA LITERALSTRING PVIRG\n"); }
+              | ESCREVA REAL PVIRG { print_if_enabled("\nexpr_escreva -> ESCREVA REAL PVIRG\n"); }
+              | ESCREVA INTEIRO PVIRG { print_if_enabled("\nexpr_escreva -> ESCREVA INTEIRO PVIRG\n"); }
+              | ESCREVA ID PVIRG { print_if_enabled("\nexpr_escreva -> ESCREVA ID PVIRG\n"); }
               ;
 
-args_list : var_decl args_list { printf("\nargs_list -> var_decl args_list\n"); }
+args_list : var_decl args_list { print_if_enabled("\nargs_list -> var_decl args_list\n"); }
           | ;
 
-vars_list : var_decl vars_list { printf("\nvars_list -> var_decl vars_list\n"); }
+vars_list : var_decl vars_list { }
           | ;
 
-var_decl : tipo_var ID_list PVIRG { printf("\nvar_decl -> tipo_var ID_list PVIRG\n"); };
+var_decl : tipo_var ID_list PVIRG { print_if_enabled("\nvar_decl -> tipo_var ID_list PVIRG\n"); };
 
-ID_list : ID_list VIRG ID { printf("\nID_list -> ID_list VIRG ID\n"); }
-        | ID { printf("\nID_list -> ID\n"); }
+ID_list : ID_list VIRG ID { print_if_enabled("\nID_list -> ID_list VIRG ID\n"); }
+        | ID { print_if_enabled("\nID_list -> ID\n"); }
         ;
 
 tipo_var : INTEIRO {
-            printf("\ntipo_var -> INTEIRO\n");
-            $$ = T_INT;
+            print_if_enabled("\ntipo_var -> INTEIRO\n");
           }
           | REAL {
-            printf("\ntipo_var -> REAL\n");
-            $$ = T_FLOAT;
+            print_if_enabled("\ntipo_var -> REAL\n");
           }
           | LITERAL {
-            printf("\ntipo_var -> LITERAL\n");
-            $$ = T_STRING;
+            print_if_enabled("\ntipo_var -> LITERAL\n");
           }
           ;
 
-//Produção de uma instrução
-instruction : expr_escreva instruction { printf("\ninstruction -> expr_escreva\n");}
-             | attrib instruction { printf("\ninstruction -> attrib\n");}
+instruction : expr_escreva instruction { print_if_enabled("\ninstruction -> expr_escreva\n");}
+             | attrib instruction { print_if_enabled("\ninstruction -> attrib\n");}
              | ;
 
 %%
+int main(int argc, char **argv) {
 
-int main() {
-    initializeSymbolTable(); // Inicializa a tabela de símbolos
-    addReservedWords(); // Adiciona palavras reservadas
+    for (int i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "--verbose") == 0) {
+            enable_prints = 1;
+        }
+        if (strcmp(argv[i], "--lex") == 0) {
+            enable_lex_prints = 1;
+        }
+    }
+
+    initializeSymbolTable();
+    addReservedWords();
 
     if (yyparse() != 0) {
         fprintf(stderr, "Abnormal exit\n");
     }
     return 0;
+}
+
+void print_if_enabled(const char *msg) {
+    if (enable_prints) {
+        printf("%s", msg);
+    }
+}
+
+void print_lex_with_args(const char *msg, const char *arg) {
+    if (enable_lex_prints) {
+        printf(msg, arg);
+    }
 }
 
 int yyerror(char *s) {
@@ -221,7 +232,6 @@ int yyerror(char *s) {
 Type checkType(Type left, Type right) {
     if (left == right) return left;
     if ((left == T_INT && right == T_FLOAT) || (left == T_FLOAT && right == T_INT)) return T_FLOAT;
-    fprintf(stderr, "Error: Incompatibilidade de tipos -- Line: %d\n", yylineno);
     return T_ERROR;
 }
 

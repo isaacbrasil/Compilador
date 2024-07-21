@@ -1,0 +1,19 @@
+inicioprog
+inicioargs
+ literal letra;
+ inteiro cont;
+fimargs
+iniciovars
+ real numreal1;
+ real numreal2;
+ real numreal3;
+ inteiro num1;
+ inteiro num2;
+ inteiro num3;
+fimvars
+num1 = 20;
+num2 = 21;
+numreal1 = 1.1;
+numreal2 = 2.1;
+num3 = 20 + 21;
+numreal3 = numreal1 + "bomdia";

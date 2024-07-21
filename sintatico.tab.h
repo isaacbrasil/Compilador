@@ -57,30 +57,35 @@ extern int yydebug;
     INTEIRO = 258,                 /* INTEIRO  */
     REAL = 259,                    /* REAL  */
     LITERALSTRING = 260,           /* LITERALSTRING  */
-    AP = 261,                      /* AP  */
-    FP = 262,                      /* FP  */
-    VIRG = 263,                    /* VIRG  */
-    PVIRG = 264,                   /* PVIRG  */
-    COMM = 265,                    /* COMM  */
-    INICIOPROG = 266,              /* INICIOPROG  */
-    FIMPROG = 267,                 /* FIMPROG  */
-    INICIOARGS = 268,              /* INICIOARGS  */
-    FIMARGS = 269,                 /* FIMARGS  */
-    INICIOVARS = 270,              /* INICIOVARS  */
-    FIMVARS = 271,                 /* FIMVARS  */
-    ESCREVA = 272,                 /* ESCREVA  */
-    SE = 273,                      /* SE  */
-    ENTAO = 274,                   /* ENTAO  */
-    FIMSE = 275,                   /* FIMSE  */
-    ENQUANTO = 276,                /* ENQUANTO  */
-    FACA = 277,                    /* FACA  */
-    FIMENQUANTO = 278,             /* FIMENQUANTO  */
-    ID = 279,                      /* ID  */
+    ID = 261,                      /* ID  */
+    AP = 262,                      /* AP  */
+    FP = 263,                      /* FP  */
+    VIRG = 264,                    /* VIRG  */
+    PVIRG = 265,                   /* PVIRG  */
+    COMM = 266,                    /* COMM  */
+    INICIOPROG = 267,              /* INICIOPROG  */
+    FIMPROG = 268,                 /* FIMPROG  */
+    INICIOARGS = 269,              /* INICIOARGS  */
+    FIMARGS = 270,                 /* FIMARGS  */
+    INICIOVARS = 271,              /* INICIOVARS  */
+    FIMVARS = 272,                 /* FIMVARS  */
+    ESCREVA = 273,                 /* ESCREVA  */
+    SE = 274,                      /* SE  */
+    ENTAO = 275,                   /* ENTAO  */
+    FIMSE = 276,                   /* FIMSE  */
+    ENQUANTO = 277,                /* ENQUANTO  */
+    FACA = 278,                    /* FACA  */
+    FIMENQUANTO = 279,             /* FIMENQUANTO  */
     NUMBER = 280,                  /* NUMBER  */
     RELOP = 281,                   /* RELOP  */
     ATTR = 282,                    /* ATTR  */
     ERROR = 283,                   /* ERROR  */
-    LITERAL = 284                  /* LITERAL  */
+    LITERAL = 284,                 /* LITERAL  */
+    RELALG = 285,                  /* RELALG  */
+    RELALGSUM = 286,               /* RELALGSUM  */
+    RELALGSUB = 287,               /* RELALGSUB  */
+    RELALGDIV = 288,               /* RELALGDIV  */
+    RELALGTIMES = 289              /* RELALGTIMES  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -89,14 +94,14 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 19 "sintatico.y"
+#line 23 "sintatico.y"
 
     int ival;
     float fval;
     char *sval;
     Type type;
 
-#line 100 "sintatico.tab.h"
+#line 105 "sintatico.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
