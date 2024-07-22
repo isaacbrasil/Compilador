@@ -26,11 +26,11 @@ bison -d sintatico.y && flex lex.l && gcc sintatico.tab.c lex.yy.c  symbol_table
 ```
 
 
-Para desligar o modo verbose basta passar a flag "--no-print":
+Para ativar o modo verbose basta passar a flag "--lex" para ativar a verbosidade do léxico e a flag "--verbose" para ativar a verbosidade do sintatico:
 
 
 ```
-bison -d sintatico.y && flex lex.l && gcc sintatico.tab.c lex.yy.c  symbol_table.c -o mycompiler
-./mycompiler --no-print < input.txt
+bison -d sintatico.y && flex lex.l && gcc sintatico.tab.c lex.yy.c symbol_table.c -o mycompiler && ./mycompiler --verbose --lex < exemplo01.txt
+
 
 ```
