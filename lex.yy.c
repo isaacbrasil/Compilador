@@ -547,7 +547,7 @@ char *yytext;
 
 int installReserved(const char *yytext, const char *tokenType);
 int installID(const char *lexeme);
-int installNUM(const char *num, const char* type);
+int installNUM(const char *num, Type type);
 int installLiteral(const char *yytext);
 int installEspecialChar(const char *yytext);
 #line 554 "lex.yy.c"
@@ -953,26 +953,20 @@ YY_RULE_SETUP
 {
     installID(yytext);
     print_lex_with_args("\nidentificador: %s\n", yytext);
-    yylval.name = strdup(yytext);
-    // yylval.type = T_UNDEFINED;
     return ID;
 }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 72 "lex.l"
+#line 70 "lex.l"
 {
-    const char* type = (strchr(yytext, '.') != NULL) ? "real" : "inteiro";
+    Type type = (strchr(yytext, '.') != NULL) ? T_FLOAT : T_INT;
     installNUM(yytext, type);
-    if (strcmp(type, "real") == 0) {
+    if (type == T_FLOAT) {
         print_lex_with_args("\nreal: %s\n", yytext);
-        yylval.fval = atof(yytext);
-        yylval.type = T_FLOAT;
         return REAL;
     } else {
         print_lex_with_args("\ninteiro: %s\n", yytext);
-        yylval.ival = atoi(yytext);
-        yylval.type = T_INT;
         return INTEIRO;
     }
 }
@@ -980,85 +974,83 @@ YY_RULE_SETUP
 case 26:
 /* rule 26 can match eol */
 YY_RULE_SETUP
-#line 88 "lex.l"
+#line 82 "lex.l"
 {
     installLiteral(yytext);
     print_lex_with_args("\nliteral string: %s\n", yytext);
-    yylval.type = T_STRING;
-    yylval.sval = strdup(yytext);
     return LITERALSTRING;
 }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 96 "lex.l"
+#line 88 "lex.l"
 { print_lex_with_args("\noperador relacional: %s\n", yytext); return RELOP;}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 97 "lex.l"
+#line 89 "lex.l"
 { print_lex_with_args("\noperador relacional: %s\n", yytext); return RELOP;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 98 "lex.l"
+#line 90 "lex.l"
 { print_lex_with_args("\noperador relacional: %s\n", yytext); return RELOP;}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 99 "lex.l"
+#line 91 "lex.l"
 { print_lex_with_args("\noperador relacional: %s\n", yytext); return RELOP;}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 100 "lex.l"
+#line 92 "lex.l"
 { print_lex_with_args("\noperador relacional: %s\n", yytext); return RELOP;}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 101 "lex.l"
+#line 93 "lex.l"
 {print_lex_with_args("\noperador relacional: %s\n", yytext); return RELOP;}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 102 "lex.l"
+#line 94 "lex.l"
 { print_lex_with_args("\natribuição: %s\n", yytext); return ATTR;}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 104 "lex.l"
+#line 96 "lex.l"
 { print_lex_with_args("\noperador aritmético: %s\n", yytext); return RELALGSUM;}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 105 "lex.l"
+#line 97 "lex.l"
 { print_lex_with_args("\noperador aritmético: %s\n", yytext); return RELALGSUB;}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 106 "lex.l"
+#line 98 "lex.l"
 { print_lex_with_args("\noperador aritmético: %s\n", yytext); return RELALGDIV;}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 107 "lex.l"
+#line 99 "lex.l"
 { print_lex_with_args("\noperador aritmético: %s\n", yytext); return RELALGTIMES;}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 109 "lex.l"
+#line 101 "lex.l"
 { print_lex_with_args("\nErro: caractere desconhecido: '%s'\n", yytext); return ERROR; }
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 110 "lex.l"
+#line 102 "lex.l"
 { showSymbolTable(); return 999; }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 112 "lex.l"
+#line 104 "lex.l"
 ECHO;
 	YY_BREAK
-#line 1062 "lex.yy.c"
+#line 1054 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2061,15 +2053,15 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 112 "lex.l"
+#line 104 "lex.l"
 
 int installID(const char* lexeme) {
     insertSymbol(lexeme, T_UNDEFINED);
     return 0;
 }
 
-int installNUM(const char* num, const char* type) {
-    insertSymbol(num, T_UNDEFINED);
+int installNUM(const char* num, Type type) {
+    insertSymbol(num, type);
     return 0;
 }
 

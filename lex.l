@@ -8,7 +8,7 @@
 
 int installReserved(const char *yytext, const char *tokenType);
 int installID(const char *lexeme);
-int installNUM(const char *num, const char* type);
+int installNUM(const char *num, Type type);
 int installLiteral(const char *yytext);
 int installEspecialChar(const char *yytext);
 %}
@@ -64,23 +64,17 @@ fimenquanto { installReserved(yytext, "keyword"); print_lex_with_args("\nPalavra
 {identificador} {
     installID(yytext);
     print_lex_with_args("\nidentificador: %s\n", yytext);
-    yylval.name = strdup(yytext);
-    // yylval.type = T_UNDEFINED;
     return ID;
 }
 
 {numero} {
-    const char* type = (strchr(yytext, '.') != NULL) ? T_FLOAT : T_INT;
+    Type type = (strchr(yytext, '.') != NULL) ? T_FLOAT : T_INT;
     installNUM(yytext, type);
-    if (strcmp(type, T_FLOAT) == 0) {
+    if (type == T_FLOAT) {
         print_lex_with_args("\nreal: %s\n", yytext);
-        yylval.fval = atof(yytext);
-        yylval.type = T_FLOAT;
         return REAL;
     } else {
         print_lex_with_args("\ninteiro: %s\n", yytext);
-        yylval.ival = atoi(yytext);
-        yylval.type = T_INT;
         return INTEIRO;
     }
 }
@@ -88,8 +82,6 @@ fimenquanto { installReserved(yytext, "keyword"); print_lex_with_args("\nPalavra
 {literal} {
     installLiteral(yytext);
     print_lex_with_args("\nliteral string: %s\n", yytext);
-    yylval.type = T_STRING;
-    yylval.sval = strdup(yytext);
     return LITERALSTRING;
 }
 
@@ -115,8 +107,8 @@ int installID(const char* lexeme) {
     return 0;
 }
 
-int installNUM(const char* num, const char* type) {
-    insertSymbol(num, T_UNDEFINED);
+int installNUM(const char* num, Type type) {
+    insertSymbol(num, type);
     return 0;
 }
 
