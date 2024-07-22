@@ -8,7 +8,10 @@ Symbol *symbolTable[TABLE_SIZE];
 // Função hash auxiliar
 static unsigned int hash(const char *str) {
     unsigned int hash = 0;
-    for (; *str; str++) hash = hash * 31 + *str;
+    while (*str) {
+        hash = (hash * 31) + *str;
+        str++;
+    }
     return hash % TABLE_SIZE;
 }
 
@@ -17,13 +20,15 @@ Symbol *findSymbol(const char *name) {
     int index = hash(name);
     Symbol *symbol = symbolTable[index];
     while (symbol) {
-        if (strcmp(symbol->name, name) == 0) return symbol;
+        if (strcmp(symbol->name, name) == 0) {
+            return symbol;
+        }
         symbol = symbol->next;
     }
     return NULL;
 }
 
-void insertSymbol(const char *name, const char *type, int size, void *memoryLocation) {
+void insertSymbol(const char *name, Type type) {
     Symbol *existingSymbol = findSymbol(name);
     if (existingSymbol == NULL) {
         Symbol *symbol = (Symbol *)malloc(sizeof(Symbol));
@@ -32,9 +37,7 @@ void insertSymbol(const char *name, const char *type, int size, void *memoryLoca
             return;
         }
         symbol->name = strdup(name);
-        symbol->type = strdup(type);
-        symbol->size = size;
-        symbol->memoryLocation = memoryLocation;
+        symbol->type = type;
 
         int index = hash(name);
         symbol->next = symbolTable[index];
@@ -43,23 +46,23 @@ void insertSymbol(const char *name, const char *type, int size, void *memoryLoca
 }
 
 void addReservedWords() {
-    insertSymbol("se", "keyword", 0, 0);
-    insertSymbol("entao", "keyword", 0, 0);
-    insertSymbol("else", "keyword", 0, 0);
-    insertSymbol("inicioprog", "keyword", 0, 0);
-    insertSymbol("fimprog", "keyword", 0, 0);
-    insertSymbol("inicioargs", "keyword", 0, 0);
-    insertSymbol("fimargs", "keyword", 0, 0);
-    insertSymbol("iniciovars", "keyword", 0, 0);
-    insertSymbol("fimvars", "keyword", 0, 0);
-    insertSymbol("escreva", "keyword", 0, 0);
-    insertSymbol("inteiro", "keyword", 0, 0);
-    insertSymbol("real", "keyword", 0, 0);
-    insertSymbol("literal", "keyword", 0, 0);
-    insertSymbol("fimse", "keyword", 0, 0);
-    insertSymbol("enquanto", "keyword", 0, 0);
-    insertSymbol("faca", "keyword", 0, 0);
-    insertSymbol("fimenquanto", "keyword", 0, 0);
+    insertSymbol("se", T_STRING);
+    insertSymbol("entao", T_STRING);
+    insertSymbol("else", T_STRING);
+    insertSymbol("inicioprog", T_STRING);
+    insertSymbol("fimprog", T_STRING);
+    insertSymbol("inicioargs", T_STRING);
+    insertSymbol("fimargs", T_STRING);
+    insertSymbol("iniciovars", T_STRING);
+    insertSymbol("fimvars", T_STRING);
+    insertSymbol("escreva", T_STRING);
+    insertSymbol("inteiro", T_STRING);
+    insertSymbol("real", T_STRING);
+    insertSymbol("literal", T_STRING);
+    insertSymbol("fimse", T_STRING);
+    insertSymbol("enquanto", T_STRING);
+    insertSymbol("faca", T_STRING);
+    insertSymbol("fimenquanto", T_STRING);
 }
 
 void initializeSymbolTable() {
@@ -74,8 +77,6 @@ void freeSymbolTable() {
         while (symbol) {
             Symbol *next = symbol->next;
             free(symbol->name);
-            free(symbol->type);
-            free(symbol->attributes);
             free(symbol);
             symbol = next;
         }
@@ -86,7 +87,7 @@ void showSymbolTable() {
     for (int i = 0; i < TABLE_SIZE; i++) {
         Symbol *symbol = symbolTable[i];
         while (symbol) {
-            printf("Nome: %s, Tipo: %s, Tamanho: %d, Endereço: %p\n", symbol->name, symbol->type, symbol->size, symbol->memoryLocation);
+            printf("Nome: %s, Tipo: %d\n", symbol->name, symbol->type);
             symbol = symbol->next;
         }
     }

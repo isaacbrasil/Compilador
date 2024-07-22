@@ -1,5 +1,7 @@
 %{
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "types.h"
 #include "symbol_table.h"
 #include "sintatico.tab.h"
@@ -50,7 +52,8 @@ fimvars { installReserved(yytext, "keyword"); print_lex_with_args("\nPalavra res
 escreva { installReserved(yytext, "keyword"); print_lex_with_args("\nPalavra reservada: %s\n", yytext); return ESCREVA; }
 inteiro { installReserved(yytext, "keyword"); print_lex_with_args("\nPalavra reservada: %s\n", yytext); return INTEIRO; }
 real { installReserved(yytext, "keyword"); print_lex_with_args("\nPalavra reservada: %s\n", yytext); return REAL; }
-literal { installReserved(yytext, "keyword"); print_lex_with_args("\nPalavra reservada: %s\n", yytext); return LITERAL; }
+literal { installReserved(yytext, "keyword"); print_lex_with_args("\nPalavra reservada: %s\n", yytext); return LITERAL;
+}
 se { installReserved(yytext, "keyword"); print_lex_with_args("\nPalavra reservada: %s\n", yytext); return SE; }
 entao { installReserved(yytext, "keyword"); print_lex_with_args("\nPalavra reservada: %s\n", yytext); return ENTAO; }
 fimse { installReserved(yytext, "keyword"); print_lex_with_args("\nPalavra reservada: %s\n", yytext); return FIMSE; }
@@ -58,23 +61,37 @@ enquanto { installReserved(yytext, "keyword"); print_lex_with_args("\nPalavra re
 faca { installReserved(yytext, "keyword"); print_lex_with_args("\nPalavra reservada: %s\n", yytext); return FACA; }
 fimenquanto { installReserved(yytext, "keyword"); print_lex_with_args("\nPalavra reservada: %s\n", yytext); return FIMENQUANTO; }
 
-{identificador} {installID(yytext); print_lex_with_args("\nidentificador: %s\n", yytext); return ID;}
+{identificador} {
+    installID(yytext);
+    print_lex_with_args("\nidentificador: %s\n", yytext);
+    yylval.name = strdup(yytext);
+    // yylval.type = T_UNDEFINED;
+    return ID;
+}
+
 {numero} {
-    const char* type = (strchr(yytext, '.') != NULL) ? "real" : "inteiro";
+    const char* type = (strchr(yytext, '.') != NULL) ? T_FLOAT : T_INT;
     installNUM(yytext, type);
-    if (strcmp(type, "real") == 0) {
+    if (strcmp(type, T_FLOAT) == 0) {
         print_lex_with_args("\nreal: %s\n", yytext);
         yylval.fval = atof(yytext);
+        yylval.type = T_FLOAT;
         return REAL;
     } else {
         print_lex_with_args("\ninteiro: %s\n", yytext);
         yylval.ival = atoi(yytext);
+        yylval.type = T_INT;
         return INTEIRO;
     }
 }
 
-{literal} { installLiteral(yytext); print_lex_with_args("\nliteral string: %s\n", yytext); return LITERALSTRING; }
-
+{literal} {
+    installLiteral(yytext);
+    print_lex_with_args("\nliteral string: %s\n", yytext);
+    yylval.type = T_STRING;
+    yylval.sval = strdup(yytext);
+    return LITERALSTRING;
+}
 
 "<" { print_lex_with_args("\noperador relacional: %s\n", yytext); return RELOP;}
 "<=" { print_lex_with_args("\noperador relacional: %s\n", yytext); return RELOP;}
@@ -90,30 +107,30 @@ fimenquanto { installReserved(yytext, "keyword"); print_lex_with_args("\nPalavra
 "*" { print_lex_with_args("\noperador aritmético: %s\n", yytext); return RELALGTIMES;}
 
 . { print_lex_with_args("\nErro: caractere desconhecido: '%s'\n", yytext); return ERROR; }
-<<EOF>> {  return 999; }
+<<EOF>> { showSymbolTable(); return 999; }
 
 %%
 int installID(const char* lexeme) {
-    insertSymbol(lexeme, "identifier", 0, NULL);
+    insertSymbol(lexeme, T_UNDEFINED);
     return 0;
 }
 
 int installNUM(const char* num, const char* type) {
-    insertSymbol(num, type, 0, NULL);
+    insertSymbol(num, T_UNDEFINED);
     return 0;
 }
 
 int installReserved(const char* lexeme, const char* tokenType) {
-    insertSymbol(lexeme, tokenType, 0, NULL);
+    insertSymbol(lexeme, T_UNDEFINED);
     return 0;
 }
 
 int installLiteral(const char* lexeme) {
-    insertSymbol(lexeme, "literal", 0, NULL);
+    insertSymbol(lexeme, T_UNDEFINED);
     return 0;
 }
 
 int installEspecialChar(const char* lexeme) {
-    insertSymbol(lexeme, "specialChar", 0, NULL);
+    insertSymbol(lexeme, T_UNDEFINED);
     return 0;
 }

@@ -559,12 +559,12 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    50,    50,    52,    54,    56,    58,    59,    60,    61,
-      62,    63,    64,    66,    71,    77,    83,    89,    94,   100,
-     108,   109,   110,   111,   114,   117,   120,   123,   126,   129,
-     132,   137,   140,   143,   146,   149,   152,   157,   159,   161,
-     162,   163,   164,   167,   168,   170,   171,   173,   175,   176,
-     179,   182,   185
+       0,    47,    47,    49,    51,    53,    55,    56,    57,    58,
+      59,    60,    61,    63,    67,    71,    75,    79,    83,    87,
+      93,    94,    95,    96,    99,   102,   105,   108,   111,   114,
+     117,   122,   125,   128,   131,   134,   137,   142,   144,   146,
+     147,   148,   149,   152,   153,   155,   156,   158,   160,   161,
+     164,   167,   170
 };
 #endif
 
@@ -1195,360 +1195,348 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* programa: INICIOPROG prog FIMPROG  */
-#line 50 "sintatico.y"
+#line 47 "sintatico.y"
                                    { print_if_enabled("\nFim do Programa\n"); }
 #line 1201 "sintatico.tab.c"
     break;
 
   case 3: /* prog: declara_args declara_vars statement  */
-#line 52 "sintatico.y"
+#line 49 "sintatico.y"
                                            { print_if_enabled("\nProdução do codigo do programa\n"); }
 #line 1207 "sintatico.tab.c"
     break;
 
   case 4: /* declara_args: INICIOARGS args_list FIMARGS  */
-#line 54 "sintatico.y"
+#line 51 "sintatico.y"
                                             { print_if_enabled("\nProdução de argumentos\n"); }
 #line 1213 "sintatico.tab.c"
     break;
 
   case 5: /* declara_vars: INICIOVARS vars_list FIMVARS  */
-#line 56 "sintatico.y"
+#line 53 "sintatico.y"
                                             { print_if_enabled("\nProdução de variaveis\n"); }
 #line 1219 "sintatico.tab.c"
     break;
 
   case 6: /* statement: algebraic_expr statement  */
-#line 58 "sintatico.y"
+#line 55 "sintatico.y"
                                      { print_if_enabled("\nstatement -> algebraic_expr statement\n"); }
 #line 1225 "sintatico.tab.c"
     break;
 
   case 7: /* statement: logic_expr statement  */
-#line 59 "sintatico.y"
+#line 56 "sintatico.y"
                                  { print_if_enabled("\nstatement -> logic_expr statement\n"); }
 #line 1231 "sintatico.tab.c"
     break;
 
   case 8: /* statement: attrib statement  */
-#line 60 "sintatico.y"
+#line 57 "sintatico.y"
                              { print_if_enabled("\nstatement -> attrib statement\n"); }
 #line 1237 "sintatico.tab.c"
     break;
 
   case 9: /* statement: expr_condicional statement  */
-#line 61 "sintatico.y"
+#line 58 "sintatico.y"
                                        { print_if_enabled("\nstatement -> expr_condicional statement\n"); }
 #line 1243 "sintatico.tab.c"
     break;
 
   case 10: /* statement: expr_controle statement  */
-#line 62 "sintatico.y"
+#line 59 "sintatico.y"
                                     { print_if_enabled("\nstatement -> expr_controle statement\n"); }
 #line 1249 "sintatico.tab.c"
     break;
 
   case 11: /* statement: expr_escreva statement  */
-#line 63 "sintatico.y"
+#line 60 "sintatico.y"
                                    { print_if_enabled("\nstatement -> expr_escreva statement\n"); }
 #line 1255 "sintatico.tab.c"
     break;
 
   case 13: /* algebraic_expr: INTEIRO rel_alg INTEIRO  */
-#line 66 "sintatico.y"
+#line 63 "sintatico.y"
                                          {
                     (yyval.type) = T_INT;
-                    printf("$$ type: %d\n", (yyval.type));
                     print_if_enabled("\nalgebraic_expr -> INTEIRO rel_alg INTEIRO\n");
                 }
-#line 1265 "sintatico.tab.c"
+#line 1264 "sintatico.tab.c"
     break;
 
   case 14: /* algebraic_expr: INTEIRO rel_alg ID  */
-#line 71 "sintatico.y"
+#line 67 "sintatico.y"
                                      {
-                    (yyval.type) = checkType(T_INT, (yyvsp[0].type));
-                    printf("$$ type: %d\n", (yyval.type));
                     if ((yyval.type) == T_ERROR) yyerror("Incompatibilidade de tipos na expressão aritmética");
                     print_if_enabled("\nalgebraic_expr -> INTEIRO rel_alg ID\n");
                 }
-#line 1276 "sintatico.tab.c"
+#line 1273 "sintatico.tab.c"
     break;
 
   case 15: /* algebraic_expr: ID rel_alg ID  */
-#line 77 "sintatico.y"
+#line 71 "sintatico.y"
                                 {
-                    (yyval.type) = checkType((yyvsp[-2].type), (yyvsp[0].type));
-                    printf("$$ type: %d\n", (yyval.type));
                     if ((yyval.type) == T_ERROR) yyerror("Incompatibilidade de tipos na expressão aritmética");
                     print_if_enabled("\nalgebraic_expr -> ID rel_alg ID\n");
                 }
-#line 1287 "sintatico.tab.c"
+#line 1282 "sintatico.tab.c"
     break;
 
   case 16: /* algebraic_expr: ID rel_alg INTEIRO  */
-#line 83 "sintatico.y"
+#line 75 "sintatico.y"
                                      {
-                    (yyval.type) = checkType((yyvsp[-2].type), T_INT);
-                    printf("$$ type: %d\n", (yyval.type));
                     if ((yyval.type) == T_ERROR) yyerror("Incompatibilidade de tipos na expressão aritmética");
                     print_if_enabled("\nalgebraic_expr -> ID rel_alg INTEIRO\n");
                 }
-#line 1298 "sintatico.tab.c"
+#line 1291 "sintatico.tab.c"
     break;
 
   case 17: /* algebraic_expr: REAL rel_alg REAL  */
-#line 89 "sintatico.y"
+#line 79 "sintatico.y"
                                     {
                     (yyval.type) = T_FLOAT;
-                    printf("$$ type: %d\n", (yyval.type));
                     print_if_enabled("\nalgebraic_expr -> REAL rel_alg REAL\n");
                 }
-#line 1308 "sintatico.tab.c"
+#line 1300 "sintatico.tab.c"
     break;
 
   case 18: /* algebraic_expr: REAL rel_alg ID  */
-#line 94 "sintatico.y"
+#line 83 "sintatico.y"
                                   {
-                    (yyval.type) = checkType(T_FLOAT, (yyvsp[0].type));
-                    printf("$$ type: %d\n", (yyval.type));
                     if ((yyval.type) == T_ERROR) yyerror("Incompatibilidade de tipos na expressão aritmética");
                     print_if_enabled("\nalgebraic_expr -> REAL rel_alg ID\n");
                 }
-#line 1319 "sintatico.tab.c"
+#line 1309 "sintatico.tab.c"
     break;
 
   case 19: /* algebraic_expr: ID rel_alg REAL  */
-#line 100 "sintatico.y"
+#line 87 "sintatico.y"
                                   {
-                    (yyval.type) = checkType((yyvsp[-2].type), T_FLOAT);
-                    printf("$$ type: %d\n", (yyval.type));
                     if ((yyval.type) == T_ERROR) yyerror("Incompatibilidade de tipos na expressão aritmética");
                     print_if_enabled("\nalgebraic_expr -> ID rel_alg REAL\n");
                 }
-#line 1330 "sintatico.tab.c"
+#line 1318 "sintatico.tab.c"
     break;
 
   case 20: /* rel_alg: RELALGSUB  */
-#line 108 "sintatico.y"
+#line 93 "sintatico.y"
                     { print_if_enabled("\nrel_alg -> SUBTRAÇÃO\n"); }
-#line 1336 "sintatico.tab.c"
+#line 1324 "sintatico.tab.c"
     break;
 
   case 21: /* rel_alg: RELALGSUM  */
-#line 109 "sintatico.y"
+#line 94 "sintatico.y"
                     { print_if_enabled("\nrel_alg -> ADIÇÃO\n"); }
-#line 1342 "sintatico.tab.c"
+#line 1330 "sintatico.tab.c"
     break;
 
   case 22: /* rel_alg: RELALGDIV  */
-#line 110 "sintatico.y"
+#line 95 "sintatico.y"
                     { print_if_enabled("\nrel_alg -> DIVISÃO\n"); }
-#line 1348 "sintatico.tab.c"
+#line 1336 "sintatico.tab.c"
     break;
 
   case 23: /* rel_alg: RELALGTIMES  */
-#line 111 "sintatico.y"
+#line 96 "sintatico.y"
                       { print_if_enabled("\nrel_alg -> MULTIPLICAÇÃO\n"); }
-#line 1354 "sintatico.tab.c"
+#line 1342 "sintatico.tab.c"
     break;
 
   case 24: /* logic_expr: ID RELOP ID  */
-#line 114 "sintatico.y"
+#line 99 "sintatico.y"
                          {
                 print_if_enabled("\nlogic_expr -> ID RELOP ID\n");
             }
-#line 1362 "sintatico.tab.c"
+#line 1350 "sintatico.tab.c"
     break;
 
   case 25: /* logic_expr: ID RELOP INTEIRO  */
-#line 117 "sintatico.y"
+#line 102 "sintatico.y"
                                {
                 print_if_enabled("\nlogic_expr -> ID RELOP INTEIRO\n");
             }
-#line 1370 "sintatico.tab.c"
+#line 1358 "sintatico.tab.c"
     break;
 
   case 26: /* logic_expr: INTEIRO RELOP ID  */
-#line 120 "sintatico.y"
+#line 105 "sintatico.y"
                                {
                 print_if_enabled("\nlogic_expr -> INTEIRO RELOP ID\n");
             }
-#line 1378 "sintatico.tab.c"
+#line 1366 "sintatico.tab.c"
     break;
 
   case 27: /* logic_expr: INTEIRO RELOP INTEIRO  */
-#line 123 "sintatico.y"
+#line 108 "sintatico.y"
                                     {
                 print_if_enabled("\nlogic_expr -> INTEIRO RELOP INTEIRO\n");
             }
-#line 1386 "sintatico.tab.c"
+#line 1374 "sintatico.tab.c"
     break;
 
   case 28: /* logic_expr: ID RELOP REAL  */
-#line 126 "sintatico.y"
+#line 111 "sintatico.y"
                             {
                 print_if_enabled("\nlogic_expr -> ID RELOP REAL\n");
             }
-#line 1394 "sintatico.tab.c"
+#line 1382 "sintatico.tab.c"
     break;
 
   case 29: /* logic_expr: REAL RELOP ID  */
-#line 129 "sintatico.y"
+#line 114 "sintatico.y"
                             {
                 print_if_enabled("\nlogic_expr -> REAL RELOP ID\n");
             }
-#line 1402 "sintatico.tab.c"
+#line 1390 "sintatico.tab.c"
     break;
 
   case 30: /* logic_expr: REAL RELOP REAL  */
-#line 132 "sintatico.y"
+#line 117 "sintatico.y"
                               {
                 print_if_enabled("\nlogic_expr -> REAL RELOP REAL\n");
             }
-#line 1410 "sintatico.tab.c"
+#line 1398 "sintatico.tab.c"
     break;
 
   case 31: /* attrib: ID ATTR ID PVIRG  */
-#line 137 "sintatico.y"
+#line 122 "sintatico.y"
                           {
             print_if_enabled("\nattrib -> ID ATTR ID PVIRG\n");
         }
-#line 1418 "sintatico.tab.c"
+#line 1406 "sintatico.tab.c"
     break;
 
   case 32: /* attrib: ID ATTR INTEIRO PVIRG  */
-#line 140 "sintatico.y"
+#line 125 "sintatico.y"
                                 {
             print_if_enabled("\nattrib -> ID ATTR INTEIRO PVIRG\n");
         }
-#line 1426 "sintatico.tab.c"
+#line 1414 "sintatico.tab.c"
     break;
 
   case 33: /* attrib: ID ATTR REAL PVIRG  */
-#line 143 "sintatico.y"
+#line 128 "sintatico.y"
                              {
             print_if_enabled("\nattrib -> ID ATTR REAL PVIRG\n");
         }
-#line 1434 "sintatico.tab.c"
+#line 1422 "sintatico.tab.c"
     break;
 
   case 34: /* attrib: ID ATTR algebraic_expr PVIRG  */
-#line 146 "sintatico.y"
+#line 131 "sintatico.y"
                                        {
             print_if_enabled("\nattrib -> ID ATTR algebraic_expr PVIRG\n");
         }
-#line 1442 "sintatico.tab.c"
+#line 1430 "sintatico.tab.c"
     break;
 
   case 35: /* attrib: ID ATTR logic_expr PVIRG  */
-#line 149 "sintatico.y"
+#line 134 "sintatico.y"
                                    {
             print_if_enabled("\nattrib -> ID ATTR logic_expr PVIRG\n");
         }
-#line 1450 "sintatico.tab.c"
+#line 1438 "sintatico.tab.c"
     break;
 
   case 36: /* attrib: ID ATTR LITERALSTRING PVIRG  */
-#line 152 "sintatico.y"
+#line 137 "sintatico.y"
                                       {
             print_if_enabled("\nattrib -> ID ATTR LITERALSTRING PVIRG\n");
         }
-#line 1458 "sintatico.tab.c"
+#line 1446 "sintatico.tab.c"
     break;
 
   case 37: /* expr_condicional: SE AP logic_expr FP ENTAO statement FIMSE  */
-#line 157 "sintatico.y"
+#line 142 "sintatico.y"
                                                              { print_if_enabled("\nProdução de expressão condicional\n"); }
-#line 1464 "sintatico.tab.c"
+#line 1452 "sintatico.tab.c"
     break;
 
   case 38: /* expr_controle: ENQUANTO AP logic_expr FP FACA statement FIMENQUANTO  */
-#line 159 "sintatico.y"
+#line 144 "sintatico.y"
                                                                      { print_if_enabled("\nProdução de expressão de controle\n"); }
-#line 1470 "sintatico.tab.c"
+#line 1458 "sintatico.tab.c"
     break;
 
   case 39: /* expr_escreva: ESCREVA LITERALSTRING PVIRG  */
-#line 161 "sintatico.y"
+#line 146 "sintatico.y"
                                            { print_if_enabled("\nexpr_escreva -> ESCREVA LITERALSTRING PVIRG\n"); }
-#line 1476 "sintatico.tab.c"
+#line 1464 "sintatico.tab.c"
     break;
 
   case 40: /* expr_escreva: ESCREVA REAL PVIRG  */
-#line 162 "sintatico.y"
+#line 147 "sintatico.y"
                                    { print_if_enabled("\nexpr_escreva -> ESCREVA REAL PVIRG\n"); }
-#line 1482 "sintatico.tab.c"
+#line 1470 "sintatico.tab.c"
     break;
 
   case 41: /* expr_escreva: ESCREVA INTEIRO PVIRG  */
-#line 163 "sintatico.y"
+#line 148 "sintatico.y"
                                       { print_if_enabled("\nexpr_escreva -> ESCREVA INTEIRO PVIRG\n"); }
-#line 1488 "sintatico.tab.c"
+#line 1476 "sintatico.tab.c"
     break;
 
   case 42: /* expr_escreva: ESCREVA ID PVIRG  */
-#line 164 "sintatico.y"
+#line 149 "sintatico.y"
                                  { print_if_enabled("\nexpr_escreva -> ESCREVA ID PVIRG\n"); }
-#line 1494 "sintatico.tab.c"
+#line 1482 "sintatico.tab.c"
     break;
 
   case 43: /* args_list: var_decl args_list  */
-#line 167 "sintatico.y"
+#line 152 "sintatico.y"
                                { print_if_enabled("\nargs_list -> var_decl args_list\n"); }
-#line 1500 "sintatico.tab.c"
+#line 1488 "sintatico.tab.c"
     break;
 
   case 45: /* vars_list: var_decl vars_list  */
-#line 170 "sintatico.y"
+#line 155 "sintatico.y"
                                { }
-#line 1506 "sintatico.tab.c"
+#line 1494 "sintatico.tab.c"
     break;
 
   case 47: /* var_decl: tipo_var ID_list PVIRG  */
-#line 173 "sintatico.y"
+#line 158 "sintatico.y"
                                   { print_if_enabled("\nvar_decl -> tipo_var ID_list PVIRG\n"); }
-#line 1512 "sintatico.tab.c"
+#line 1500 "sintatico.tab.c"
     break;
 
   case 48: /* ID_list: ID_list VIRG ID  */
-#line 175 "sintatico.y"
+#line 160 "sintatico.y"
                           { print_if_enabled("\nID_list -> ID_list VIRG ID\n"); }
-#line 1518 "sintatico.tab.c"
+#line 1506 "sintatico.tab.c"
     break;
 
   case 49: /* ID_list: ID  */
-#line 176 "sintatico.y"
+#line 161 "sintatico.y"
              { print_if_enabled("\nID_list -> ID\n"); }
-#line 1524 "sintatico.tab.c"
+#line 1512 "sintatico.tab.c"
     break;
 
   case 50: /* tipo_var: INTEIRO  */
-#line 179 "sintatico.y"
+#line 164 "sintatico.y"
                    {
             print_if_enabled("\ntipo_var -> INTEIRO\n");
           }
-#line 1532 "sintatico.tab.c"
+#line 1520 "sintatico.tab.c"
     break;
 
   case 51: /* tipo_var: REAL  */
-#line 182 "sintatico.y"
+#line 167 "sintatico.y"
                  {
             print_if_enabled("\ntipo_var -> REAL\n");
           }
-#line 1540 "sintatico.tab.c"
+#line 1528 "sintatico.tab.c"
     break;
 
   case 52: /* tipo_var: LITERAL  */
-#line 185 "sintatico.y"
+#line 170 "sintatico.y"
                     {
             print_if_enabled("\ntipo_var -> LITERAL\n");
           }
-#line 1548 "sintatico.tab.c"
+#line 1536 "sintatico.tab.c"
     break;
 
 
-#line 1552 "sintatico.tab.c"
+#line 1540 "sintatico.tab.c"
 
       default: break;
     }
@@ -1741,7 +1729,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 194 "sintatico.y"
+#line 179 "sintatico.y"
 
 int main(int argc, char **argv) {
 
@@ -1755,7 +1743,7 @@ int main(int argc, char **argv) {
     }
 
     initializeSymbolTable();
-    addReservedWords();
+    // addReservedWords();
 
     if (yyparse() != 0) {
         fprintf(stderr, "Abnormal exit\n");

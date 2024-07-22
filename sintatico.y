@@ -24,14 +24,11 @@ Type determineType(double num);
     int ival;
     float fval;
     char *sval;
+    char *name;
     Type type;
 }
 
-%token <ival> INTEIRO
-%token <fval> REAL
-%token <sval> LITERALSTRING
-%token <type> ID
-
+%token INTEIRO REAL LITERALSTRING ID
 %token AP FP VIRG PVIRG COMM INICIOPROG FIMPROG INICIOARGS FIMARGS INICIOVARS FIMVARS ESCREVA
 %token SE ENTAO FIMSE ENQUANTO FACA FIMENQUANTO NUMBER RELOP ATTR ERROR LITERAL RELALG
 
@@ -65,41 +62,31 @@ statement : algebraic_expr statement { print_if_enabled("\nstatement -> algebrai
 
 algebraic_expr : INTEIRO rel_alg INTEIRO {
                     $$ = T_INT;
-                    printf("$$ type: %d\n", $$);
+                    //printa $1 e $3 e seus $n.type
+                    printf("$1: %d\n, $3: %d\n, $1.type: %d\n, $3.type: %d\n", $1, $3, $1.type, $3.type);
                     print_if_enabled("\nalgebraic_expr -> INTEIRO rel_alg INTEIRO\n");
                 }
                 | INTEIRO rel_alg ID {
-                    $$ = checkType(T_INT, $3);
-                    printf("$$ type: %d\n", $$);
                     if ($$ == T_ERROR) yyerror("Incompatibilidade de tipos na expressão aritmética");
                     print_if_enabled("\nalgebraic_expr -> INTEIRO rel_alg ID\n");
                 }
                 | ID rel_alg ID {
-                    $$ = checkType($1, $3);
-                    printf("$$ type: %d\n", $$);
                     if ($$ == T_ERROR) yyerror("Incompatibilidade de tipos na expressão aritmética");
                     print_if_enabled("\nalgebraic_expr -> ID rel_alg ID\n");
                 }
                 | ID rel_alg INTEIRO {
-                    $$ = checkType($1, T_INT);
-                    printf("$$ type: %d\n", $$);
                     if ($$ == T_ERROR) yyerror("Incompatibilidade de tipos na expressão aritmética");
                     print_if_enabled("\nalgebraic_expr -> ID rel_alg INTEIRO\n");
                 }
                 | REAL rel_alg REAL {
                     $$ = T_FLOAT;
-                    printf("$$ type: %d\n", $$);
                     print_if_enabled("\nalgebraic_expr -> REAL rel_alg REAL\n");
                 }
                 | REAL rel_alg ID {
-                    $$ = checkType(T_FLOAT, $3);
-                    printf("$$ type: %d\n", $$);
                     if ($$ == T_ERROR) yyerror("Incompatibilidade de tipos na expressão aritmética");
                     print_if_enabled("\nalgebraic_expr -> REAL rel_alg ID\n");
                 }
                 | ID rel_alg REAL {
-                    $$ = checkType($1, T_FLOAT);
-                    printf("$$ type: %d\n", $$);
                     if ($$ == T_ERROR) yyerror("Incompatibilidade de tipos na expressão aritmética");
                     print_if_enabled("\nalgebraic_expr -> ID rel_alg REAL\n");
                 }
@@ -204,7 +191,7 @@ int main(int argc, char **argv) {
     }
 
     initializeSymbolTable();
-    addReservedWords();
+    // addReservedWords();
 
     if (yyparse() != 0) {
         fprintf(stderr, "Abnormal exit\n");

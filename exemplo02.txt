@@ -6,7 +6,7 @@ fimargs
 iniciovars
  real numreal1;
  real numreal2;
- real numreal3;
+ real numreal3, numreal4;
  inteiro num1;
  inteiro num2;
  inteiro num3;
@@ -16,4 +16,7 @@ num2 = 21;
 numreal1 = 1.1;
 numreal2 = 2.1;
 num3 = 20 + 21;
-numreal3 = numreal1 + "bomdia";
+numreal3 = numreal1 + numreal2;
+se (num1 == num2) entao
+	escreva "Iguais!\n";
+fimse
