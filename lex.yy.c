@@ -538,57 +538,20 @@ char *yytext;
 #line 1 "lex.l"
 #line 2 "lex.l"
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "symbol_table.h"
 #include "sintatico.tab.h"
 
-/*#define INICIOPROG 1
-#define FIMPROG 2
-#define INICIOARGS 3
-#define FIMARGS 4
-#define INICIOVARS 5
-#define FIMVARS 6
-#define ESCREVA 7
-#define INTEIRO 8
-#define REAL 9
-#define SE 21
-#define LITERAL 10
-#define ENTAO 11
-#define FIMSE 12
-#define ENQUANTO 13
-#define FACA 14
-#define FIMENQUANTO 15
-#define ID 16
-#define NUMBER 17
-#define RELOP 18
-#define LT 60
-#define LE 61
-#define EQ 62
-#define NE 63
-#define GT 64
-#define GE 65
-#define SPECIALCHAR 66
-#define ATTR 67
-#define DELIM 68
-#define AP 69
-#define FP 70
-#define AP 74
-#define FP 75
-#define VIRG 71
-#define PVIRG 72
-#define COMM 73
-#define RELALG 124
-#define ERROR 404
-#define LITERALSTRING 478
-*/
 
 int installReserved(const char *yytext, const char *tokenType);
 int installID(const char *lexeme);
 int installNUM(const char *num);
 int installLiteral(const char *yytext);
 int installEspecialChar(const char *yytext);
-
-#line 591 "lex.yy.c"
-#line 592 "lex.yy.c"
+void print_lex_with_args(const char *msg, char *arg);
+#line 554 "lex.yy.c"
+#line 555 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -805,10 +768,10 @@ YY_DECL
 		}
 
 	{
-#line 74 "lex.l"
+#line 37 "lex.l"
 
 
-#line 812 "lex.yy.c"
+#line 775 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -868,202 +831,211 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 76 "lex.l"
+#line 39 "lex.l"
 { yylineno++; }
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 78 "lex.l"
-{ } 
+#line 41 "lex.l"
+{ }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 80 "lex.l"
-{ installEspecialChar(yytext); printf("\nAbre parenteses: %s\n", yytext); return AP;}
+#line 43 "lex.l"
+{ installEspecialChar(yytext); print_lex_with_args("\nAbre parenteses: %s\n", yytext); return AP;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 81 "lex.l"
-{ installEspecialChar(yytext); printf("\nFecha parenteses: %s\n", yytext); return FP;}
+#line 44 "lex.l"
+{ installEspecialChar(yytext); print_lex_with_args("\nFecha parenteses: %s\n", yytext); return FP;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 82 "lex.l"
-{ installEspecialChar(yytext); printf("\nAbre chaves: %s\n", yytext); return AC;}
+#line 45 "lex.l"
+{ installEspecialChar(yytext); print_lex_with_args("\nAbre chaves: %s\n", yytext); return AC;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 83 "lex.l"
-{ installEspecialChar(yytext); printf("\nFecha chaves: %s\n", yytext); return FC;}
+#line 46 "lex.l"
+{ installEspecialChar(yytext); print_lex_with_args("\nFecha chaves: %s\n", yytext); return FC;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 84 "lex.l"
-{ installEspecialChar(yytext); printf("\nVírgula: %s\n", yytext); return VIRG;}
+#line 47 "lex.l"
+{ installEspecialChar(yytext); print_lex_with_args("\nVírgula: %s\n", yytext); return VIRG;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 85 "lex.l"
-{ installEspecialChar(yytext); printf("\nPonto & Vírgula: %s\n", yytext); return PVIRG;}
+#line 48 "lex.l"
+{ installEspecialChar(yytext); print_lex_with_args("\nPonto & Vírgula: %s\n", yytext); return PVIRG;}
 	YY_BREAK
 case 9:
 /* rule 9 can match eol */
 YY_RULE_SETUP
-#line 86 "lex.l"
-{ printf("\nComentario: %s\n", yytext); return COMM; }
+#line 49 "lex.l"
+{ print_lex_with_args("\nComentario: %s\n", yytext); return COMM; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 88 "lex.l"
-{ installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", yytext); return INICIOPROG;  }
+#line 51 "lex.l"
+{ installReserved(yytext, "keyword"); print_lex_with_args("\nPalavra reservada: %s\n", yytext); return INICIOPROG;  }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 89 "lex.l"
-{ installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", yytext); return FIMPROG; }
+#line 52 "lex.l"
+{ installReserved(yytext, "keyword"); print_lex_with_args("\nPalavra reservada: %s\n", yytext); return FIMPROG; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 90 "lex.l"
-{ installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", yytext); return INICIOARGS; }
+#line 53 "lex.l"
+{ installReserved(yytext, "keyword"); print_lex_with_args("\nPalavra reservada: %s\n", yytext); return INICIOARGS; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 91 "lex.l"
-{ installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", yytext); return FIMARGS; }
+#line 54 "lex.l"
+{ installReserved(yytext, "keyword"); print_lex_with_args("\nPalavra reservada: %s\n", yytext); return FIMARGS; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 92 "lex.l"
-{ installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", yytext); return INICIOVARS; }
+#line 55 "lex.l"
+{ installReserved(yytext, "keyword"); print_lex_with_args("\nPalavra reservada: %s\n", yytext); return INICIOVARS; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 93 "lex.l"
-{ installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", yytext); return FIMVARS; }
+#line 56 "lex.l"
+{ installReserved(yytext, "keyword"); print_lex_with_args("\nPalavra reservada: %s\n", yytext); return FIMVARS; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 94 "lex.l"
-{ installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", yytext); return ESCREVA; }
+#line 57 "lex.l"
+{ installReserved(yytext, "keyword"); print_lex_with_args("\nPalavra reservada: %s\n", yytext); return ESCREVA; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 95 "lex.l"
-{ installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", yytext); return INTEIRO; }
+#line 58 "lex.l"
+{ installReserved(yytext, "keyword"); print_lex_with_args("\nPalavra reservada: %s\n", yytext); return INTEIRO; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 96 "lex.l"
-{ installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", yytext); return REAL; }
+#line 59 "lex.l"
+{ installReserved(yytext, "keyword"); print_lex_with_args("\nPalavra reservada: %s\n", yytext); return REAL; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 97 "lex.l"
-{ installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", yytext); return LITERAL; }
+#line 60 "lex.l"
+{ installReserved(yytext, "keyword"); print_lex_with_args("\nPalavra reservada: %s\n", yytext); return LITERAL;
+}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 98 "lex.l"
-{ installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", yytext); return SE; }
+#line 62 "lex.l"
+{ installReserved(yytext, "keyword"); print_lex_with_args("\nPalavra reservada: %s\n", yytext); return SE; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 99 "lex.l"
-{ installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", yytext); return ENTAO; }
+#line 63 "lex.l"
+{ installReserved(yytext, "keyword"); print_lex_with_args("\nPalavra reservada: %s\n", yytext); return ENTAO; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 100 "lex.l"
-{ installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", yytext); return FIMSE; }
+#line 64 "lex.l"
+{ installReserved(yytext, "keyword"); print_lex_with_args("\nPalavra reservada: %s\n", yytext); return FIMSE; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 101 "lex.l"
-{ installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", yytext); return ENQUANTO; }
+#line 65 "lex.l"
+{ installReserved(yytext, "keyword"); print_lex_with_args("\nPalavra reservada: %s\n", yytext); return ENQUANTO; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 102 "lex.l"
-{ installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", yytext); return FACA; }
+#line 66 "lex.l"
+{ installReserved(yytext, "keyword"); print_lex_with_args("\nPalavra reservada: %s\n", yytext); return FACA; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 103 "lex.l"
-{ installReserved(yytext, "keyword"); printf("\nPalavra reservada: %s\n", yytext); return FIMENQUANTO; }
+#line 67 "lex.l"
+{ installReserved(yytext, "keyword"); print_lex_with_args("\nPalavra reservada: %s\n", yytext); return FIMENQUANTO; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 105 "lex.l"
-{installID(yytext); printf("\nidentificador: %s\n", yytext); return ID;}
+#line 69 "lex.l"
+{
+    installID(yytext);
+    print_lex_with_args("\nidentificador: %s\n", yytext);
+    return ID;
+}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 106 "lex.l"
-{installNUM(yytext); printf("\nnumero: %s\n", yytext); return NUMBER;}
+#line 75 "lex.l"
+{installNUM(yytext); print_lex_with_args("\nnumero: %s\n", yytext); return NUMBER;}
 	YY_BREAK
 case 28:
 /* rule 28 can match eol */
 YY_RULE_SETUP
-#line 107 "lex.l"
-{ installLiteral(yytext); printf("\nliteral: %s\n", yytext); return LITERALSTRING; } 
+#line 78 "lex.l"
+{
+    installLiteral(yytext);
+    print_lex_with_args("\nliteral string: %s\n", yytext);
+    return LITERALSTRING;
+}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 109 "lex.l"
-{ installEspecialChar(yytext); printf("\nCaractere especial: %s\n", yytext); return SPECIALCHAR; }
+#line 83 "lex.l"
+{ installEspecialChar(yytext); print_lex_with_args("\nCaractere especial: %s\n", yytext); return SPECIALCHAR; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 112 "lex.l"
-{ printf("\noperador relacional: %s\n", yytext); return RELOP;}
+#line 85 "lex.l"
+{ print_lex_with_args("\noperador relacional: %s\n", yytext); return RELOP;}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 113 "lex.l"
-{ printf("\noperador relacional: %s\n", yytext); return RELOP;}
+#line 86 "lex.l"
+{ print_lex_with_args("\noperador relacional: %s\n", yytext); return RELOP;}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 114 "lex.l"
-{ printf("\noperador relacional: %s\n", yytext); return RELOP;}
+#line 87 "lex.l"
+{ print_lex_with_args("\noperador relacional: %s\n", yytext); return RELOP;}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 115 "lex.l"
-{ printf("\noperador relacional: %s\n", yytext); return RELOP;}
+#line 88 "lex.l"
+{ print_lex_with_args("\noperador relacional: %s\n", yytext); return RELOP;}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 116 "lex.l"
-{ printf("\noperador relacional: %s\n", yytext); return RELOP;}
+#line 89 "lex.l"
+{ print_lex_with_args("\noperador relacional: %s\n", yytext); return RELOP;}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 117 "lex.l"
-{printf("\noperador relacional: %s\n", yytext); return RELOP;}
+#line 90 "lex.l"
+{print_lex_with_args("\noperador relacional: %s\n", yytext); return RELOP;}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 118 "lex.l"
-{ printf("\natribuição: %s\n", yytext); return ATTR;}
+#line 91 "lex.l"
+{ print_lex_with_args("\natribuição: %s\n", yytext); return ATTR;}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 120 "lex.l"
-{ printf("\nErro: caractere desconhecido: '%s'\n", yytext); return ERROR; }
+#line 93 "lex.l"
+{ print_lex_with_args("\nErro: caractere desconhecido: '%s'\n", yytext); return ERROR; }
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 121 "lex.l"
+#line 94 "lex.l"
 { printf("\nFIM DE ARQUIVO.\n"); return 999; }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 123 "lex.l"
+#line 96 "lex.l"
 ECHO;
 	YY_BREAK
-#line 1067 "lex.yy.c"
+#line 1039 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2066,35 +2038,29 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 123 "lex.l"
+#line 96 "lex.l"
 
 int installID(const char* lexeme) {
     insertSymbol(lexeme, "identifier", 0, NULL);
-    return 0; 
+    return 0;
 }
+
 int installNUM(const char* num) {
     insertSymbol(num, "number", strlen(num), NULL);
-    return 0; 
+    return 0;
 }
+
 int installReserved(const char* lexeme, const char* tokenType) {
     insertSymbol(lexeme, tokenType, 0, NULL);
-    return 0; 
+    return 0;
 }
+
 int installLiteral(const char* lexeme) {
     insertSymbol(lexeme, "literal", 0, NULL);
-    return 0; 
+    return 0;
 }
+
 int installEspecialChar(const char* lexeme) {
     insertSymbol(lexeme, "specialChar", 0, NULL);
-    return 0; 
-}
-
-/*int main(){
-    initializeSymbolTable();
-    addReservedWords();
-
-    int result;
-    while((result = yylex()) != 999);
-    
     return 0;
-}*/
+}

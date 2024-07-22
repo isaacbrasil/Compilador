@@ -75,20 +75,19 @@
 #include <string.h>
 #include "symbol_table.h"
 #include "sintatico.tab.h"
-extern int yylineno; 
+extern int yylineno;
 int yylex(void);
 extern int yylval;
 int yyerror(char *);
 
-int enable_prints = 1; // Flag para controlar os prints
+int enable_prints = 0;
+int enable_lex_prints = 0;
+void print_if_enabled(const char *msg);
+void print_lex_with_args(const char *msg, const char *arg);
 
-void print_if_enabled(const char *msg) {
-    if (enable_prints) {
-        printf("%s", msg);
-    }
-}
 
-#line 92 "sintatico.tab.c"
+
+#line 91 "sintatico.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -150,30 +149,34 @@ enum yysymbol_kind_t
   YYSYMBOL_AC = 31,                        /* AC  */
   YYSYMBOL_FC = 32,                        /* FC  */
   YYSYMBOL_33_ = 33,                       /* '='  */
-  YYSYMBOL_34_ = 34,                       /* '+'  */
-  YYSYMBOL_35_ = 35,                       /* '-'  */
-  YYSYMBOL_36_ = 36,                       /* '*'  */
-  YYSYMBOL_37_ = 37,                       /* '/'  */
-  YYSYMBOL_YYACCEPT = 38,                  /* $accept  */
-  YYSYMBOL_programa = 39,                  /* programa  */
-  YYSYMBOL_prog = 40,                      /* prog  */
-  YYSYMBOL_declara_args = 41,              /* declara_args  */
-  YYSYMBOL_comment = 42,                   /* comment  */
-  YYSYMBOL_declara_vars = 43,              /* declara_vars  */
-  YYSYMBOL_statement = 44,                 /* statement  */
-  YYSYMBOL_algebraic_expr = 45,            /* algebraic_expr  */
-  YYSYMBOL_rel_alg = 46,                   /* rel_alg  */
-  YYSYMBOL_logic_expr = 47,                /* logic_expr  */
-  YYSYMBOL_attrib = 48,                    /* attrib  */
-  YYSYMBOL_expr_condicional = 49,          /* expr_condicional  */
-  YYSYMBOL_expr_controle = 50,             /* expr_controle  */
-  YYSYMBOL_expr_escreva = 51,              /* expr_escreva  */
-  YYSYMBOL_args_list = 52,                 /* args_list  */
-  YYSYMBOL_vars_list = 53,                 /* vars_list  */
-  YYSYMBOL_var_decl = 54,                  /* var_decl  */
-  YYSYMBOL_ID_list = 55,                   /* ID_list  */
-  YYSYMBOL_tipo_var = 56,                  /* tipo_var  */
-  YYSYMBOL_instruction = 57                /* instruction  */
+  YYSYMBOL_RELALGSUM = 34,                 /* RELALGSUM  */
+  YYSYMBOL_RELALGSUB = 35,                 /* RELALGSUB  */
+  YYSYMBOL_36_ = 36,                       /* '+'  */
+  YYSYMBOL_37_ = 37,                       /* '-'  */
+  YYSYMBOL_RELALGDIV = 38,                 /* RELALGDIV  */
+  YYSYMBOL_RELALGTIMES = 39,               /* RELALGTIMES  */
+  YYSYMBOL_40_ = 40,                       /* '*'  */
+  YYSYMBOL_41_ = 41,                       /* '/'  */
+  YYSYMBOL_YYACCEPT = 42,                  /* $accept  */
+  YYSYMBOL_programa = 43,                  /* programa  */
+  YYSYMBOL_prog = 44,                      /* prog  */
+  YYSYMBOL_declara_args = 45,              /* declara_args  */
+  YYSYMBOL_comment = 46,                   /* comment  */
+  YYSYMBOL_declara_vars = 47,              /* declara_vars  */
+  YYSYMBOL_statement = 48,                 /* statement  */
+  YYSYMBOL_algebraic_expr = 49,            /* algebraic_expr  */
+  YYSYMBOL_rel_alg = 50,                   /* rel_alg  */
+  YYSYMBOL_logic_expr = 51,                /* logic_expr  */
+  YYSYMBOL_attrib = 52,                    /* attrib  */
+  YYSYMBOL_expr_condicional = 53,          /* expr_condicional  */
+  YYSYMBOL_expr_controle = 54,             /* expr_controle  */
+  YYSYMBOL_expr_escreva = 55,              /* expr_escreva  */
+  YYSYMBOL_args_list = 56,                 /* args_list  */
+  YYSYMBOL_vars_list = 57,                 /* vars_list  */
+  YYSYMBOL_var_decl = 58,                  /* var_decl  */
+  YYSYMBOL_ID_list = 59,                   /* ID_list  */
+  YYSYMBOL_tipo_var = 60,                  /* tipo_var  */
+  YYSYMBOL_instruction = 61                /* instruction  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -504,7 +507,7 @@ union yyalloc
 #define YYLAST   124
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  38
+#define YYNTOKENS  42
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  20
 /* YYNRULES -- Number of rules.  */
@@ -513,7 +516,7 @@ union yyalloc
 #define YYNSTATES  106
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   287
+#define YYMAXUTOK   291
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -531,7 +534,7 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,    36,    34,     2,    35,     2,    37,     2,     2,
+       2,     2,    40,    36,     2,    37,     2,    41,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,    33,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -555,19 +558,20 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
-      25,    26,    27,    28,    29,    30,    31,    32
+      25,    26,    27,    28,    29,    30,    31,    32,    34,    35,
+      38,    39
 };
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
-static const yytype_uint8 yyrline[] =
+static const yytype_int8 yyrline[] =
 {
-       0,    37,    37,    40,    43,    44,    48,    50,    51,    55,
-      56,    57,    58,    59,    60,    61,    62,    63,    67,    68,
-      69,    70,    74,    75,    76,    77,    81,    82,    83,    84,
-      88,    89,    90,    91,    92,    96,    98,   101,   102,   103,
-     104,   108,   109,   112,   113,   116,   119,   120,   124,   125,
-     126,   129,   130,   131,   132
+       0,    34,    34,    36,    39,    40,    42,    44,    45,    49,
+      50,    51,    52,    53,    54,    55,    56,    57,    61,    62,
+      63,    64,    69,    70,    71,    72,    76,    77,    78,    79,
+      83,    84,    85,    86,    87,    91,    93,    96,    97,    98,
+      99,   103,   104,   107,   108,   111,   114,   115,   119,   120,
+     121,   124,   125,   126,   127
 };
 #endif
 
@@ -588,7 +592,8 @@ static const char *const yytname[] =
   "INICIOVARS", "FIMVARS", "ESCREVA", "INTEIRO", "REAL", "SE", "ENTAO",
   "FIMSE", "ENQUANTO", "FACA", "FIMENQUANTO", "ID", "NUMBER", "LITERAL",
   "SPECIALCHAR", "RELOP", "ATTR", "ERROR", "LITERALSTRING", "AC", "FC",
-  "'='", "'+'", "'-'", "'*'", "'/'", "$accept", "programa", "prog",
+  "'='", "RELALGSUM", "RELALGSUB", "'+'", "'-'", "RELALGDIV",
+  "RELALGTIMES", "'*'", "'/'", "$accept", "programa", "prog",
   "declara_args", "comment", "declara_vars", "statement", "algebraic_expr",
   "rel_alg", "logic_expr", "attrib", "expr_condicional", "expr_controle",
   "expr_escreva", "args_list", "vars_list", "var_decl", "ID_list",
@@ -616,16 +621,16 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -6,     5,    24,    -7,    12,    34,   -30,   -30,   -30,   -30,
-     -30,    29,    28,   -17,   -30,    26,    -4,   -30,   -30,   -30,
-       6,   -30,    37,    28,   -30,    22,    72,    78,    21,    27,
-      -4,   -30,    -4,    -4,    -4,    -4,    -4,    -4,    64,   -30,
-     -30,   -30,    86,    92,   102,   103,     4,     4,    77,    36,
-     -30,   -30,   -30,   -30,    79,    81,    83,   -30,   -30,   -30,
-     -30,   -30,   -30,   -30,   -30,   -30,   -30,   -30,   -30,    84,
-      85,   106,   109,   -30,   -30,    -5,    -1,   108,   110,   111,
+       7,    -6,    28,    -9,    30,    13,   -30,   -30,   -30,   -30,
+     -30,    31,    -7,    23,   -30,    51,     3,   -30,   -30,   -30,
+       8,   -30,    32,    -7,   -30,    25,    62,    66,    16,    22,
+       3,   -30,     3,     3,     3,     3,     3,     3,    58,   -30,
+     -30,   -30,    48,    84,    88,    94,     6,     6,    27,    54,
+     -30,   -30,   -30,   -30,    37,    56,    86,   -30,   -30,   -30,
+     -30,   -30,   -30,   -30,   -30,   -30,   -30,   -30,   -30,    78,
+      85,   107,   109,   -30,   -30,    -5,    -3,   108,   110,   111,
      -30,   -30,   -30,   -30,   -30,   -30,    97,    98,   -30,   -30,
-     -30,   -30,   -30,     0,     0,    90,     0,     0,     0,   101,
+     -30,   -30,   -30,    -2,    -2,    90,    -2,    -2,    -2,   101,
       99,   -30,   -30,   -30,   -30,   -30
 };
 
@@ -650,8 +655,8 @@ static const yytype_int8 yydefact[] =
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -30,   -30,   -30,   -30,   -20,   -30,    35,    73,   -29,    50,
-     -14,   -30,   -30,    -8,   112,   100,     2,   -30,   -30,    -3
+     -30,   -30,   -30,   -30,   -11,   -30,    38,    73,   -29,    42,
+      -1,   -30,   -30,     5,   112,   100,    -4,   -30,   -30,    10
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
@@ -666,35 +671,35 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      56,    88,     1,    24,     7,    89,    19,    24,     8,     9,
-      25,    38,    39,    26,    25,     3,    27,    23,    10,    28,
-      29,    14,    48,    95,     6,    23,    55,    69,    70,    50,
-      51,    52,    53,    50,    51,    52,    53,    42,    43,    21,
-      17,     8,     9,     8,     9,    44,    15,    56,    48,    49,
-      40,    10,    45,    10,    55,    50,    51,    52,    53,    75,
-      76,    50,    51,    52,    53,    57,    77,    58,    59,    60,
-      61,    62,    63,    96,    96,    46,    96,    96,    96,    97,
-      97,    47,    97,    97,    97,    98,    98,    64,    98,    98,
-      98,   100,    65,   101,   102,   103,    71,    72,    66,    79,
-      73,    74,    80,    81,    82,    83,    84,    85,    67,    68,
-      86,    48,    55,    87,    90,    93,    91,    92,    49,    94,
+      56,    88,     7,    89,     3,    24,     8,     9,     8,     9,
+      24,    23,    25,    38,    39,     1,    10,    25,    10,    23,
+      26,    95,    48,    27,    55,    15,    28,    29,     6,    69,
+      70,    50,    51,    50,    51,    52,    53,    52,    53,    14,
+      42,    43,    17,    48,    49,    40,    19,    56,    44,    55,
+      73,    74,    50,    51,    65,    45,    52,    53,    50,    51,
+      80,    81,    52,    53,    21,    46,     8,     9,    57,    47,
+      58,    59,    60,    61,    62,    63,    10,    75,    76,    82,
+      83,    64,    96,    96,    77,    96,    96,    96,    71,    72,
+      66,    79,    97,    97,    67,    97,    97,    97,    98,    98,
+      68,    98,    98,    98,   100,    48,   101,   102,   103,    84,
+      85,    86,    55,    87,    90,    93,    91,    92,    49,    94,
      104,   105,    78,    41,    18
 };
 
 static const yytype_int8 yycheck[] =
 {
-      29,     6,     8,     7,    11,     6,    23,     7,    15,    16,
-      14,     5,     6,    17,    14,    10,    20,    15,    25,    23,
-      24,     9,    27,    23,     0,    23,    27,    23,    24,    34,
-      35,    36,    37,    34,    35,    36,    37,    15,    16,    13,
-      11,    15,    16,    15,    16,    23,    12,    76,    27,    28,
-      13,    25,    30,    25,    27,    34,    35,    36,    37,    23,
-      24,    34,    35,    36,    37,    30,    30,    32,    33,    34,
-      35,    36,    37,    93,    94,     3,    96,    97,    98,    93,
-      94,     3,    96,    97,    98,    93,    94,    23,    96,    97,
-      98,    94,     6,    96,    97,    98,    46,    47,     6,    49,
-      23,    24,    23,    24,    23,    24,    23,    24,     6,     6,
-       4,    27,    27,     4,     6,    18,     6,     6,    28,    21,
+      29,     6,    11,     6,    10,     7,    15,    16,    15,    16,
+       7,    15,    14,     5,     6,     8,    25,    14,    25,    23,
+      17,    23,    27,    20,    27,    12,    23,    24,     0,    23,
+      24,    36,    37,    36,    37,    40,    41,    40,    41,     9,
+      15,    16,    11,    27,    28,    13,    23,    76,    23,    27,
+      23,    24,    36,    37,     6,    30,    40,    41,    36,    37,
+      23,    24,    40,    41,    13,     3,    15,    16,    30,     3,
+      32,    33,    34,    35,    36,    37,    25,    23,    24,    23,
+      24,    23,    93,    94,    30,    96,    97,    98,    46,    47,
+       6,    49,    93,    94,     6,    96,    97,    98,    93,    94,
+       6,    96,    97,    98,    94,    27,    96,    97,    98,    23,
+      24,     4,    27,     4,     6,    18,     6,     6,    28,    21,
       19,    22,    49,    23,    12
 };
 
@@ -702,28 +707,28 @@ static const yytype_int8 yycheck[] =
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     8,    39,    10,    40,    41,     0,    11,    15,    16,
-      25,    52,    54,    56,     9,    12,    43,    11,    52,    23,
-      55,    13,    53,    54,     7,    14,    17,    20,    23,    24,
-      42,    44,    45,    47,    48,    49,    50,    51,     5,     6,
-      13,    53,    15,    16,    23,    30,     3,     3,    27,    28,
-      34,    35,    36,    37,    46,    27,    46,    44,    44,    44,
-      44,    44,    44,    44,    23,     6,     6,     6,     6,    23,
-      24,    47,    47,    23,    24,    23,    24,    30,    45,    47,
+       0,     8,    43,    10,    44,    45,     0,    11,    15,    16,
+      25,    56,    58,    60,     9,    12,    47,    11,    56,    23,
+      59,    13,    57,    58,     7,    14,    17,    20,    23,    24,
+      46,    48,    49,    51,    52,    53,    54,    55,     5,     6,
+      13,    57,    15,    16,    23,    30,     3,     3,    27,    28,
+      36,    37,    40,    41,    50,    27,    50,    48,    48,    48,
+      48,    48,    48,    48,    23,     6,     6,     6,     6,    23,
+      24,    51,    51,    23,    24,    23,    24,    30,    49,    51,
       23,    24,    23,    24,    23,    24,     4,     4,     6,     6,
-       6,     6,     6,    18,    21,    23,    42,    48,    51,    57,
-      57,    57,    57,    57,    19,    22
+       6,     6,     6,    18,    21,    23,    46,    52,    55,    61,
+      61,    61,    61,    61,    19,    22
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    38,    39,    40,    41,    41,    42,    43,    43,    44,
-      44,    44,    44,    44,    44,    44,    44,    44,    45,    45,
-      45,    45,    46,    46,    46,    46,    47,    47,    47,    47,
-      48,    48,    48,    48,    48,    49,    50,    51,    51,    51,
-      51,    52,    52,    53,    53,    54,    55,    55,    56,    56,
-      56,    57,    57,    57,    57
+       0,    42,    43,    44,    45,    45,    46,    47,    47,    48,
+      48,    48,    48,    48,    48,    48,    48,    48,    49,    49,
+      49,    49,    50,    50,    50,    50,    51,    51,    51,    51,
+      52,    52,    52,    52,    52,    53,    54,    55,    55,    55,
+      55,    56,    56,    57,    57,    58,    59,    59,    60,    60,
+      60,    61,    61,    61,    61
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
@@ -1198,295 +1203,295 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* programa: INICIOPROG prog FIMPROG  */
-#line 37 "sintatico.y"
-                                    { print_if_enabled("\nFim do Programa\n");}
-#line 1204 "sintatico.tab.c"
+#line 34 "sintatico.y"
+                                   { print_if_enabled("\nFim do Programa\n"); }
+#line 1209 "sintatico.tab.c"
     break;
 
   case 3: /* prog: declara_args declara_vars statement  */
-#line 40 "sintatico.y"
-                                           { print_if_enabled("\nProdução do codigo do programa\n");}
-#line 1210 "sintatico.tab.c"
+#line 36 "sintatico.y"
+                                           { print_if_enabled("\nProdução do codigo do programa\n"); }
+#line 1215 "sintatico.tab.c"
     break;
 
   case 4: /* declara_args: INICIOARGS args_list FIMARGS  */
-#line 43 "sintatico.y"
+#line 39 "sintatico.y"
                                                 {print_if_enabled("\nProdução de argumentos\n");}
-#line 1216 "sintatico.tab.c"
+#line 1221 "sintatico.tab.c"
     break;
 
   case 5: /* declara_args: INICIOARGS FIMARGS  */
-#line 44 "sintatico.y"
+#line 40 "sintatico.y"
                                                 {print_if_enabled("\nArgumentos vazios\n");}
-#line 1222 "sintatico.tab.c"
+#line 1227 "sintatico.tab.c"
     break;
 
   case 6: /* comment: COMM  */
-#line 48 "sintatico.y"
+#line 42 "sintatico.y"
                                                 {print_if_enabled("\nProdução de comentarios\n");}
-#line 1228 "sintatico.tab.c"
+#line 1233 "sintatico.tab.c"
     break;
 
   case 7: /* declara_vars: INICIOVARS vars_list FIMVARS  */
-#line 50 "sintatico.y"
+#line 44 "sintatico.y"
                                                 {print_if_enabled("\nProdução de variaveis\n");}
-#line 1234 "sintatico.tab.c"
+#line 1239 "sintatico.tab.c"
     break;
 
   case 8: /* declara_vars: INICIOVARS FIMVARS  */
-#line 51 "sintatico.y"
+#line 45 "sintatico.y"
                                                 {print_if_enabled("\nVariáveis vazias\n");}
-#line 1240 "sintatico.tab.c"
+#line 1245 "sintatico.tab.c"
     break;
 
   case 9: /* statement: comment statement  */
-#line 55 "sintatico.y"
+#line 49 "sintatico.y"
                                                 {print_if_enabled("\nstatement -> comment statement\n"); }
-#line 1246 "sintatico.tab.c"
+#line 1251 "sintatico.tab.c"
     break;
 
   case 10: /* statement: algebraic_expr statement  */
-#line 56 "sintatico.y"
+#line 50 "sintatico.y"
                                                 {print_if_enabled("\nstatement -> algebraic_expr statement\n");}
-#line 1252 "sintatico.tab.c"
+#line 1257 "sintatico.tab.c"
     break;
 
   case 11: /* statement: logic_expr statement  */
-#line 57 "sintatico.y"
+#line 51 "sintatico.y"
                                                 {print_if_enabled("\nstatement -> logic_expr statement\n");}
-#line 1258 "sintatico.tab.c"
+#line 1263 "sintatico.tab.c"
     break;
 
   case 12: /* statement: attrib statement  */
-#line 58 "sintatico.y"
+#line 52 "sintatico.y"
                                                 {print_if_enabled("\nstatement -> attrib statement\n");}
-#line 1264 "sintatico.tab.c"
+#line 1269 "sintatico.tab.c"
     break;
 
   case 13: /* statement: expr_condicional statement  */
-#line 59 "sintatico.y"
+#line 53 "sintatico.y"
                                                 {print_if_enabled("\nstatement -> expr_condicional statement\n");}
-#line 1270 "sintatico.tab.c"
+#line 1275 "sintatico.tab.c"
     break;
 
   case 14: /* statement: expr_controle statement  */
-#line 60 "sintatico.y"
+#line 54 "sintatico.y"
                                                 {print_if_enabled("\nstatement -> expr_controle statement\n");}
-#line 1276 "sintatico.tab.c"
+#line 1281 "sintatico.tab.c"
     break;
 
   case 15: /* statement: expr_escreva statement  */
-#line 61 "sintatico.y"
+#line 55 "sintatico.y"
                                                 {print_if_enabled("\nstatement -> expr_escreva statement\n");}
-#line 1282 "sintatico.tab.c"
+#line 1287 "sintatico.tab.c"
     break;
 
   case 16: /* statement: comment  */
-#line 62 "sintatico.y"
+#line 56 "sintatico.y"
                                                 { print_if_enabled("\nstatement -> comment\n"); }
-#line 1288 "sintatico.tab.c"
+#line 1293 "sintatico.tab.c"
     break;
 
   case 18: /* algebraic_expr: NUMBER rel_alg NUMBER  */
-#line 67 "sintatico.y"
+#line 61 "sintatico.y"
                                         { print_if_enabled("\nalgebraic_expr -> NUMBER rel_alg NUMBER\n");}
-#line 1294 "sintatico.tab.c"
+#line 1299 "sintatico.tab.c"
     break;
 
   case 19: /* algebraic_expr: NUMBER rel_alg ID  */
-#line 68 "sintatico.y"
+#line 62 "sintatico.y"
                                         { print_if_enabled("\nalgebraic_expr -> NUMBER rel_alg ID\n");}
-#line 1300 "sintatico.tab.c"
+#line 1305 "sintatico.tab.c"
     break;
 
   case 20: /* algebraic_expr: ID rel_alg ID  */
-#line 69 "sintatico.y"
+#line 63 "sintatico.y"
                                         { print_if_enabled("\nalgebraic_expr -> ID rel_alg ID\n");}
-#line 1306 "sintatico.tab.c"
+#line 1311 "sintatico.tab.c"
     break;
 
   case 21: /* algebraic_expr: ID rel_alg NUMBER  */
-#line 70 "sintatico.y"
+#line 64 "sintatico.y"
                                         { print_if_enabled("\nalgebraic_expr -> ID rel_alg NUMBER\n");}
-#line 1312 "sintatico.tab.c"
+#line 1317 "sintatico.tab.c"
     break;
 
   case 22: /* rel_alg: '-'  */
-#line 74 "sintatico.y"
-              { print_if_enabled("\nrel_alg -> SUBTRAÇÃO\n");}
-#line 1318 "sintatico.tab.c"
+#line 69 "sintatico.y"
+              { print_if_enabled("\nrel_alg -> SUBTRAÇÃO\n"); }
+#line 1323 "sintatico.tab.c"
     break;
 
   case 23: /* rel_alg: '+'  */
-#line 75 "sintatico.y"
-              { print_if_enabled("\nrel_alg -> ADIÇÃO\n");}
-#line 1324 "sintatico.tab.c"
+#line 70 "sintatico.y"
+              { print_if_enabled("\nrel_alg -> ADIÇÃO\n"); }
+#line 1329 "sintatico.tab.c"
     break;
 
   case 24: /* rel_alg: '/'  */
-#line 76 "sintatico.y"
-              { print_if_enabled("\nrel_alg -> DIVISÃO\n");}
-#line 1330 "sintatico.tab.c"
+#line 71 "sintatico.y"
+              { print_if_enabled("\nrel_alg -> DIVISÃO\n"); }
+#line 1335 "sintatico.tab.c"
     break;
 
   case 25: /* rel_alg: '*'  */
-#line 77 "sintatico.y"
-              { print_if_enabled("\nrel_alg -> MULTIPLICAÇÃO\n");}
-#line 1336 "sintatico.tab.c"
+#line 72 "sintatico.y"
+              { print_if_enabled("\nrel_alg -> MULTIPLICAÇÃO\n"); }
+#line 1341 "sintatico.tab.c"
     break;
 
   case 26: /* logic_expr: ID RELOP ID  */
-#line 81 "sintatico.y"
+#line 76 "sintatico.y"
                                     { print_if_enabled("\nlogic_expr -> ID RELOP ID \n");}
-#line 1342 "sintatico.tab.c"
+#line 1347 "sintatico.tab.c"
     break;
 
   case 27: /* logic_expr: ID RELOP NUMBER  */
-#line 82 "sintatico.y"
+#line 77 "sintatico.y"
                                     { print_if_enabled("\nlogic_expr -> ID RELOP NUMBER\n");}
-#line 1348 "sintatico.tab.c"
+#line 1353 "sintatico.tab.c"
     break;
 
   case 28: /* logic_expr: NUMBER RELOP ID  */
-#line 83 "sintatico.y"
+#line 78 "sintatico.y"
                                     { print_if_enabled("\nlogic_expr -> NUMBER RELOP ID\n");}
-#line 1354 "sintatico.tab.c"
+#line 1359 "sintatico.tab.c"
     break;
 
   case 29: /* logic_expr: NUMBER RELOP NUMBER  */
-#line 84 "sintatico.y"
+#line 79 "sintatico.y"
                                     { print_if_enabled("\nlogic_expr -> NUMBER RELOP NUMBER\n");}
-#line 1360 "sintatico.tab.c"
+#line 1365 "sintatico.tab.c"
     break;
 
   case 30: /* attrib: ID ATTR ID PVIRG  */
-#line 88 "sintatico.y"
+#line 83 "sintatico.y"
                                         { print_if_enabled("\nattrib -> ID ATTR ID PVIRG\n");}
-#line 1366 "sintatico.tab.c"
+#line 1371 "sintatico.tab.c"
     break;
 
   case 31: /* attrib: ID ATTR NUMBER PVIRG  */
-#line 89 "sintatico.y"
+#line 84 "sintatico.y"
                                         { print_if_enabled("\nattrib -> ID ATTR NUMBER PVIRG\n");}
-#line 1372 "sintatico.tab.c"
+#line 1377 "sintatico.tab.c"
     break;
 
   case 32: /* attrib: ID ATTR algebraic_expr PVIRG  */
-#line 90 "sintatico.y"
+#line 85 "sintatico.y"
                                         { print_if_enabled("\nattrib -> ID ATTR algebraic_expr PVIRG\n");}
-#line 1378 "sintatico.tab.c"
+#line 1383 "sintatico.tab.c"
     break;
 
   case 33: /* attrib: ID ATTR logic_expr PVIRG  */
-#line 91 "sintatico.y"
+#line 86 "sintatico.y"
                                         { print_if_enabled("\nattrib -> ID ATTR logic_expr PVIRG\n");}
-#line 1384 "sintatico.tab.c"
+#line 1389 "sintatico.tab.c"
     break;
 
   case 34: /* attrib: ID ATTR LITERALSTRING PVIRG  */
-#line 92 "sintatico.y"
+#line 87 "sintatico.y"
                                         { print_if_enabled("\nattrib -> ID ATTR LITERALSTRING PVIRG\n");}
-#line 1390 "sintatico.tab.c"
+#line 1395 "sintatico.tab.c"
     break;
 
   case 35: /* expr_condicional: SE AP logic_expr FP ENTAO instruction FIMSE  */
-#line 96 "sintatico.y"
+#line 91 "sintatico.y"
                                                                { print_if_enabled("\nProdução de expressão condicional\n");}
-#line 1396 "sintatico.tab.c"
+#line 1401 "sintatico.tab.c"
     break;
 
   case 36: /* expr_controle: ENQUANTO AP logic_expr FP FACA instruction FIMENQUANTO  */
-#line 98 "sintatico.y"
+#line 93 "sintatico.y"
                                                                        { print_if_enabled("\nProdução de expressão de controle\n");}
-#line 1402 "sintatico.tab.c"
+#line 1407 "sintatico.tab.c"
     break;
 
   case 37: /* expr_escreva: ESCREVA LITERALSTRING PVIRG  */
-#line 101 "sintatico.y"
+#line 96 "sintatico.y"
                                               { print_if_enabled("\nexpr_escreva -> ESCREVA LITERALSTRING PVIRG\n");}
-#line 1408 "sintatico.tab.c"
+#line 1413 "sintatico.tab.c"
     break;
 
   case 38: /* expr_escreva: ESCREVA REAL PVIRG  */
-#line 102 "sintatico.y"
+#line 97 "sintatico.y"
                                         { print_if_enabled("\nexpr_escreva -> ESCREVA REAL PVIRG\n");}
-#line 1414 "sintatico.tab.c"
+#line 1419 "sintatico.tab.c"
     break;
 
   case 39: /* expr_escreva: ESCREVA INTEIRO PVIRG  */
-#line 103 "sintatico.y"
+#line 98 "sintatico.y"
                                         { print_if_enabled("\nexpr_escreva -> ESCREVA INTEIRO PVIRG\n");}
-#line 1420 "sintatico.tab.c"
+#line 1425 "sintatico.tab.c"
     break;
 
   case 41: /* args_list: var_decl args_list  */
-#line 108 "sintatico.y"
+#line 103 "sintatico.y"
                                { print_if_enabled("\nargs_list -> var_decl args_list\n");}
-#line 1426 "sintatico.tab.c"
+#line 1431 "sintatico.tab.c"
     break;
 
   case 43: /* vars_list: var_decl vars_list  */
-#line 112 "sintatico.y"
+#line 107 "sintatico.y"
                                 { print_if_enabled("\nvars_list -> var_decl vars_list\n");}
-#line 1432 "sintatico.tab.c"
+#line 1437 "sintatico.tab.c"
     break;
 
   case 45: /* var_decl: tipo_var ID_list PVIRG  */
-#line 116 "sintatico.y"
+#line 111 "sintatico.y"
                                   { print_if_enabled("\nvar_decl -> tipo_var ID_list PVIRG\n");}
-#line 1438 "sintatico.tab.c"
+#line 1443 "sintatico.tab.c"
     break;
 
   case 46: /* ID_list: ID_list VIRG ID  */
-#line 119 "sintatico.y"
+#line 114 "sintatico.y"
                             { print_if_enabled("\nID_list -> ID_list VIRG ID\n");}
-#line 1444 "sintatico.tab.c"
+#line 1449 "sintatico.tab.c"
     break;
 
   case 47: /* ID_list: ID  */
-#line 120 "sintatico.y"
+#line 115 "sintatico.y"
                             { print_if_enabled("\nID_list -> ID\n");}
-#line 1450 "sintatico.tab.c"
+#line 1455 "sintatico.tab.c"
     break;
 
   case 48: /* tipo_var: INTEIRO  */
-#line 124 "sintatico.y"
+#line 119 "sintatico.y"
                             { print_if_enabled("\ntipo_var -> INTEIRO\n");}
-#line 1456 "sintatico.tab.c"
+#line 1461 "sintatico.tab.c"
     break;
 
   case 49: /* tipo_var: REAL  */
-#line 125 "sintatico.y"
+#line 120 "sintatico.y"
                             { print_if_enabled("\ntipo_var -> REAL\n");}
-#line 1462 "sintatico.tab.c"
+#line 1467 "sintatico.tab.c"
     break;
 
   case 50: /* tipo_var: LITERAL  */
-#line 126 "sintatico.y"
+#line 121 "sintatico.y"
                             { print_if_enabled("\ntipo_var -> LITERAL\n");}
-#line 1468 "sintatico.tab.c"
+#line 1473 "sintatico.tab.c"
     break;
 
   case 51: /* instruction: expr_escreva instruction  */
-#line 129 "sintatico.y"
+#line 124 "sintatico.y"
                                        { print_if_enabled("\ninstruction -> expr_escreva\n");}
-#line 1474 "sintatico.tab.c"
+#line 1479 "sintatico.tab.c"
     break;
 
   case 52: /* instruction: attrib instruction  */
-#line 130 "sintatico.y"
+#line 125 "sintatico.y"
                                     { print_if_enabled("\ninstruction -> attrib\n");}
-#line 1480 "sintatico.tab.c"
+#line 1485 "sintatico.tab.c"
     break;
 
   case 53: /* instruction: comment instruction  */
-#line 131 "sintatico.y"
+#line 126 "sintatico.y"
                                        { print_if_enabled("\ninstruction -> comment\n");}
-#line 1486 "sintatico.tab.c"
+#line 1491 "sintatico.tab.c"
     break;
 
 
-#line 1490 "sintatico.tab.c"
+#line 1495 "sintatico.tab.c"
 
       default: break;
     }
@@ -1679,25 +1684,38 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 134 "sintatico.y"
+#line 129 "sintatico.y"
 
 int main(int argc, char **argv) {
 
- // Verifica se a flag para desabilitar os prints foi passada
     for (int i = 1; i < argc; i++) {
-        if (strcmp(argv[i], "--no-print") == 0) {
-            enable_prints = 0;
+        if (strcmp(argv[i], "--verbose") == 0) {
+            enable_prints = 1;
+        }
+        if (strcmp(argv[i], "--lex") == 0) {
+            enable_lex_prints = 1;
         }
     }
 
-
-    initializeSymbolTable(); // Inicializa a tabela de símbolos
-    addReservedWords();      // Adiciona palavras reservadas
+    initializeSymbolTable();
+    addReservedWords();
 
     if (yyparse() != 0) {
         fprintf(stderr, "Abnormal exit\n");
     }
     return 0;
+}
+
+void print_if_enabled(const char *msg) {
+    if (enable_prints) {
+        printf("%s", msg);
+    }
+}
+
+void print_lex_with_args(const char *msg, const char *arg) {
+    if (enable_lex_prints) {
+        printf(msg, arg);
+    }
 }
 
 int yyerror(char *s) {

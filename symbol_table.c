@@ -8,7 +8,10 @@ Symbol *symbolTable[TABLE_SIZE];
 // Função hash auxiliar
 static unsigned int hash(const char *str) {
     unsigned int hash = 0;
-    for (; *str; str++) hash = hash * 31 + *str;
+    while (*str) {
+        hash = (hash * 31) + *str;
+        str++;
+    }
     return hash % TABLE_SIZE;
 }
 
@@ -17,7 +20,9 @@ Symbol *findSymbol(const char *name) {
     int index = hash(name);
     Symbol *symbol = symbolTable[index];
     while (symbol) {
-        if (strcmp(symbol->name, name) == 0) return symbol;
+        if (strcmp(symbol->name, name) == 0) {
+            return symbol;
+        }
         symbol = symbol->next;
     }
     return NULL;
@@ -75,10 +80,9 @@ void freeSymbolTable() {
         while (symbol) {
             Symbol *next = symbol->next;
             free(symbol->name);
-            free(symbol->type);
-            free(symbol->attributes);
             free(symbol);
             symbol = next;
         }
     }
 }
+

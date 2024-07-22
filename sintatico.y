@@ -5,18 +5,17 @@
 #include <string.h>
 #include "symbol_table.h"
 #include "sintatico.tab.h"
-extern int yylineno; 
+extern int yylineno;
 int yylex(void);
 extern int yylval;
 int yyerror(char *);
 
-int enable_prints = 1; // Flag para controlar os prints
+int enable_prints = 0;
+int enable_lex_prints = 0;
+void print_if_enabled(const char *msg);
+void print_lex_with_args(const char *msg, const char *arg);
 
-void print_if_enabled(const char *msg) {
-    if (enable_prints) {
-        printf("%s", msg);
-    }
-}
+
 %}
 
 %token AP FP VIRG PVIRG COMM INICIOPROG FIMPROG INICIOARGS FIMARGS INICIOVARS FIMVARS ESCREVA INTEIRO  
@@ -24,27 +23,22 @@ void print_if_enabled(const char *msg) {
 %token LITERALSTRING
 %token AC FC
 
-// Precedencia
+
 %right '='
 %left RELOP
-%left '+' '-'
-%left '*' '/'
-
+%left RELALGSUM RELALGSUB '+' '-'
+%left RELALGDIV RELALGTIMES '*' '/'
 
 %%
-      
-//Produção do programa completo
-programa : INICIOPROG prog FIMPROG  { print_if_enabled("\nFim do Programa\n");};
 
-//Produção do codigo do programa:
-prog : declara_args declara_vars statement { print_if_enabled("\nProdução do codigo do programa\n");};
+programa : INICIOPROG prog FIMPROG { print_if_enabled("\nFim do Programa\n"); };
+
+prog : declara_args declara_vars statement { print_if_enabled("\nProdução do codigo do programa\n"); };
 
 //Produção de argumentos e variaveis
 declara_args : INICIOARGS args_list FIMARGS     {print_if_enabled("\nProdução de argumentos\n");}
              | INICIOARGS FIMARGS               {print_if_enabled("\nArgumentos vazios\n");}
              ;
-
-//Produção de comentarios
 comment: COMM                                   {print_if_enabled("\nProdução de comentarios\n");};
 
 declara_vars : INICIOVARS vars_list FIMVARS     {print_if_enabled("\nProdução de variaveis\n");}
@@ -63,18 +57,19 @@ statement : comment statement                   {print_if_enabled("\nstatement -
         | 
         ;
 
-//Produção de expressão algébrica
+        //Produção de expressão algébrica
 algebraic_expr : NUMBER rel_alg NUMBER  { print_if_enabled("\nalgebraic_expr -> NUMBER rel_alg NUMBER\n");}
                 | NUMBER rel_alg ID     { print_if_enabled("\nalgebraic_expr -> NUMBER rel_alg ID\n");}
                 | ID rel_alg ID         { print_if_enabled("\nalgebraic_expr -> ID rel_alg ID\n");}
                 | ID rel_alg NUMBER     { print_if_enabled("\nalgebraic_expr -> ID rel_alg NUMBER\n");}
                 ;
 
-//Produção de operador algébrico
-rel_alg : '-' { print_if_enabled("\nrel_alg -> SUBTRAÇÃO\n");}
-        | '+' { print_if_enabled("\nrel_alg -> ADIÇÃO\n");}  
-        | '/' { print_if_enabled("\nrel_alg -> DIVISÃO\n");}
-        | '*' { print_if_enabled("\nrel_alg -> MULTIPLICAÇÃO\n");}
+
+
+rel_alg : '-' { print_if_enabled("\nrel_alg -> SUBTRAÇÃO\n"); }
+        | '+' { print_if_enabled("\nrel_alg -> ADIÇÃO\n"); }
+        | '/' { print_if_enabled("\nrel_alg -> DIVISÃO\n"); }
+        | '*' { print_if_enabled("\nrel_alg -> MULTIPLICAÇÃO\n"); }
         ;
 
 //Produção de expressão logica
@@ -134,21 +129,34 @@ instruction : expr_escreva instruction { print_if_enabled("\ninstruction -> expr
 %%
 int main(int argc, char **argv) {
 
- // Verifica se a flag para desabilitar os prints foi passada
     for (int i = 1; i < argc; i++) {
-        if (strcmp(argv[i], "--no-print") == 0) {
-            enable_prints = 0;
+        if (strcmp(argv[i], "--verbose") == 0) {
+            enable_prints = 1;
+        }
+        if (strcmp(argv[i], "--lex") == 0) {
+            enable_lex_prints = 1;
         }
     }
 
-
-    initializeSymbolTable(); // Inicializa a tabela de símbolos
-    addReservedWords();      // Adiciona palavras reservadas
+    initializeSymbolTable();
+    addReservedWords();
 
     if (yyparse() != 0) {
         fprintf(stderr, "Abnormal exit\n");
     }
     return 0;
+}
+
+void print_if_enabled(const char *msg) {
+    if (enable_prints) {
+        printf("%s", msg);
+    }
+}
+
+void print_lex_with_args(const char *msg, const char *arg) {
+    if (enable_lex_prints) {
+        printf(msg, arg);
+    }
 }
 
 int yyerror(char *s) {

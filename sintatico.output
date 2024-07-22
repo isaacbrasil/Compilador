@@ -1,0 +1,1247 @@
+Terminais sem uso na gramática
+
+    SPECIALCHAR
+    ERROR
+    AC
+    FC
+    '='
+    RELALGSUM
+    RELALGSUB
+    RELALGDIV
+    RELALGTIMES
+
+
+Estado 3 conflitos: 1 de deslocamento/redução
+Estado 15 conflitos: 1 de deslocamento/redução
+Estado 30 conflitos: 1 de redução/redução
+
+
+Gramática
+
+    0 $accept: programa $end
+
+    1 programa: INICIOPROG prog FIMPROG
+
+    2 prog: declara_args declara_vars statement
+
+    3 declara_args: INICIOARGS args_list FIMARGS
+    4             | INICIOARGS FIMARGS
+
+    5 comment: COMM
+
+    6 declara_vars: INICIOVARS vars_list FIMVARS
+    7             | INICIOVARS FIMVARS
+
+    8 statement: comment statement
+    9          | algebraic_expr statement
+   10          | logic_expr statement
+   11          | attrib statement
+   12          | expr_condicional statement
+   13          | expr_controle statement
+   14          | expr_escreva statement
+   15          | comment
+   16          | ε
+
+   17 algebraic_expr: NUMBER rel_alg NUMBER
+   18               | NUMBER rel_alg ID
+   19               | ID rel_alg ID
+   20               | ID rel_alg NUMBER
+
+   21 rel_alg: '-'
+   22        | '+'
+   23        | '/'
+   24        | '*'
+
+   25 logic_expr: ID RELOP ID
+   26           | ID RELOP NUMBER
+   27           | NUMBER RELOP ID
+   28           | NUMBER RELOP NUMBER
+
+   29 attrib: ID ATTR ID PVIRG
+   30       | ID ATTR NUMBER PVIRG
+   31       | ID ATTR algebraic_expr PVIRG
+   32       | ID ATTR logic_expr PVIRG
+   33       | ID ATTR LITERALSTRING PVIRG
+
+   34 expr_condicional: SE AP logic_expr FP ENTAO instruction FIMSE
+
+   35 expr_controle: ENQUANTO AP logic_expr FP FACA instruction FIMENQUANTO
+
+   36 expr_escreva: ESCREVA LITERALSTRING PVIRG
+   37             | ESCREVA REAL PVIRG
+   38             | ESCREVA INTEIRO PVIRG
+   39             | ESCREVA ID PVIRG
+
+   40 args_list: var_decl args_list
+   41          | ε
+
+   42 vars_list: var_decl vars_list
+   43          | ε
+
+   44 var_decl: tipo_var ID_list PVIRG
+
+   45 ID_list: ID_list VIRG ID
+   46        | ID
+
+   47 tipo_var: INTEIRO
+   48         | REAL
+   49         | LITERAL
+
+   50 instruction: expr_escreva instruction
+   51            | attrib instruction
+   52            | comment instruction
+   53            | ε
+
+
+Terminais, com as regras onde eles aparecem
+
+    $end (0) 0
+    '*' (42) 24
+    '+' (43) 22
+    '-' (45) 21
+    '/' (47) 23
+    '=' (61)
+    error (256)
+    AP (258) 34 35
+    FP (259) 34 35
+    VIRG (260) 45
+    PVIRG (261) 29 30 31 32 33 36 37 38 39 44
+    COMM (262) 5
+    INICIOPROG (263) 1
+    FIMPROG (264) 1
+    INICIOARGS (265) 3 4
+    FIMARGS (266) 3 4
+    INICIOVARS (267) 6 7
+    FIMVARS (268) 6 7
+    ESCREVA (269) 36 37 38 39
+    INTEIRO (270) 38 47
+    REAL (271) 37 48
+    SE (272) 34
+    ENTAO (273) 34
+    FIMSE (274) 34
+    ENQUANTO (275) 35
+    FACA (276) 35
+    FIMENQUANTO (277) 35
+    ID (278) 18 19 20 25 26 27 29 30 31 32 33 39 45 46
+    NUMBER (279) 17 18 20 26 27 28 30
+    LITERAL (280) 49
+    SPECIALCHAR (281)
+    RELOP (282) 25 26 27 28
+    ATTR (283) 29 30 31 32 33
+    ERROR (284)
+    LITERALSTRING (285) 33 36
+    AC (286)
+    FC (287)
+    RELALGSUM (288)
+    RELALGSUB (289)
+    RELALGDIV (290)
+    RELALGTIMES (291)
+
+
+Não terminais com as regras onde eles aparecem
+
+    $accept (42)
+        à esquerda: 0
+    programa (43)
+        à esquerda: 1
+        à direita: 0
+    prog (44)
+        à esquerda: 2
+        à direita: 1
+    declara_args (45)
+        à esquerda: 3 4
+        à direita: 2
+    comment (46)
+        à esquerda: 5
+        à direita: 8 15 52
+    declara_vars (47)
+        à esquerda: 6 7
+        à direita: 2
+    statement (48)
+        à esquerda: 8 9 10 11 12 13 14 15 16
+        à direita: 2 8 9 10 11 12 13 14
+    algebraic_expr (49)
+        à esquerda: 17 18 19 20
+        à direita: 9 31
+    rel_alg (50)
+        à esquerda: 21 22 23 24
+        à direita: 17 18 19 20
+    logic_expr (51)
+        à esquerda: 25 26 27 28
+        à direita: 10 32 34 35
+    attrib (52)
+        à esquerda: 29 30 31 32 33
+        à direita: 11 51
+    expr_condicional (53)
+        à esquerda: 34
+        à direita: 12
+    expr_controle (54)
+        à esquerda: 35
+        à direita: 13
+    expr_escreva (55)
+        à esquerda: 36 37 38 39
+        à direita: 14 50
+    args_list (56)
+        à esquerda: 40 41
+        à direita: 3 40
+    vars_list (57)
+        à esquerda: 42 43
+        à direita: 6 42
+    var_decl (58)
+        à esquerda: 44
+        à direita: 40 42
+    ID_list (59)
+        à esquerda: 45 46
+        à direita: 44 45
+    tipo_var (60)
+        à esquerda: 47 48 49
+        à direita: 44
+    instruction (61)
+        à esquerda: 50 51 52 53
+        à direita: 34 35 50 51 52
+
+
+Estado 0
+
+    0 $accept: • programa $end
+
+    INICIOPROG  deslocar, e ir ao estado 1
+
+    programa  ir ao estado 2
+
+
+Estado 1
+
+    1 programa: INICIOPROG • prog FIMPROG
+
+    INICIOARGS  deslocar, e ir ao estado 3
+
+    prog          ir ao estado 4
+    declara_args  ir ao estado 5
+
+
+Estado 2
+
+    0 $accept: programa • $end
+
+    $end  deslocar, e ir ao estado 6
+
+
+Estado 3
+
+    3 declara_args: INICIOARGS • args_list FIMARGS
+    4             | INICIOARGS • FIMARGS
+
+    FIMARGS  deslocar, e ir ao estado 7
+    INTEIRO  deslocar, e ir ao estado 8
+    REAL     deslocar, e ir ao estado 9
+    LITERAL  deslocar, e ir ao estado 10
+
+    FIMARGS  [reduzir usando a regra 41 (args_list)]
+
+    args_list  ir ao estado 11
+    var_decl   ir ao estado 12
+    tipo_var   ir ao estado 13
+
+
+Estado 4
+
+    1 programa: INICIOPROG prog • FIMPROG
+
+    FIMPROG  deslocar, e ir ao estado 14
+
+
+Estado 5
+
+    2 prog: declara_args • declara_vars statement
+
+    INICIOVARS  deslocar, e ir ao estado 15
+
+    declara_vars  ir ao estado 16
+
+
+Estado 6
+
+    0 $accept: programa $end •
+
+    $padrão  aceitar
+
+
+Estado 7
+
+    4 declara_args: INICIOARGS FIMARGS •
+
+    $padrão  reduzir usando a regra 4 (declara_args)
+
+
+Estado 8
+
+   47 tipo_var: INTEIRO •
+
+    $padrão  reduzir usando a regra 47 (tipo_var)
+
+
+Estado 9
+
+   48 tipo_var: REAL •
+
+    $padrão  reduzir usando a regra 48 (tipo_var)
+
+
+Estado 10
+
+   49 tipo_var: LITERAL •
+
+    $padrão  reduzir usando a regra 49 (tipo_var)
+
+
+Estado 11
+
+    3 declara_args: INICIOARGS args_list • FIMARGS
+
+    FIMARGS  deslocar, e ir ao estado 17
+
+
+Estado 12
+
+   40 args_list: var_decl • args_list
+
+    INTEIRO  deslocar, e ir ao estado 8
+    REAL     deslocar, e ir ao estado 9
+    LITERAL  deslocar, e ir ao estado 10
+
+    $padrão  reduzir usando a regra 41 (args_list)
+
+    args_list  ir ao estado 18
+    var_decl   ir ao estado 12
+    tipo_var   ir ao estado 13
+
+
+Estado 13
+
+   44 var_decl: tipo_var • ID_list PVIRG
+
+    ID  deslocar, e ir ao estado 19
+
+    ID_list  ir ao estado 20
+
+
+Estado 14
+
+    1 programa: INICIOPROG prog FIMPROG •
+
+    $padrão  reduzir usando a regra 1 (programa)
+
+
+Estado 15
+
+    6 declara_vars: INICIOVARS • vars_list FIMVARS
+    7             | INICIOVARS • FIMVARS
+
+    FIMVARS  deslocar, e ir ao estado 21
+    INTEIRO  deslocar, e ir ao estado 8
+    REAL     deslocar, e ir ao estado 9
+    LITERAL  deslocar, e ir ao estado 10
+
+    FIMVARS  [reduzir usando a regra 43 (vars_list)]
+
+    vars_list  ir ao estado 22
+    var_decl   ir ao estado 23
+    tipo_var   ir ao estado 13
+
+
+Estado 16
+
+    2 prog: declara_args declara_vars • statement
+
+    COMM      deslocar, e ir ao estado 24
+    ESCREVA   deslocar, e ir ao estado 25
+    SE        deslocar, e ir ao estado 26
+    ENQUANTO  deslocar, e ir ao estado 27
+    ID        deslocar, e ir ao estado 28
+    NUMBER    deslocar, e ir ao estado 29
+
+    $padrão  reduzir usando a regra 16 (statement)
+
+    comment           ir ao estado 30
+    statement         ir ao estado 31
+    algebraic_expr    ir ao estado 32
+    logic_expr        ir ao estado 33
+    attrib            ir ao estado 34
+    expr_condicional  ir ao estado 35
+    expr_controle     ir ao estado 36
+    expr_escreva      ir ao estado 37
+
+
+Estado 17
+
+    3 declara_args: INICIOARGS args_list FIMARGS •
+
+    $padrão  reduzir usando a regra 3 (declara_args)
+
+
+Estado 18
+
+   40 args_list: var_decl args_list •
+
+    $padrão  reduzir usando a regra 40 (args_list)
+
+
+Estado 19
+
+   46 ID_list: ID •
+
+    $padrão  reduzir usando a regra 46 (ID_list)
+
+
+Estado 20
+
+   44 var_decl: tipo_var ID_list • PVIRG
+   45 ID_list: ID_list • VIRG ID
+
+    VIRG   deslocar, e ir ao estado 38
+    PVIRG  deslocar, e ir ao estado 39
+
+
+Estado 21
+
+    7 declara_vars: INICIOVARS FIMVARS •
+
+    $padrão  reduzir usando a regra 7 (declara_vars)
+
+
+Estado 22
+
+    6 declara_vars: INICIOVARS vars_list • FIMVARS
+
+    FIMVARS  deslocar, e ir ao estado 40
+
+
+Estado 23
+
+   42 vars_list: var_decl • vars_list
+
+    INTEIRO  deslocar, e ir ao estado 8
+    REAL     deslocar, e ir ao estado 9
+    LITERAL  deslocar, e ir ao estado 10
+
+    $padrão  reduzir usando a regra 43 (vars_list)
+
+    vars_list  ir ao estado 41
+    var_decl   ir ao estado 23
+    tipo_var   ir ao estado 13
+
+
+Estado 24
+
+    5 comment: COMM •
+
+    $padrão  reduzir usando a regra 5 (comment)
+
+
+Estado 25
+
+   36 expr_escreva: ESCREVA • LITERALSTRING PVIRG
+   37             | ESCREVA • REAL PVIRG
+   38             | ESCREVA • INTEIRO PVIRG
+   39             | ESCREVA • ID PVIRG
+
+    INTEIRO        deslocar, e ir ao estado 42
+    REAL           deslocar, e ir ao estado 43
+    ID             deslocar, e ir ao estado 44
+    LITERALSTRING  deslocar, e ir ao estado 45
+
+
+Estado 26
+
+   34 expr_condicional: SE • AP logic_expr FP ENTAO instruction FIMSE
+
+    AP  deslocar, e ir ao estado 46
+
+
+Estado 27
+
+   35 expr_controle: ENQUANTO • AP logic_expr FP FACA instruction FIMENQUANTO
+
+    AP  deslocar, e ir ao estado 47
+
+
+Estado 28
+
+   19 algebraic_expr: ID • rel_alg ID
+   20               | ID • rel_alg NUMBER
+   25 logic_expr: ID • RELOP ID
+   26           | ID • RELOP NUMBER
+   29 attrib: ID • ATTR ID PVIRG
+   30       | ID • ATTR NUMBER PVIRG
+   31       | ID • ATTR algebraic_expr PVIRG
+   32       | ID • ATTR logic_expr PVIRG
+   33       | ID • ATTR LITERALSTRING PVIRG
+
+    RELOP  deslocar, e ir ao estado 48
+    ATTR   deslocar, e ir ao estado 49
+    '+'    deslocar, e ir ao estado 50
+    '-'    deslocar, e ir ao estado 51
+    '*'    deslocar, e ir ao estado 52
+    '/'    deslocar, e ir ao estado 53
+
+    rel_alg  ir ao estado 54
+
+
+Estado 29
+
+   17 algebraic_expr: NUMBER • rel_alg NUMBER
+   18               | NUMBER • rel_alg ID
+   27 logic_expr: NUMBER • RELOP ID
+   28           | NUMBER • RELOP NUMBER
+
+    RELOP  deslocar, e ir ao estado 55
+    '+'    deslocar, e ir ao estado 50
+    '-'    deslocar, e ir ao estado 51
+    '*'    deslocar, e ir ao estado 52
+    '/'    deslocar, e ir ao estado 53
+
+    rel_alg  ir ao estado 56
+
+
+Estado 30
+
+    8 statement: comment • statement
+   15          | comment •
+
+    COMM      deslocar, e ir ao estado 24
+    ESCREVA   deslocar, e ir ao estado 25
+    SE        deslocar, e ir ao estado 26
+    ENQUANTO  deslocar, e ir ao estado 27
+    ID        deslocar, e ir ao estado 28
+    NUMBER    deslocar, e ir ao estado 29
+
+    FIMPROG  reduzir usando a regra 15 (statement)
+    FIMPROG  [reduzir usando a regra 16 (statement)]
+    $padrão  reduzir usando a regra 15 (statement)
+
+    comment           ir ao estado 30
+    statement         ir ao estado 57
+    algebraic_expr    ir ao estado 32
+    logic_expr        ir ao estado 33
+    attrib            ir ao estado 34
+    expr_condicional  ir ao estado 35
+    expr_controle     ir ao estado 36
+    expr_escreva      ir ao estado 37
+
+
+Estado 31
+
+    2 prog: declara_args declara_vars statement •
+
+    $padrão  reduzir usando a regra 2 (prog)
+
+
+Estado 32
+
+    9 statement: algebraic_expr • statement
+
+    COMM      deslocar, e ir ao estado 24
+    ESCREVA   deslocar, e ir ao estado 25
+    SE        deslocar, e ir ao estado 26
+    ENQUANTO  deslocar, e ir ao estado 27
+    ID        deslocar, e ir ao estado 28
+    NUMBER    deslocar, e ir ao estado 29
+
+    $padrão  reduzir usando a regra 16 (statement)
+
+    comment           ir ao estado 30
+    statement         ir ao estado 58
+    algebraic_expr    ir ao estado 32
+    logic_expr        ir ao estado 33
+    attrib            ir ao estado 34
+    expr_condicional  ir ao estado 35
+    expr_controle     ir ao estado 36
+    expr_escreva      ir ao estado 37
+
+
+Estado 33
+
+   10 statement: logic_expr • statement
+
+    COMM      deslocar, e ir ao estado 24
+    ESCREVA   deslocar, e ir ao estado 25
+    SE        deslocar, e ir ao estado 26
+    ENQUANTO  deslocar, e ir ao estado 27
+    ID        deslocar, e ir ao estado 28
+    NUMBER    deslocar, e ir ao estado 29
+
+    $padrão  reduzir usando a regra 16 (statement)
+
+    comment           ir ao estado 30
+    statement         ir ao estado 59
+    algebraic_expr    ir ao estado 32
+    logic_expr        ir ao estado 33
+    attrib            ir ao estado 34
+    expr_condicional  ir ao estado 35
+    expr_controle     ir ao estado 36
+    expr_escreva      ir ao estado 37
+
+
+Estado 34
+
+   11 statement: attrib • statement
+
+    COMM      deslocar, e ir ao estado 24
+    ESCREVA   deslocar, e ir ao estado 25
+    SE        deslocar, e ir ao estado 26
+    ENQUANTO  deslocar, e ir ao estado 27
+    ID        deslocar, e ir ao estado 28
+    NUMBER    deslocar, e ir ao estado 29
+
+    $padrão  reduzir usando a regra 16 (statement)
+
+    comment           ir ao estado 30
+    statement         ir ao estado 60
+    algebraic_expr    ir ao estado 32
+    logic_expr        ir ao estado 33
+    attrib            ir ao estado 34
+    expr_condicional  ir ao estado 35
+    expr_controle     ir ao estado 36
+    expr_escreva      ir ao estado 37
+
+
+Estado 35
+
+   12 statement: expr_condicional • statement
+
+    COMM      deslocar, e ir ao estado 24
+    ESCREVA   deslocar, e ir ao estado 25
+    SE        deslocar, e ir ao estado 26
+    ENQUANTO  deslocar, e ir ao estado 27
+    ID        deslocar, e ir ao estado 28
+    NUMBER    deslocar, e ir ao estado 29
+
+    $padrão  reduzir usando a regra 16 (statement)
+
+    comment           ir ao estado 30
+    statement         ir ao estado 61
+    algebraic_expr    ir ao estado 32
+    logic_expr        ir ao estado 33
+    attrib            ir ao estado 34
+    expr_condicional  ir ao estado 35
+    expr_controle     ir ao estado 36
+    expr_escreva      ir ao estado 37
+
+
+Estado 36
+
+   13 statement: expr_controle • statement
+
+    COMM      deslocar, e ir ao estado 24
+    ESCREVA   deslocar, e ir ao estado 25
+    SE        deslocar, e ir ao estado 26
+    ENQUANTO  deslocar, e ir ao estado 27
+    ID        deslocar, e ir ao estado 28
+    NUMBER    deslocar, e ir ao estado 29
+
+    $padrão  reduzir usando a regra 16 (statement)
+
+    comment           ir ao estado 30
+    statement         ir ao estado 62
+    algebraic_expr    ir ao estado 32
+    logic_expr        ir ao estado 33
+    attrib            ir ao estado 34
+    expr_condicional  ir ao estado 35
+    expr_controle     ir ao estado 36
+    expr_escreva      ir ao estado 37
+
+
+Estado 37
+
+   14 statement: expr_escreva • statement
+
+    COMM      deslocar, e ir ao estado 24
+    ESCREVA   deslocar, e ir ao estado 25
+    SE        deslocar, e ir ao estado 26
+    ENQUANTO  deslocar, e ir ao estado 27
+    ID        deslocar, e ir ao estado 28
+    NUMBER    deslocar, e ir ao estado 29
+
+    $padrão  reduzir usando a regra 16 (statement)
+
+    comment           ir ao estado 30
+    statement         ir ao estado 63
+    algebraic_expr    ir ao estado 32
+    logic_expr        ir ao estado 33
+    attrib            ir ao estado 34
+    expr_condicional  ir ao estado 35
+    expr_controle     ir ao estado 36
+    expr_escreva      ir ao estado 37
+
+
+Estado 38
+
+   45 ID_list: ID_list VIRG • ID
+
+    ID  deslocar, e ir ao estado 64
+
+
+Estado 39
+
+   44 var_decl: tipo_var ID_list PVIRG •
+
+    $padrão  reduzir usando a regra 44 (var_decl)
+
+
+Estado 40
+
+    6 declara_vars: INICIOVARS vars_list FIMVARS •
+
+    $padrão  reduzir usando a regra 6 (declara_vars)
+
+
+Estado 41
+
+   42 vars_list: var_decl vars_list •
+
+    $padrão  reduzir usando a regra 42 (vars_list)
+
+
+Estado 42
+
+   38 expr_escreva: ESCREVA INTEIRO • PVIRG
+
+    PVIRG  deslocar, e ir ao estado 65
+
+
+Estado 43
+
+   37 expr_escreva: ESCREVA REAL • PVIRG
+
+    PVIRG  deslocar, e ir ao estado 66
+
+
+Estado 44
+
+   39 expr_escreva: ESCREVA ID • PVIRG
+
+    PVIRG  deslocar, e ir ao estado 67
+
+
+Estado 45
+
+   36 expr_escreva: ESCREVA LITERALSTRING • PVIRG
+
+    PVIRG  deslocar, e ir ao estado 68
+
+
+Estado 46
+
+   34 expr_condicional: SE AP • logic_expr FP ENTAO instruction FIMSE
+
+    ID      deslocar, e ir ao estado 69
+    NUMBER  deslocar, e ir ao estado 70
+
+    logic_expr  ir ao estado 71
+
+
+Estado 47
+
+   35 expr_controle: ENQUANTO AP • logic_expr FP FACA instruction FIMENQUANTO
+
+    ID      deslocar, e ir ao estado 69
+    NUMBER  deslocar, e ir ao estado 70
+
+    logic_expr  ir ao estado 72
+
+
+Estado 48
+
+   25 logic_expr: ID RELOP • ID
+   26           | ID RELOP • NUMBER
+
+    ID      deslocar, e ir ao estado 73
+    NUMBER  deslocar, e ir ao estado 74
+
+
+Estado 49
+
+   29 attrib: ID ATTR • ID PVIRG
+   30       | ID ATTR • NUMBER PVIRG
+   31       | ID ATTR • algebraic_expr PVIRG
+   32       | ID ATTR • logic_expr PVIRG
+   33       | ID ATTR • LITERALSTRING PVIRG
+
+    ID             deslocar, e ir ao estado 75
+    NUMBER         deslocar, e ir ao estado 76
+    LITERALSTRING  deslocar, e ir ao estado 77
+
+    algebraic_expr  ir ao estado 78
+    logic_expr      ir ao estado 79
+
+
+Estado 50
+
+   22 rel_alg: '+' •
+
+    $padrão  reduzir usando a regra 22 (rel_alg)
+
+
+Estado 51
+
+   21 rel_alg: '-' •
+
+    $padrão  reduzir usando a regra 21 (rel_alg)
+
+
+Estado 52
+
+   24 rel_alg: '*' •
+
+    $padrão  reduzir usando a regra 24 (rel_alg)
+
+
+Estado 53
+
+   23 rel_alg: '/' •
+
+    $padrão  reduzir usando a regra 23 (rel_alg)
+
+
+Estado 54
+
+   19 algebraic_expr: ID rel_alg • ID
+   20               | ID rel_alg • NUMBER
+
+    ID      deslocar, e ir ao estado 80
+    NUMBER  deslocar, e ir ao estado 81
+
+
+Estado 55
+
+   27 logic_expr: NUMBER RELOP • ID
+   28           | NUMBER RELOP • NUMBER
+
+    ID      deslocar, e ir ao estado 82
+    NUMBER  deslocar, e ir ao estado 83
+
+
+Estado 56
+
+   17 algebraic_expr: NUMBER rel_alg • NUMBER
+   18               | NUMBER rel_alg • ID
+
+    ID      deslocar, e ir ao estado 84
+    NUMBER  deslocar, e ir ao estado 85
+
+
+Estado 57
+
+    8 statement: comment statement •
+
+    $padrão  reduzir usando a regra 8 (statement)
+
+
+Estado 58
+
+    9 statement: algebraic_expr statement •
+
+    $padrão  reduzir usando a regra 9 (statement)
+
+
+Estado 59
+
+   10 statement: logic_expr statement •
+
+    $padrão  reduzir usando a regra 10 (statement)
+
+
+Estado 60
+
+   11 statement: attrib statement •
+
+    $padrão  reduzir usando a regra 11 (statement)
+
+
+Estado 61
+
+   12 statement: expr_condicional statement •
+
+    $padrão  reduzir usando a regra 12 (statement)
+
+
+Estado 62
+
+   13 statement: expr_controle statement •
+
+    $padrão  reduzir usando a regra 13 (statement)
+
+
+Estado 63
+
+   14 statement: expr_escreva statement •
+
+    $padrão  reduzir usando a regra 14 (statement)
+
+
+Estado 64
+
+   45 ID_list: ID_list VIRG ID •
+
+    $padrão  reduzir usando a regra 45 (ID_list)
+
+
+Estado 65
+
+   38 expr_escreva: ESCREVA INTEIRO PVIRG •
+
+    $padrão  reduzir usando a regra 38 (expr_escreva)
+
+
+Estado 66
+
+   37 expr_escreva: ESCREVA REAL PVIRG •
+
+    $padrão  reduzir usando a regra 37 (expr_escreva)
+
+
+Estado 67
+
+   39 expr_escreva: ESCREVA ID PVIRG •
+
+    $padrão  reduzir usando a regra 39 (expr_escreva)
+
+
+Estado 68
+
+   36 expr_escreva: ESCREVA LITERALSTRING PVIRG •
+
+    $padrão  reduzir usando a regra 36 (expr_escreva)
+
+
+Estado 69
+
+   25 logic_expr: ID • RELOP ID
+   26           | ID • RELOP NUMBER
+
+    RELOP  deslocar, e ir ao estado 48
+
+
+Estado 70
+
+   27 logic_expr: NUMBER • RELOP ID
+   28           | NUMBER • RELOP NUMBER
+
+    RELOP  deslocar, e ir ao estado 55
+
+
+Estado 71
+
+   34 expr_condicional: SE AP logic_expr • FP ENTAO instruction FIMSE
+
+    FP  deslocar, e ir ao estado 86
+
+
+Estado 72
+
+   35 expr_controle: ENQUANTO AP logic_expr • FP FACA instruction FIMENQUANTO
+
+    FP  deslocar, e ir ao estado 87
+
+
+Estado 73
+
+   25 logic_expr: ID RELOP ID •
+
+    $padrão  reduzir usando a regra 25 (logic_expr)
+
+
+Estado 74
+
+   26 logic_expr: ID RELOP NUMBER •
+
+    $padrão  reduzir usando a regra 26 (logic_expr)
+
+
+Estado 75
+
+   19 algebraic_expr: ID • rel_alg ID
+   20               | ID • rel_alg NUMBER
+   25 logic_expr: ID • RELOP ID
+   26           | ID • RELOP NUMBER
+   29 attrib: ID ATTR ID • PVIRG
+
+    PVIRG  deslocar, e ir ao estado 88
+    RELOP  deslocar, e ir ao estado 48
+    '+'    deslocar, e ir ao estado 50
+    '-'    deslocar, e ir ao estado 51
+    '*'    deslocar, e ir ao estado 52
+    '/'    deslocar, e ir ao estado 53
+
+    rel_alg  ir ao estado 54
+
+
+Estado 76
+
+   17 algebraic_expr: NUMBER • rel_alg NUMBER
+   18               | NUMBER • rel_alg ID
+   27 logic_expr: NUMBER • RELOP ID
+   28           | NUMBER • RELOP NUMBER
+   30 attrib: ID ATTR NUMBER • PVIRG
+
+    PVIRG  deslocar, e ir ao estado 89
+    RELOP  deslocar, e ir ao estado 55
+    '+'    deslocar, e ir ao estado 50
+    '-'    deslocar, e ir ao estado 51
+    '*'    deslocar, e ir ao estado 52
+    '/'    deslocar, e ir ao estado 53
+
+    rel_alg  ir ao estado 56
+
+
+Estado 77
+
+   33 attrib: ID ATTR LITERALSTRING • PVIRG
+
+    PVIRG  deslocar, e ir ao estado 90
+
+
+Estado 78
+
+   31 attrib: ID ATTR algebraic_expr • PVIRG
+
+    PVIRG  deslocar, e ir ao estado 91
+
+
+Estado 79
+
+   32 attrib: ID ATTR logic_expr • PVIRG
+
+    PVIRG  deslocar, e ir ao estado 92
+
+
+Estado 80
+
+   19 algebraic_expr: ID rel_alg ID •
+
+    $padrão  reduzir usando a regra 19 (algebraic_expr)
+
+
+Estado 81
+
+   20 algebraic_expr: ID rel_alg NUMBER •
+
+    $padrão  reduzir usando a regra 20 (algebraic_expr)
+
+
+Estado 82
+
+   27 logic_expr: NUMBER RELOP ID •
+
+    $padrão  reduzir usando a regra 27 (logic_expr)
+
+
+Estado 83
+
+   28 logic_expr: NUMBER RELOP NUMBER •
+
+    $padrão  reduzir usando a regra 28 (logic_expr)
+
+
+Estado 84
+
+   18 algebraic_expr: NUMBER rel_alg ID •
+
+    $padrão  reduzir usando a regra 18 (algebraic_expr)
+
+
+Estado 85
+
+   17 algebraic_expr: NUMBER rel_alg NUMBER •
+
+    $padrão  reduzir usando a regra 17 (algebraic_expr)
+
+
+Estado 86
+
+   34 expr_condicional: SE AP logic_expr FP • ENTAO instruction FIMSE
+
+    ENTAO  deslocar, e ir ao estado 93
+
+
+Estado 87
+
+   35 expr_controle: ENQUANTO AP logic_expr FP • FACA instruction FIMENQUANTO
+
+    FACA  deslocar, e ir ao estado 94
+
+
+Estado 88
+
+   29 attrib: ID ATTR ID PVIRG •
+
+    $padrão  reduzir usando a regra 29 (attrib)
+
+
+Estado 89
+
+   30 attrib: ID ATTR NUMBER PVIRG •
+
+    $padrão  reduzir usando a regra 30 (attrib)
+
+
+Estado 90
+
+   33 attrib: ID ATTR LITERALSTRING PVIRG •
+
+    $padrão  reduzir usando a regra 33 (attrib)
+
+
+Estado 91
+
+   31 attrib: ID ATTR algebraic_expr PVIRG •
+
+    $padrão  reduzir usando a regra 31 (attrib)
+
+
+Estado 92
+
+   32 attrib: ID ATTR logic_expr PVIRG •
+
+    $padrão  reduzir usando a regra 32 (attrib)
+
+
+Estado 93
+
+   34 expr_condicional: SE AP logic_expr FP ENTAO • instruction FIMSE
+
+    COMM     deslocar, e ir ao estado 24
+    ESCREVA  deslocar, e ir ao estado 25
+    ID       deslocar, e ir ao estado 95
+
+    $padrão  reduzir usando a regra 53 (instruction)
+
+    comment       ir ao estado 96
+    attrib        ir ao estado 97
+    expr_escreva  ir ao estado 98
+    instruction   ir ao estado 99
+
+
+Estado 94
+
+   35 expr_controle: ENQUANTO AP logic_expr FP FACA • instruction FIMENQUANTO
+
+    COMM     deslocar, e ir ao estado 24
+    ESCREVA  deslocar, e ir ao estado 25
+    ID       deslocar, e ir ao estado 95
+
+    $padrão  reduzir usando a regra 53 (instruction)
+
+    comment       ir ao estado 96
+    attrib        ir ao estado 97
+    expr_escreva  ir ao estado 98
+    instruction   ir ao estado 100
+
+
+Estado 95
+
+   29 attrib: ID • ATTR ID PVIRG
+   30       | ID • ATTR NUMBER PVIRG
+   31       | ID • ATTR algebraic_expr PVIRG
+   32       | ID • ATTR logic_expr PVIRG
+   33       | ID • ATTR LITERALSTRING PVIRG
+
+    ATTR  deslocar, e ir ao estado 49
+
+
+Estado 96
+
+   52 instruction: comment • instruction
+
+    COMM     deslocar, e ir ao estado 24
+    ESCREVA  deslocar, e ir ao estado 25
+    ID       deslocar, e ir ao estado 95
+
+    $padrão  reduzir usando a regra 53 (instruction)
+
+    comment       ir ao estado 96
+    attrib        ir ao estado 97
+    expr_escreva  ir ao estado 98
+    instruction   ir ao estado 101
+
+
+Estado 97
+
+   51 instruction: attrib • instruction
+
+    COMM     deslocar, e ir ao estado 24
+    ESCREVA  deslocar, e ir ao estado 25
+    ID       deslocar, e ir ao estado 95
+
+    $padrão  reduzir usando a regra 53 (instruction)
+
+    comment       ir ao estado 96
+    attrib        ir ao estado 97
+    expr_escreva  ir ao estado 98
+    instruction   ir ao estado 102
+
+
+Estado 98
+
+   50 instruction: expr_escreva • instruction
+
+    COMM     deslocar, e ir ao estado 24
+    ESCREVA  deslocar, e ir ao estado 25
+    ID       deslocar, e ir ao estado 95
+
+    $padrão  reduzir usando a regra 53 (instruction)
+
+    comment       ir ao estado 96
+    attrib        ir ao estado 97
+    expr_escreva  ir ao estado 98
+    instruction   ir ao estado 103
+
+
+Estado 99
+
+   34 expr_condicional: SE AP logic_expr FP ENTAO instruction • FIMSE
+
+    FIMSE  deslocar, e ir ao estado 104
+
+
+Estado 100
+
+   35 expr_controle: ENQUANTO AP logic_expr FP FACA instruction • FIMENQUANTO
+
+    FIMENQUANTO  deslocar, e ir ao estado 105
+
+
+Estado 101
+
+   52 instruction: comment instruction •
+
+    $padrão  reduzir usando a regra 52 (instruction)
+
+
+Estado 102
+
+   51 instruction: attrib instruction •
+
+    $padrão  reduzir usando a regra 51 (instruction)
+
+
+Estado 103
+
+   50 instruction: expr_escreva instruction •
+
+    $padrão  reduzir usando a regra 50 (instruction)
+
+
+Estado 104
+
+   34 expr_condicional: SE AP logic_expr FP ENTAO instruction FIMSE •
+
+    $padrão  reduzir usando a regra 34 (expr_condicional)
+
+
+Estado 105
+
+   35 expr_controle: ENQUANTO AP logic_expr FP FACA instruction FIMENQUANTO •
+
+    $padrão  reduzir usando a regra 35 (expr_controle)

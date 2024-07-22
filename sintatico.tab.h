@@ -83,7 +83,11 @@ extern int yydebug;
     ERROR = 284,                   /* ERROR  */
     LITERALSTRING = 285,           /* LITERALSTRING  */
     AC = 286,                      /* AC  */
-    FC = 287                       /* FC  */
+    FC = 287,                      /* FC  */
+    RELALGSUM = 288,               /* RELALGSUM  */
+    RELALGSUB = 289,               /* RELALGSUB  */
+    RELALGDIV = 290,               /* RELALGDIV  */
+    RELALGTIMES = 291              /* RELALGTIMES  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
